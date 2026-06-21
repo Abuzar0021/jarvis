@@ -1,5 +1,6 @@
 """Backend configuration — extends root config.py with voice/server settings."""
 
+import os
 import sys
 from pathlib import Path
 
@@ -34,6 +35,14 @@ TTS_SAMPLE_RATE = 24_000       # Kokoro output rate
 
 # ── Push-to-talk fallback ─────────────────────────────────────────────────────
 PTT_KEY = "ctrl+shift+j"
+
+# ── Personality ───────────────────────────────────────────────────────────────
+# ── Vision (Phase 2) ──────────────────────────────────────────────────────────
+VISION_MODEL = MODELS.get("vision", "openai/gpt-4o")
+VISION_MAX_W = int(os.getenv("VISION_MAX_W", "1280"))   # max image width sent to LLM
+VISION_MAX_H = int(os.getenv("VISION_MAX_H", "720"))    # max image height
+VISION_JPEG_QUALITY = int(os.getenv("VISION_JPEG_QUALITY", "85"))
+VISION_CAPTURE_DIR = DATA_DIR / "captures"              # DATA_DIR from config.*
 
 # ── Personality ───────────────────────────────────────────────────────────────
 JARVIS_GREETING = "Jarvis online. How can I assist you?"

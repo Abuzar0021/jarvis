@@ -23,6 +23,7 @@ from backend.config import HOST, PORT
 from backend.api.voice_router import router as voice_router
 from backend.api.agent_router import router as agent_router
 from backend.api.system_router import router as system_router
+from backend.api.vision_router import router as vision_router
 from backend.voice.pipeline import get_pipeline
 from core.logger import get_logger, console
 from rich.panel import Panel
@@ -74,6 +75,7 @@ app.add_middleware(
 app.include_router(voice_router)
 app.include_router(agent_router)
 app.include_router(system_router)
+app.include_router(vision_router)
 
 
 # ── Status Page (Phase 1 HUD — replaced by Next.js in Phase 6) ───────────────

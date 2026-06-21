@@ -29,6 +29,7 @@ _BUILTIN_AGENTS = {
     "outreach":   "agents.outreach_agent.OutreachAgent",
     "data":       "agents.data_agent.DataAgent",
     "factory":    "agents.agent_factory.AgentFactory",
+    "vision":     "agents.vision_agent.VisionAgent",
 }
 
 

@@ -32,6 +32,7 @@ MODELS: dict[str, str] = {
     "outreach":   os.getenv("OUTREACH_MODEL",   "anthropic/claude-3-haiku"),
     "data":       os.getenv("DATA_MODEL",       "anthropic/claude-3.5-sonnet"),
     "factory":    os.getenv("FACTORY_MODEL",    "anthropic/claude-3.5-sonnet"),
+    "vision":     os.getenv("VISION_MODEL",     "openai/gpt-4o"),
     "default":    os.getenv("DEFAULT_MODEL",    "anthropic/claude-3.5-sonnet"),
 }
 
