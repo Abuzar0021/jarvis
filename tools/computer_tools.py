@@ -72,7 +72,10 @@ def _pag():
     },
     dangerous=True,
 )
-async def open_app(name: str, args: Optional[list] = None) -> str:
+async def open_app(name: str = "", app_name: str = "", args: Optional[list] = None) -> str:
+    name = name or app_name  # accept either parameter name
+    if not name:
+        return "ERROR: open_app requires 'name' or 'app_name'"
     args = args or []
     logger.info(f"open_app: {name!r} args={args}")
 
@@ -380,13 +383,21 @@ async def move_mouse(x: int, y: int, duration: float = 0.2) -> str:
 async def screenshot(question: str = "Describe everything visible on this screen.") -> str:
     try:
         from backend.vision.screen import capture_screen
-        from backend.vision.analyzer import get_analyzer
-
         image_b64, saved_path = await capture_screen(save=True)
-        analyzer = get_analyzer()
-        description = await analyzer.analyze(image_b64, question)
-        note = f"\n[Screenshot: {saved_path}]" if saved_path else ""
-        return description + note
+        path_note = f"[Screenshot saved: {saved_path}]" if saved_path else "[Screenshot captured]"
+
+        # Attempt LLM analysis only when an API key is available
+        api_key = os.environ.get("OPENROUTER_API_KEY", "")
+        if api_key:
+            try:
+                from backend.vision.analyzer import get_analyzer
+                analyzer = get_analyzer()
+                description = await analyzer.analyze(image_b64, question)
+                return f"{description}\n{path_note}"
+            except Exception as exc:
+                logger.warning(f"Vision analysis skipped: {exc}")
+
+        return path_note
     except RuntimeError as exc:
         return f"Screenshot unavailable: {exc}"
     except Exception as exc:

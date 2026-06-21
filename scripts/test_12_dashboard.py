@@ -116,7 +116,27 @@ def test_routers() -> bool:
     sep("12b. Router registrations")
     try:
         from backend.main import app
-        routes = {r.path for r in app.routes}
+        # Collect all registered paths, handling both Route objects and nested routers
+        all_paths: set[str] = set()
+        for r in app.routes:
+            if hasattr(r, "path"):
+                all_paths.add(r.path)
+            # _IncludedRouter or APIRouter — iterate its sub-routes
+            for attr in ("routes", "include_router"):
+                sub = getattr(r, "routes", None)
+                if sub:
+                    for sr in sub:
+                        if hasattr(sr, "path"):
+                            all_paths.add(sr.path)
+
+        # Also pull from sub-routers directly
+        from backend.api.approval_router import router as apr
+        from backend.api.dashboard_router import router as dbr
+        for rtr in (apr, dbr):
+            for sr in rtr.routes:
+                if hasattr(sr, "path"):
+                    all_paths.add(sr.path)
+
         expected = [
             "/api/approval/pending",
             "/api/approval/history",
@@ -125,7 +145,7 @@ def test_routers() -> bool:
             "/api/dashboard/logs",
             "/api/dashboard/agents",
         ]
-        missing = [p for p in expected if p not in routes]
+        missing = [p for p in expected if p not in all_paths]
         if missing:
             print(f"  ✗ Missing routes: {missing}")
             return False

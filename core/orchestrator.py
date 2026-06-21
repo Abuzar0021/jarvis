@@ -9,6 +9,8 @@ import asyncio
 import importlib
 import importlib.util
 import sys
+import time
+import uuid
 from pathlib import Path
 from typing import Optional
 
@@ -128,15 +130,18 @@ class Orchestrator:
     async def run_plan(
         self,
         subtasks: list[dict],
-        task_id: str,
+        task_id: Optional[str] = None,
         show_progress: bool = True,
     ) -> dict[str, str]:
         """
-        Execute a list of subtasks sequentially (respecting dependencies).
-        Returns a mapping of subtask title → result.
+        Execute subtasks respecting dependencies; independent groups run in parallel.
+        Returns mapping of subtask title → result.
         """
+        task_id = task_id or str(uuid.uuid4())
+        _t0 = time.monotonic()
         results: dict[str, str] = {}
         completed: set[str] = set()
+        failed_count = 0
 
         # Persist subtasks
         subtask_ids: dict[str, str] = {}
@@ -157,11 +162,12 @@ class Orchestrator:
             ]
 
             if not ready:
-                # All remaining tasks have unmet deps — run them anyway
+                # All remaining tasks have unmet deps — run them anyway to avoid deadlock
                 ready = remaining[:1]
                 logger.warning(f"Circular/missing dependency, forcing: {ready[0]['title']}")
 
-            # Run ready tasks in parallel when there are multiple independent subtasks
+            ctx = {"previous_results": {k: v[:300] for k, v in results.items()}}
+
             if len(ready) == 1:
                 st = ready[0]
                 title = st["title"]
@@ -169,31 +175,40 @@ class Orchestrator:
                 sid = subtask_ids.get(title)
                 if show_progress:
                     logger.info(f"[orchestrator] [{agent_name}] {title}")
-                result = await self.run_task(
-                    agent_name=agent_name,
-                    task=f"{title}\n\n{st.get('description', '')}",
-                    context={"previous_results": {k: v[:300] for k, v in results.items()}},
-                    task_id=task_id,
-                    subtask_id=sid,
-                )
+                try:
+                    result = await self.run_task(
+                        agent_name=agent_name,
+                        task=f"{title}\n\n{st.get('description', '')}",
+                        context=ctx,
+                        task_id=task_id,
+                        subtask_id=sid,
+                    )
+                except Exception as exc:
+                    result = f"ERROR: {exc}"
+                    failed_count += 1
+                    logger.error(f"Subtask '{title}' raised: {exc}")
                 results[title] = result
                 completed.add(title)
                 remaining.remove(st)
             else:
                 # Parallel execution for independent subtasks
-                ctx = {"previous_results": {k: v[:300] for k, v in results.items()}}
                 if show_progress:
                     titles = ", ".join(st["title"] for st in ready)
-                    logger.info(f"[orchestrator] parallel: {titles}")
+                    logger.info(f"[orchestrator] parallel({len(ready)}): {titles}")
 
                 async def _run_one(st: dict) -> tuple[str, str]:
-                    return st["title"], await self.run_task(
-                        agent_name=st.get("agent", "coding"),
-                        task=f"{st['title']}\n\n{st.get('description', '')}",
-                        context=ctx,
-                        task_id=task_id,
-                        subtask_id=subtask_ids.get(st["title"]),
-                    )
+                    title = st["title"]
+                    try:
+                        res = await self.run_task(
+                            agent_name=st.get("agent", "coding"),
+                            task=f"{title}\n\n{st.get('description', '')}",
+                            context=ctx,
+                            task_id=task_id,
+                            subtask_id=subtask_ids.get(title),
+                        )
+                        return title, res
+                    except Exception as exc:
+                        return title, f"ERROR: {exc}"
 
                 batch = await asyncio.gather(
                     *[_run_one(st) for st in ready], return_exceptions=True
@@ -202,12 +217,20 @@ class Orchestrator:
                     title = st["title"]
                     if isinstance(outcome, Exception):
                         results[title] = f"ERROR: {outcome}"
+                        failed_count += 1
                         logger.error(f"Parallel subtask '{title}' raised: {outcome}")
                     else:
                         results[title] = outcome[1]
+                        if outcome[1].startswith("ERROR:"):
+                            failed_count += 1
                     completed.add(title)
                     remaining.remove(st)
 
+        elapsed = time.monotonic() - _t0
+        logger.info(
+            f"[orchestrator] plan done: {len(results)} tasks, "
+            f"{failed_count} failed, {elapsed:.2f}s"
+        )
         return results
 
 

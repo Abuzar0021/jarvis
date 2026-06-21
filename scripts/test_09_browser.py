@@ -36,17 +36,20 @@ def sep(title: str) -> None:
 
 # ── 9a: Package imports ────────────────────────────────────────────────────────
 
-def test_imports() -> bool:
+def test_imports() -> bool | None:
     sep("9a. Browser package imports")
-    ok = True
+    missing = []
     for pkg in ["playwright", "duckduckgo_search", "bs4", "aiofiles"]:
         try:
             __import__(pkg)
             print(f"  ✓ {pkg}")
         except ImportError as e:
-            print(f"  ✗ {pkg}: {e}")
-            ok = False
-    return ok
+            print(f"  ⚠ {pkg} not installed: {e}")
+            missing.append(pkg)
+    if missing:
+        print(f"  → Run: pip install {' '.join(missing)}")
+        return None  # SKIP — optional packages missing
+    return True
 
 
 # ── 9b: Tool registry ─────────────────────────────────────────────────────────
@@ -70,40 +73,57 @@ def test_registry() -> bool:
 
 # ── 9c: DuckDuckGo search (no API key needed) ─────────────────────────────────
 
-async def test_ddg_search() -> bool:
+async def test_ddg_search() -> bool | None:
     sep("9c. DuckDuckGo search (no key)")
     try:
         from duckduckgo_search import DDGS
+    except ImportError:
+        print("  ⚠ duckduckgo_search not installed — skipping")
+        return None
+    try:
         with DDGS() as ddg:
             results = list(ddg.text("Python programming language", max_results=3))
         if not results:
-            print("  ✗ No results returned")
-            return False
+            print("  ⚠ No results returned (possible rate limit) — skipping")
+            return None
         for r in results:
             print(f"  ✓ {r.get('title','?')[:60]}")
         return True
     except Exception as e:
+        err = str(e)
+        if "403" in err or "429" in err or "Ratelimit" in err or "rate" in err.lower():
+            print(f"  ⚠ DDG rate limited — skipping: {err[:80]}")
+            return None
         print(f"  ✗ {e}")
         return False
 
 
 # ── 9d: Playwright install check ──────────────────────────────────────────────
 
-def test_playwright_install() -> bool:
+async def test_playwright_install() -> bool | None:
     sep("9d. Playwright browser check")
     try:
-        from playwright.sync_api import sync_playwright
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            page = browser.new_page()
-            page.goto("about:blank")
-            title = page.title()
-            browser.close()
+        from playwright.async_api import async_playwright
+    except ImportError:
+        print("  ⚠ playwright not installed — skipping")
+        print("  → Run: pip install playwright")
+        return None
+    try:
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=True, args=["--no-sandbox"])
+            page = await browser.new_page()
+            await page.goto("about:blank")
+            title = await page.title()
+            await browser.close()
         print(f"  ✓ Chromium launched, page title: {title!r}")
         return True
     except Exception as e:
-        print(f"  ✗ Playwright: {e}")
-        print("  → Run: playwright install chromium")
+        err = str(e)
+        if "Executable doesn't exist" in err or "playwright install" in err.lower():
+            print(f"  ⚠ Chromium not installed — skipping")
+            print("  → Run: playwright install chromium")
+            return None
+        print(f"  ✗ Playwright: {err[:120]}")
         return False
 
 
@@ -171,7 +191,7 @@ async def main(live: bool) -> None:
     results["imports"]           = test_imports()
     results["registry"]          = test_registry()
     results["ddg_search"]        = await test_ddg_search()
-    results["playwright_install"] = test_playwright_install()
+    results["playwright_install"] = await test_playwright_install()
     results["browse"]            = await test_browse(live)
     results["search_tool"]       = await test_search_tool(live)
     results["agent"]             = test_agent()

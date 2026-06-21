@@ -36,18 +36,19 @@ class LLMClient:
     """Thin async wrapper around OpenRouter (OpenAI-compatible)."""
 
     def __init__(self) -> None:
-        if not OPENROUTER_API_KEY:
-            raise EnvironmentError(
-                "OPENROUTER_API_KEY is not set. Copy .env.example → .env and add your key."
+        self._has_key = bool(OPENROUTER_API_KEY)
+        if self._has_key:
+            self.client = AsyncOpenAI(
+                api_key=OPENROUTER_API_KEY,
+                base_url=OPENROUTER_BASE_URL,
+                default_headers={
+                    "HTTP-Referer": "https://github.com/jarvis-ai-os",
+                    "X-Title": "Jarvis AI OS",
+                },
             )
-        self.client = AsyncOpenAI(
-            api_key=OPENROUTER_API_KEY,
-            base_url=OPENROUTER_BASE_URL,
-            default_headers={
-                "HTTP-Referer": "https://github.com/jarvis-ai-os",
-                "X-Title": "Jarvis AI OS",
-            },
-        )
+        else:
+            self.client = None
+            logger.warning("OPENROUTER_API_KEY not set — LLM calls will fail at runtime")
 
     @staticmethod
     def _is_model_unavailable(exc: APIStatusError) -> bool:
@@ -73,6 +74,10 @@ class LLMClient:
         the next model in _FALLBACK_MODELS is tried automatically.
         Rate-limit errors (429) are retried with exponential backoff on the same model.
         """
+        if not self._has_key:
+            raise EnvironmentError(
+                "OPENROUTER_API_KEY is not set. Copy .env.example → .env and add your key."
+            )
         resolved = model or MODELS["default"]
 
         # Build a deduplicated fallback sequence: requested model first, then fallbacks.

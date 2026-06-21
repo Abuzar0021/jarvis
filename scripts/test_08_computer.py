@@ -36,26 +36,26 @@ def sep(title: str) -> None:
 
 # ── 8a: Package imports ────────────────────────────────────────────────────────
 
-def test_imports() -> bool:
+def test_imports() -> bool | None:
     sep("8a. Computer tool package imports")
-    results = {}
+    missing = []
     try:
         import psutil
-        results["psutil"] = psutil.__version__
         print(f"  ✓ psutil {psutil.__version__}")
     except ImportError as e:
-        print(f"  ✗ psutil: {e}")
-        results["psutil"] = None
+        print(f"  ⚠ psutil not installed: {e}")
+        missing.append("psutil")
 
     try:
         import pyautogui
-        results["pyautogui"] = "ok"
         print("  ✓ pyautogui imported")
     except Exception as e:
         print(f"  ⚠ pyautogui: {e} (expected in headless)")
-        results["pyautogui"] = "headless"
 
-    return results.get("psutil") is not None
+    if missing:
+        print(f"  → Run: pip install {' '.join(missing)}")
+        return None  # SKIP — optional packages not installed
+    return True
 
 
 # ── 8b: Tool registry ─────────────────────────────────────────────────────────
@@ -82,10 +82,15 @@ def test_registry() -> bool:
 
 # ── 8c: psutil process list ───────────────────────────────────────────────────
 
-def test_psutil() -> bool:
+def test_psutil() -> bool | None:
     sep("8c. psutil process enumeration")
     try:
         import psutil
+    except ImportError:
+        print("  ⚠ psutil not installed — skipping")
+        print("  → Run: pip install psutil")
+        return None
+    try:
         procs = list(psutil.process_iter(["pid", "name"]))
         print(f"  ✓ {len(procs)} processes visible")
         names = [p.info["name"] for p in procs[:5] if p.info["name"]]
