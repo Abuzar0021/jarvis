@@ -295,6 +295,22 @@ class Memory:
             result.append(d)
         return result
 
+    # ── Aliases (backward-compat with verify scripts) ─────────────────────────
+
+    def save_message(self, session_id: str, role: str, content: str, agent_name: Optional[str] = None) -> str:
+        return self.add_message(session_id, role, content, agent_name)
+
+    def get_history(self, session_id: str, limit: int = MAX_CONVERSATION_HISTORY) -> list[dict]:
+        return self.get_messages(session_id, limit)
+
+    def get_stats(self) -> dict:
+        counts = {}
+        for table in ("conversations", "tasks", "subtasks", "action_logs", "dynamic_agents"):
+            row = self._exec(f"SELECT COUNT(*) AS n FROM {table}").fetchone()
+            counts[table] = row["n"]
+        db_size = Path(self.db_path).stat().st_size if Path(self.db_path).exists() else 0
+        return {**counts, "db_size_bytes": db_size}
+
 
 # Singleton
 _memory: Optional[Memory] = None

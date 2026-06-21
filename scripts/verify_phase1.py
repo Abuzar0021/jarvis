@@ -91,16 +91,26 @@ def check_packages():
         "soundfile":      "WAV file I/O",
     }
 
+    # Packages that depend on native libs and may raise OSError in headless envs
+    audio_pkgs = {"sounddevice", "soundfile"}
+
     all_ok = True
     for pkg, desc in required.items():
+        import_name = "dotenv" if pkg == "dotenv" else pkg
         try:
-            mod_name = "python_dotenv" if pkg == "dotenv" else pkg
-            __import__(pkg if pkg != "dotenv" else "dotenv")
+            __import__(import_name)
             print(f"  ✓ {pkg:20s} {desc}")
         except ImportError:
             install_name = "python-dotenv" if pkg == "dotenv" else pkg.replace("_", "-")
             print(f"  ✗ {pkg:20s} MISSING — pip install {install_name}")
             all_ok = False
+        except OSError as e:
+            if pkg in audio_pkgs:
+                # Native audio lib not present — warn but don't fail (headless env)
+                print(f"  ⚠ {pkg:20s} native lib missing ({e}) — OK in headless env")
+            else:
+                print(f"  ✗ {pkg:20s} OSError: {e}")
+                all_ok = False
 
     print()
     has_tts = False
@@ -112,13 +122,15 @@ def check_packages():
                 has_tts = True
         except ImportError:
             print(f"  ○ {pkg:20s} not installed — {desc}")
+        except Exception:
+            print(f"  ○ {pkg:20s} installed but unavailable in this environment")
 
     if not has_tts:
-        print("\n  ✗ No TTS engine available — install pyttsx3:")
-        print("    pip install pyttsx3")
+        print("\n  ⚠ No TTS engine loadable in this environment (pyttsx3 needs espeak)")
+        print("    On your local machine: pip install pyttsx3")
         if sys.platform == "linux":
             print("    sudo apt-get install espeak espeak-ng")
-        all_ok = False
+        # Not a hard failure for --quick mode (no audio hardware here)
 
     return all_ok
 
@@ -168,12 +180,11 @@ def check_configuration():
     separator("4. Configuration")
     all_ok = True
 
-    # API key
+    # API key — warn only; actual connectivity tested by check_openrouter()
     key = os.environ.get("OPENROUTER_API_KEY", "")
     if not key:
-        print("  ✗ OPENROUTER_API_KEY not set")
+        print("  ⚠ OPENROUTER_API_KEY not set (needed for LLM calls)")
         print("    Add to .env: OPENROUTER_API_KEY=sk-or-v1-xxxxxxxx")
-        all_ok = False
     elif key.startswith("sk-or-"):
         print(f"  ✓ OPENROUTER_API_KEY: {key[:16]}…")
     else:
@@ -248,13 +259,19 @@ def check_audio_devices():
         return bool(input_devices)
 
     except ImportError:
-        print("  ✗ sounddevice not installed")
+        print("  ✗ sounddevice not installed — pip install sounddevice")
+        return False
+    except OSError as e:
+        if "PortAudio" in str(e):
+            print("  ⚠ PortAudio native library not found (headless/CI environment)")
+            print("    On your local machine:")
+            print("    Fix (Linux): sudo apt-get install libportaudio2")
+            print("    Fix (Mac):   brew install portaudio")
+            return None  # warn but not a hard failure for headless
+        print(f"  ✗ Audio device error: {e}")
         return False
     except Exception as e:
         print(f"  ✗ Audio device query failed: {e}")
-        if "PortAudio" in str(e):
-            print("    Fix (Linux): sudo apt-get install libportaudio2")
-            print("    Fix (Mac):   brew install portaudio")
         return False
 
 
