@@ -22,25 +22,15 @@ class SafetyGuard:
 
     async def request_approval(self, agent: str, action: str, details: dict) -> bool:
         """
-        Display a warning and ask the user to approve.
-        Returns True if approved, False if rejected.
-        Non-dangerous or approval-disabled → always True.
+        Gate a dangerous action.
+        Delegates to ApprovalManager which handles WS dashboard + terminal fallback.
+        Returns True if approved, False if rejected/timeout.
         """
         if not self._require or not self.is_dangerous(action):
             return True
 
-        console.print(
-            Panel(
-                f"[bold red]⚠  DANGEROUS ACTION REQUESTED[/bold red]\n\n"
-                f"[yellow]Agent:[/yellow]  {agent}\n"
-                f"[yellow]Action:[/yellow] {action}\n"
-                f"[yellow]Details:[/yellow]\n" + "\n".join(f"  {k}: {v}" for k, v in details.items()),
-                title="[danger]Safety Review[/danger]",
-                border_style="red",
-            )
-        )
-
-        approved = Confirm.ask("[bold yellow]Approve this action?[/bold yellow]", default=False)
+        from core.approval import get_approval_manager
+        approved = await get_approval_manager().request(agent, action, details)
 
         if approved:
             logger.info(f"[safety] APPROVED {action} by {agent}")

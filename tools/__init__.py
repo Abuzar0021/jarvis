@@ -45,4 +45,4 @@ async def call_tool(name: str, memory=None, **kwargs) -> str:
 
 
 # Import all tool modules so their @register decorators fire
-from tools import file_system, terminal, search, code_runner, browser, email_tool, vision_tools  # noqa: E402, F401
+from tools import file_system, terminal, search, code_runner, browser, email_tool, vision_tools, computer_tools, browser_tools  # noqa: E402, F401

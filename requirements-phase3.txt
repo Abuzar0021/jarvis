@@ -1,0 +1,24 @@
+# ── Phase 3: Autonomous Agent OS ──────────────────────────────────────────────
+
+# Computer control
+pyautogui>=0.9.54
+pygetwindow>=0.0.9       # optional: Windows/macOS only; wmctrl used on Linux
+psutil>=5.9.0
+
+# Browser automation
+playwright>=1.44.0       # after install: playwright install chromium
+
+# Research / content extraction
+duckduckgo-search>=6.0.0
+beautifulsoup4>=4.12.0
+lxml>=5.1.0
+
+# Async file I/O
+aiofiles>=23.2.1
+
+# Install steps:
+#   pip install -r requirements-phase3.txt
+#   playwright install chromium
+#
+# System packages (Linux):
+#   sudo apt-get install wmctrl  # for focus_window on Linux

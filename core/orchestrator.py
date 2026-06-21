@@ -30,6 +30,10 @@ _BUILTIN_AGENTS = {
     "data":       "agents.data_agent.DataAgent",
     "factory":    "agents.agent_factory.AgentFactory",
     "vision":     "agents.vision_agent.VisionAgent",
+    # Phase 3
+    "computer":   "agents.computer_agent.ComputerAgent",
+    "browser":    "agents.browser_agent.BrowserAgent",
+    "reviewer":   "agents.reviewer_agent.ReviewerAgent",
 }
 
 
@@ -157,15 +161,14 @@ class Orchestrator:
                 ready = remaining[:1]
                 logger.warning(f"Circular/missing dependency, forcing: {ready[0]['title']}")
 
-            # Run ready tasks (could parallelize, but sequential is safer for file ops)
-            for st in ready:
+            # Run ready tasks in parallel when there are multiple independent subtasks
+            if len(ready) == 1:
+                st = ready[0]
                 title = st["title"]
                 agent_name = st.get("agent", "coding")
                 sid = subtask_ids.get(title)
-
                 if show_progress:
                     logger.info(f"[orchestrator] [{agent_name}] {title}")
-
                 result = await self.run_task(
                     agent_name=agent_name,
                     task=f"{title}\n\n{st.get('description', '')}",
@@ -176,6 +179,34 @@ class Orchestrator:
                 results[title] = result
                 completed.add(title)
                 remaining.remove(st)
+            else:
+                # Parallel execution for independent subtasks
+                ctx = {"previous_results": {k: v[:300] for k, v in results.items()}}
+                if show_progress:
+                    titles = ", ".join(st["title"] for st in ready)
+                    logger.info(f"[orchestrator] parallel: {titles}")
+
+                async def _run_one(st: dict) -> tuple[str, str]:
+                    return st["title"], await self.run_task(
+                        agent_name=st.get("agent", "coding"),
+                        task=f"{st['title']}\n\n{st.get('description', '')}",
+                        context=ctx,
+                        task_id=task_id,
+                        subtask_id=subtask_ids.get(st["title"]),
+                    )
+
+                batch = await asyncio.gather(
+                    *[_run_one(st) for st in ready], return_exceptions=True
+                )
+                for st, outcome in zip(ready, batch):
+                    title = st["title"]
+                    if isinstance(outcome, Exception):
+                        results[title] = f"ERROR: {outcome}"
+                        logger.error(f"Parallel subtask '{title}' raised: {outcome}")
+                    else:
+                        results[title] = outcome[1]
+                    completed.add(title)
+                    remaining.remove(st)
 
         return results
 

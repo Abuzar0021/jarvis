@@ -34,6 +34,16 @@ class EventType(str, Enum):
     SYSTEM_STATUS   = "system_status"
     ERROR           = "error"
 
+    # Phase 3 — Approvals
+    APPROVAL_REQUEST  = "approval_request"
+    APPROVAL_RESPONSE = "approval_response"
+
+    # Phase 3 — Tasks / agents
+    TASK_UPDATE       = "task_update"       # task status changed
+    AGENT_STATUS      = "agent_status"      # agent pool snapshot
+    RESEARCH_PROGRESS = "research_progress" # deep research step
+    REVIEW_RESULT     = "review_result"     # reviewer scored an output
+
 
 class ConnectionManager:
     """Manages active WebSocket connections and broadcasts events."""

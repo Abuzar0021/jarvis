@@ -33,6 +33,9 @@ MODELS: dict[str, str] = {
     "data":       os.getenv("DATA_MODEL",       "anthropic/claude-3.5-sonnet"),
     "factory":    os.getenv("FACTORY_MODEL",    "anthropic/claude-3.5-sonnet"),
     "vision":     os.getenv("VISION_MODEL",     "openai/gpt-4o"),
+    "computer":   os.getenv("COMPUTER_MODEL",   "anthropic/claude-3.5-sonnet"),
+    "browser":    os.getenv("BROWSER_MODEL",    "anthropic/claude-3.5-sonnet"),
+    "reviewer":   os.getenv("REVIEWER_MODEL",   "anthropic/claude-3-haiku"),
     "default":    os.getenv("DEFAULT_MODEL",    "anthropic/claude-3.5-sonnet"),
 }
 
@@ -40,10 +43,22 @@ MODELS: dict[str, str] = {
 REQUIRE_APPROVAL: bool = os.getenv("REQUIRE_APPROVAL", "true").lower() == "true"
 
 DANGEROUS_ACTIONS: set[str] = {
+    # File system
     "file_delete",
-    "run_terminal",
     "install_package",
+    # Terminal
+    "run_terminal",
+    # Communication
     "send_email",
+    # Computer control
+    "open_app",
+    "close_app",
+    "click",
+    "type_text",
+    "press_keys",
+    # Browser actions
+    "click_element",
+    "fill_form",
 }
 
 # ── Database ─────────────────────────────────────────────────────────────────
