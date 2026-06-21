@@ -73,58 +73,69 @@ class CEOAgent(BaseAgent):
     ) -> str:
         """
         Full autonomous goal execution pipeline:
-        plan → assign → execute → review → synthesise
-        """
-        session_id = session_id or str(uuid.uuid4())
-        task_id = self.memory.create_task(goal)
-        start = time.monotonic()
+        plan → assign → execute → synthesise
 
-        console.print(
-            Panel(
-                f"[bold magenta]GOAL:[/bold magenta] {goal}",
-                title="[bold]Jarvis CEO[/bold]",
-                border_style="magenta",
-            )
-        )
+        NOTE: per-subtask LLM review (_review_results) is intentionally skipped —
+        it was N extra LLM calls that logged flags but never acted on them.
+        The synthesise step already has full results to work with.
+        """
+        from core.execution_state import new_execution
+        from backend.websocket_manager import manager as _ws, EventType as _ET
+
+        session_id = session_id or str(uuid.uuid4())
+        task_id    = self.memory.create_task(goal)
+        start      = time.monotonic()
+
+        # Single source of truth for this goal's execution
+        state = new_execution(goal)
+        state.start("ceo", "planning")
+        await _ws.broadcast(_ET.EXECUTION_STATE, state.to_ws())
+
+        console.print(Panel(
+            f"[bold magenta]GOAL:[/bold magenta] {goal}",
+            title="[bold]Jarvis CEO[/bold]", border_style="magenta",
+        ))
 
         # ── 1. Plan ────────────────────────────────────────────────────────────
         log_action("ceo", "PLAN", goal[:60])
-        planner = get_planner()
+        planner  = get_planner()
         subtasks = await planner.plan(goal, context=context)
 
         if not subtasks:
+            state.fail("Planner returned empty plan — please be more specific.")
+            await _ws.broadcast(_ET.EXECUTION_STATE, state.to_ws())
             logger.error("[ceo] Planner returned empty plan")
-            return "Could not create a plan for this goal. Please be more specific."
+            return state.error
 
+        state.plan = subtasks
+        state.step = f"executing {len(subtasks)} step(s)"
+        await _ws.broadcast(_ET.EXECUTION_STATE, state.to_ws())
         self._show_plan(subtasks)
         self.memory.update_task(task_id, "planning", assigned_to="ceo")
 
-        # ── 2. Execute subtasks via Orchestrator ───────────────────────────────
+        # ── 2. Execute ALL subtasks via Orchestrator (blocks until complete) ───
         log_action("ceo", "EXECUTE", f"{len(subtasks)} subtasks")
         self.memory.update_task(task_id, "running")
 
         orchestrator = get_orchestrator()
         results = await orchestrator.run_plan(subtasks, task_id=task_id, show_progress=True)
 
-        # ── 3. Review results ──────────────────────────────────────────────────
-        log_action("ceo", "REVIEW")
-        reviewed = await self._review_results(goal, subtasks, results)
-
-        # ── 4. Synthesise final output ─────────────────────────────────────────
+        # ── 3. Synthesise final output (1 LLM call, not N) ────────────────────
         log_action("ceo", "SYNTHESISE")
-        synthesis = await self._synthesise(goal, reviewed)
+        synthesis = await self._synthesise(goal, results)
 
         elapsed = time.monotonic() - start
         self.memory.update_task(task_id, "done", result=synthesis[:500])
         self.memory.record_metric("ceo", "goal_duration_s", elapsed, task_id=task_id)
 
-        console.print(
-            Panel(
-                synthesis,
-                title=f"[bold green]Jarvis — Done ({elapsed:.1f}s)[/bold green]",
-                border_style="green",
-            )
-        )
+        state.finish(synthesis)
+        await _ws.broadcast(_ET.EXECUTION_STATE, state.to_ws())
+
+        console.print(Panel(
+            synthesis,
+            title=f"[bold green]Jarvis — Done ({elapsed:.1f}s)[/bold green]",
+            border_style="green",
+        ))
         return synthesis
 
     # ── Interactive chat ───────────────────────────────────────────────────────

@@ -63,3 +63,13 @@ async def get_agents():
         "available": orch.available_agents(),
         "loaded": list(orch._pool.keys()),
     }
+
+
+@router.get("/execution")
+async def get_active_executions():
+    """Live ExecutionState snapshots — single source of truth for dashboard."""
+    from core.execution_state import all_executions, active_executions
+    return {
+        "active": [s.to_ws() for s in active_executions()],
+        "recent": all_executions(limit=20),
+    }

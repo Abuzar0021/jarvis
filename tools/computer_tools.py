@@ -79,21 +79,32 @@ async def open_app(name: str = "", app_name: str = "", args: Optional[list] = No
     args = args or []
     logger.info(f"open_app: {name!r} args={args}")
 
-    def _launch() -> int:
-        proc = subprocess.Popen(
-            [name] + args,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
-        return proc.pid
+    def _launch_and_verify() -> tuple[int, str]:
+        try:
+            proc = subprocess.Popen(
+                [name] + args,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            # Brief pause so fast-crashing processes surface an error immediately
+            time.sleep(0.35)
+            rc = proc.poll()
+            if rc is not None:
+                return 0, f"ERROR: '{name}' exited immediately (exit code {rc})"
+            return proc.pid, ""
+        except FileNotFoundError:
+            return 0, f"ERROR: '{name}' not found in PATH — is it installed?"
+        except PermissionError:
+            return 0, f"ERROR: permission denied launching '{name}'"
+        except Exception as exc:
+            return 0, f"ERROR launching '{name}': {exc}"
 
-    try:
-        pid = await asyncio.to_thread(_launch)
-        return f"Launched '{name}' (PID {pid})"
-    except FileNotFoundError:
-        return f"ERROR: '{name}' not found in PATH. Is it installed?"
-    except Exception as exc:
-        return f"ERROR launching '{name}': {exc}"
+    pid, err = await asyncio.to_thread(_launch_and_verify)
+    if err:
+        logger.error(f"open_app: {err}")
+        return err
+    logger.info(f"open_app: '{name}' verified running — PID {pid}")
+    return f"✓ Launched '{name}' — PID {pid} verified running"
 
 
 # ── close_app ─────────────────────────────────────────────────────────────────

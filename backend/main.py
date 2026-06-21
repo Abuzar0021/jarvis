@@ -478,6 +478,7 @@ function handleEvent(msg) {
     case 'review_result':     onReviewResult(msg);     break;
     case 'tool_start':        onToolStart(msg);        break;
     case 'tool_complete':     onToolComplete(msg);     break;
+    case 'execution_state':   onExecutionState(msg);   break;
   }
 }
 
@@ -620,6 +621,47 @@ function onToolComplete(msg) {
   const node = document.getElementById(nodeId);
   if (node) node.className = 'agent-node ' + (ok ? 'done' : 'failed');
   updateTaskItem(tool, ok ? 'done' : 'failed', agent);
+}
+
+function onExecutionState(msg) {
+  const d = msg.data || msg;
+  const tid    = d.task_id  || '';
+  const goal   = d.goal     || '';
+  const status = d.status   || 'unknown';
+  const agent  = d.agent    || '';
+  const step   = d.step     || '';
+  const done   = d.tools_done || 0;
+  const total  = d.plan_size  || 0;
+  const result = d.result   || '';
+  const error  = d.error    || '';
+  const ms     = d.elapsed_ms || 0;
+
+  // Update goal panel with real execution state
+  updateGoal(`[${tid}] ${goal}`);
+
+  // Update agent node colour
+  const nodeId = 'node-' + agent.toLowerCase();
+  const node   = document.getElementById(nodeId);
+  const nodeClass = {running:'running', done:'done', failed:'failed', planning:'thinking'}[status] || '';
+  if (node && nodeClass) node.className = 'agent-node ' + nodeClass;
+
+  // Update task queue entry
+  if (goal) updateTaskItem(goal.substring(0,50), status, agent);
+
+  // Log final result to conversation
+  if (status === 'done' && result) {
+    addConvMsg('RESULT', 'jarvis', `[${tid}] ${result.substring(0,200)}`);
+    const nodeEl = document.getElementById(nodeId);
+    if (nodeEl) nodeEl.className = 'agent-node done';
+  } else if (status === 'failed') {
+    const msg2 = error || result || 'execution failed';
+    addConvMsg('FAILED', 'error', `[${tid}] ${msg2.substring(0,200)}`);
+    const nodeEl = document.getElementById(nodeId);
+    if (nodeEl) nodeEl.className = 'agent-node failed';
+  } else if (status === 'running' && step) {
+    // Brief progress note (not spammy — only logged first time)
+    addConvMsg('EXEC', 'user', `[${agent}] ${step}` + (total ? ` (${done}/${total})` : '') + ` +${ms}ms`);
+  }
 }
 
 // ── Goal Panel ──

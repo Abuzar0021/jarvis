@@ -46,6 +46,9 @@ class EventType(str, Enum):
     RESEARCH_PROGRESS = "research_progress" # deep research step
     REVIEW_RESULT     = "review_result"     # reviewer scored an output
 
+    # Execution state — unified snapshot (single source of truth)
+    EXECUTION_STATE   = "execution_state"   # full ExecutionState.to_ws() payload
+
 
 class ConnectionManager:
     """Manages active WebSocket connections and broadcasts events."""

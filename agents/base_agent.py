@@ -127,17 +127,35 @@ class BaseAgent(ABC):
         # Persist user message
         self.memory.add_message(session_id, "user", user_content, self.name)
 
+        # Wrap tool_executor to track which tools were actually called
+        _tools_called: list[str] = []
+
+        async def _tracked_executor(name: str, **kw) -> str:
+            _tools_called.append(name)
+            return await self._execute_tool(name, **kw)
+
         # Run tool loop
         final_text, messages = await self.llm.tool_loop(
             messages=messages,
             tools=self.tool_schemas,
-            tool_executor=self._execute_tool,
+            tool_executor=_tracked_executor,
             model=self.model,
             max_iterations=MAX_AGENT_ITERATIONS,
         )
 
-        # Self-review
-        reviewed = await self._self_review(task, final_text)
+        # Warn when a tool-capable agent produced text only — possible fake success
+        if self.tool_names and not _tools_called:
+            logger.warning(
+                f"[{self.name}] 0 tools executed — response may be text-only: "
+                f"{final_text[:80]!r}"
+            )
+
+        # Skip self-review when tools ran: results are already grounded in real
+        # system state so another LLM call adds cost without adding correctness.
+        if _tools_called:
+            reviewed = final_text
+        else:
+            reviewed = await self._self_review(task, final_text)
 
         # Persist assistant message
         self.memory.add_message(session_id, "assistant", reviewed, self.name)

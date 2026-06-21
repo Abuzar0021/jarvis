@@ -292,20 +292,25 @@ class VoicePipeline:
         The user explicitly issued this command, so it is pre-authorised.
         """
         import tools as tool_registry
+        from core.execution_state import new_execution
 
-        tool_name = intent.tool
-        args = intent.args
+        tool_name  = intent.tool
+        args       = intent.args
         agent_name = intent.agent
+
+        # Create ExecutionState — single source of truth for this command
+        state = new_execution(intent.raw)
+        state.start(agent_name, tool_name)
 
         logger.info(f"[pipeline] DIRECT EXECUTE {tool_name}({args})")
 
-        # Announce to dashboard
         await manager.broadcast(EventType.AGENT_STATUS, {
             "agent": agent_name, "status": "running", "task_title": tool_name
         })
         await manager.broadcast(EventType.TOOL_START, {
             "agent": agent_name, "tool": tool_name, "args": args
         })
+        await manager.broadcast(EventType.EXECUTION_STATE, state.to_ws())
 
         entry = tool_registry.TOOL_REGISTRY.get(tool_name)
         if entry is None:
@@ -314,20 +319,27 @@ class VoicePipeline:
         else:
             try:
                 result = await entry["handler"](**args)
-                logger.info(f"[pipeline] {tool_name} result: {result[:120]}")
+                logger.info(f"[pipeline] {tool_name} → {result[:120]}")
             except Exception as exc:
                 result = f"ERROR in {tool_name}: {exc}"
                 logger.error(result, exc_info=True)
+
+        # Record tool result and finalise state
+        state.record_tool(agent_name, tool_name, args, result)
+        state.finish(result)
 
         await manager.broadcast(EventType.TOOL_COMPLETE, {
             "agent": agent_name, "tool": tool_name, "result": result
         })
         await manager.broadcast(EventType.AGENT_STATUS, {
-            "agent": agent_name, "status": "done", "task_title": tool_name
+            "agent": agent_name,
+            "status": "done" if state.status == "done" else "failed",
+            "task_title": tool_name,
         })
         await manager.broadcast(EventType.AGENT_DONE, {
             "agent": agent_name, "result": result
         })
+        await manager.broadcast(EventType.EXECUTION_STATE, state.to_ws())
         return result
 
     async def _execute_research(self, intent, original_text: str) -> str:
