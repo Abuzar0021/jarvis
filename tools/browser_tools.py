@@ -296,7 +296,7 @@ async def click_element(url: str, selector: str) -> str:
     dangerous=True,
 )
 async def fill_form(url: str, selector: str, value: str, submit: bool = False) -> str:
-    logger.info(f"fill_form: {url} {selector!r}={value!r[:20]} submit={submit}")
+    logger.info(f"fill_form: {url} {selector!r}={value[:20]!r} submit={submit}")
     try:
         ctx = await _get_ctx()
         page = await ctx.new_page()
