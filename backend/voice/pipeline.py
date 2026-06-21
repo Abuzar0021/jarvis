@@ -258,7 +258,10 @@ class VoicePipeline:
                 response = await self._execute_tool_direct(intent)
             elif intent.type == "research":
                 response = await self._execute_research(intent, text)
+            elif intent.type == "goal":
+                response = await self._execute_goal_pipeline(text)
             else:
+                # Pure conversational (greeting / small-talk) — fast LLM response
                 response = await self._execute_conversation(text)
 
             self._last_response = response
@@ -345,8 +348,35 @@ class VoicePipeline:
         await manager.broadcast(EventType.AGENT_DONE, {"agent": "research", "result": result[:200]})
         return result
 
+    async def _execute_goal_pipeline(self, text: str) -> str:
+        """
+        Full execution pipeline for complex multi-step goals.
+        CEO → TaskPlanner → Orchestrator → Agents → Tools → Result
+        """
+        await manager.broadcast(EventType.AGENT_START, {"agent": "ceo", "task": text})
+        await manager.broadcast(EventType.AGENT_STATUS, {
+            "agent": "ceo", "status": "running", "task_title": text[:60]
+        })
+        try:
+            ceo = self._get_ceo()
+            response = await ceo.execute_goal(text, session_id="voice_session")
+            await manager.broadcast(EventType.AGENT_DONE, {"agent": "ceo", "result": response[:200]})
+            await manager.broadcast(EventType.AGENT_STATUS, {
+                "agent": "ceo", "status": "done", "task_title": text[:60]
+            })
+            return response
+        except Exception as exc:
+            err = f"Goal execution failed: {exc}"
+            logger.error(f"_execute_goal_pipeline error: {exc}", exc_info=True)
+            self.stats["errors"] += 1
+            await manager.broadcast(EventType.AGENT_ERROR, {"agent": "ceo", "error": str(exc)})
+            await manager.broadcast(EventType.AGENT_STATUS, {
+                "agent": "ceo", "status": "failed", "task_title": text[:60]
+            })
+            return err
+
     async def _execute_conversation(self, text: str) -> str:
-        """Conversational fallback via CEOAgent."""
+        """Pure conversational response via CEOAgent (greetings / small-talk only)."""
         await manager.broadcast(EventType.AGENT_START, {"agent": "ceo", "task": text})
         try:
             ceo = self._get_ceo()

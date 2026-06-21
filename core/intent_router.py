@@ -136,9 +136,10 @@ _CLOSE_PATTERNS = re.compile(
     re.IGNORECASE,
 )
 
-# type_text triggers
+# type_text triggers — "write" is excluded; use "type/enter/input" for keyboard input
+# ("write" alone is ambiguous with "write a script" and belongs to GOAL detection)
 _TYPE_PATTERNS = re.compile(
-    r"""^(?:type|write|enter|input|paste|say)\s+["']?(.+?)["']?\s*$""",
+    r"""^(?:type|enter|input|paste)\s+["']?(.+?)["']?\s*$""",
     re.IGNORECASE,
 )
 
@@ -189,10 +190,22 @@ _RESEARCH_RE    = re.compile(
     re.IGNORECASE,
 )
 
-# Conversational fall-throughs
-_GREET_RE       = re.compile(
-    r"^(?:hello|hi|hey|good\s+(?:morning|afternoon|evening|night)|"
-    r"how are you|what(?:'s| is) up|yo)\b",
+# Complex multi-step goal (requires planning + agent orchestration)
+_GOAL_RE        = re.compile(
+    r"^(?:write|build|create|make|develop|generate|produce|draft|design|"
+    r"set up|configure|deploy|fix|debug|analyse|analyze|install|refactor|"
+    r"help me|i need you to|i want you to|can you|could you|please\s+\w+|"
+    r"implement|optimise|optimize|test|review|summarize|summarise|"
+    r"compose|prepare|compile|convert|translate|format|clean)\b",
+    re.IGNORECASE,
+)
+
+# Pure conversational / small-talk (no execution needed)
+_CONV_RE        = re.compile(
+    r"^(?:hello|hi+|hey|good\s+(?:morning|afternoon|evening|night)|"
+    r"how are you|what(?:'?s| is) up|yo|thanks?|thank you|"
+    r"who are you|what can you do|what is jarvis|tell me a joke|"
+    r"okay|ok|yes|no|sure|got it|sounds good|nice|cool)\b",
     re.IGNORECASE,
 )
 
@@ -341,6 +354,16 @@ class IntentRouter:
             logger.info(f"[intent] RESEARCH ← {topic!r}")
             return Intent("research", "research", "research", {"topic": topic}, raw)
 
-        # ── 12. Conversational fallback ────────────────────────────────────────
-        logger.info(f"[intent] CONVERSATION ← {raw!r}")
-        return Intent("conversation", "ceo", "chat", {}, raw)
+        # ── 12. Pure conversational small-talk ────────────────────────────────
+        if _CONV_RE.match(raw):
+            logger.info(f"[intent] CONVERSATION ← {raw!r}")
+            return Intent("conversation", "ceo", "chat", {}, raw)
+
+        # ── 13. Complex goal — route through full CEO execution pipeline ───────
+        if _GOAL_RE.match(raw):
+            logger.info(f"[intent] GOAL ← {raw!r}")
+            return Intent("goal", "ceo", "execute_goal", {}, raw)
+
+        # ── 14. Unknown — treat as goal (execute pipeline, not text response) ──
+        logger.info(f"[intent] GOAL(fallback) ← {raw!r}")
+        return Intent("goal", "ceo", "execute_goal", {}, raw)

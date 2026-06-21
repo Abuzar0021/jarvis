@@ -73,12 +73,23 @@ class BaseAgent(ABC):
                 self.memory.log_action(self.name, name, kwargs, "rejected", approved=False)
                 return f"REJECTED: user did not approve '{name}'"
 
+        # Broadcast tool execution start to dashboard
+        from backend.websocket_manager import manager as _ws, EventType as _ET
+        await _ws.broadcast(_ET.TOOL_START, {"agent": self.name, "tool": name, "args": kwargs})
+
         start = time.monotonic()
-        result = await entry["handler"](**kwargs)
+        try:
+            result = await entry["handler"](**kwargs)
+        except Exception as exc:
+            result = f"ERROR in {name}: {exc}"
+            logger.error(f"Tool '{name}' raised: {exc}", exc_info=True)
         elapsed = time.monotonic() - start
 
         self.memory.log_action(self.name, name, kwargs, result[:200], approved=True)
         self.memory.record_metric(self.name, "tool_latency_ms", elapsed * 1000)
+
+        # Broadcast tool execution result to dashboard
+        await _ws.broadcast(_ET.TOOL_COMPLETE, {"agent": self.name, "tool": name, "result": result[:300]})
         return result
 
     # ── Core execution ─────────────────────────────────────────────────────────
