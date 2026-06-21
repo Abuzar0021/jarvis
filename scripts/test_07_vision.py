@@ -187,8 +187,8 @@ async def test_vision_llm(image_b64: str, source: str = "screen") -> bool:
     sep(f"7d. Vision LLM call (image source: {source})")
     import os
     if not os.environ.get("OPENROUTER_API_KEY"):
-        print("  ✗ OPENROUTER_API_KEY not set — skipping LLM test")
-        return False
+        print("  ○ OPENROUTER_API_KEY not set — skipping (set key to test LLM)")
+        return None
 
     try:
         from backend.vision.analyzer import VisionAnalyzer
@@ -229,8 +229,8 @@ async def test_structured_analysis(image_b64: str) -> bool:
     sep("7e. Structured analysis (JSON response)")
     import os
     if not os.environ.get("OPENROUTER_API_KEY"):
-        print("  ✗ Skipped — no API key")
-        return False
+        print("  ○ Skipped — no API key")
+        return None
 
     try:
         from backend.vision.analyzer import VisionAnalyzer

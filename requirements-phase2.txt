@@ -1,8 +1,15 @@
 # ── Phase 2: Vision System ─────────────────────────────────────────────────────
-# (mss and Pillow are already in requirements-phase1.txt)
 
-# Webcam capture
-opencv-python>=4.9.0
+# Screen capture
+mss>=9.0.0
+
+# Image processing
+pillow>=10.0.0
+
+# Webcam capture (use headless variant in servers/CI with no display)
+# For desktops with a webcam:  pip install opencv-python>=4.9.0
+# For headless / server:        pip install opencv-python-headless>=4.9.0
+opencv-python-headless>=4.9.0
 
 # Optional: OCR on captured images (pytesseract already in phase1, but needs system pkg)
 # Linux:  sudo apt-get install tesseract-ocr
