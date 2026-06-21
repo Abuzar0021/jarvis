@@ -476,6 +476,8 @@ function handleEvent(msg) {
     case 'approval_response': onApprovalResponse(msg); break;
     case 'research_progress': onResearchProgress(msg); break;
     case 'review_result':     onReviewResult(msg);     break;
+    case 'tool_start':        onToolStart(msg);        break;
+    case 'tool_complete':     onToolComplete(msg);     break;
   }
 }
 
@@ -589,6 +591,35 @@ function onReviewResult(msg) {
   pill.textContent = score + '/100';
   pill.className = 'score-pill ' + (score >= 80 ? 'pass' : score >= 50 ? 'warn' : 'fail');
   vEl.textContent = verdict;
+}
+
+// ── Tool Execution Events ──
+function onToolStart(msg) {
+  const d = msg.data || msg;
+  const tool = d.tool || '?';
+  const agent = d.agent || '?';
+  const args = d.args || {};
+  // Log to conversation panel
+  addConvMsg('EXECUTING', 'user', `[${agent.toUpperCase()}] ${tool}(${JSON.stringify(args)})`);
+  // Update agent node
+  const nodeId = 'node-' + agent.toLowerCase();
+  const node = document.getElementById(nodeId);
+  if (node) node.className = 'agent-node running';
+  updateTaskItem(tool, 'running', agent);
+}
+
+function onToolComplete(msg) {
+  const d = msg.data || msg;
+  const tool = d.tool || '?';
+  const agent = d.agent || '?';
+  const result = d.result || '';
+  const ok = !result.startsWith('ERROR');
+  addConvMsg(ok ? 'DONE' : 'ERROR', ok ? 'jarvis' : 'error',
+    `[${tool}] ${result.substring(0, 120)}${result.length > 120 ? '…' : ''}`);
+  const nodeId = 'node-' + agent.toLowerCase();
+  const node = document.getElementById(nodeId);
+  if (node) node.className = 'agent-node ' + (ok ? 'done' : 'failed');
+  updateTaskItem(tool, ok ? 'done' : 'failed', agent);
 }
 
 // ── Goal Panel ──

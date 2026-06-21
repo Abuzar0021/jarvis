@@ -42,24 +42,32 @@ MODELS: dict[str, str] = {
 # ── Safety ────────────────────────────────────────────────────────────────────
 REQUIRE_APPROVAL: bool = os.getenv("REQUIRE_APPROVAL", "true").lower() == "true"
 
+# Actions that always require approval regardless of context
 DANGEROUS_ACTIONS: set[str] = {
-    # File system
+    # File system (destructive)
     "file_delete",
     "install_package",
-    # Terminal
+    # Terminal (arbitrary code execution)
     "run_terminal",
-    # Communication
+    # Communication (sends data externally)
     "send_email",
-    # Computer control
+    # Browser form submission (could submit data)
+    "fill_form",
+}
+
+# Actions that require approval only when triggered by autonomous agents,
+# NOT when triggered directly by a user voice/text command.
+AGENT_DANGEROUS_ACTIONS: set[str] = {
     "open_app",
     "close_app",
     "click",
     "type_text",
     "press_keys",
-    # Browser actions
     "click_element",
-    "fill_form",
 }
+
+# VOICE_TRUST: when True, voice/text pipeline executes OS actions without approval
+VOICE_TRUST: bool = os.getenv("VOICE_TRUST", "true").lower() == "true"
 
 # ── Database ─────────────────────────────────────────────────────────────────
 MEMORY_DB_PATH = DATA_DIR / "memory.db"

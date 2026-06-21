@@ -70,7 +70,7 @@ def _pag():
             },
         },
     },
-    dangerous=True,
+    dangerous=False,
 )
 async def open_app(name: str = "", app_name: str = "", args: Optional[list] = None) -> str:
     name = name or app_name  # accept either parameter name
@@ -120,7 +120,7 @@ async def open_app(name: str = "", app_name: str = "", args: Optional[list] = No
             },
         },
     },
-    dangerous=True,
+    dangerous=False,
 )
 async def close_app(name: str, force: bool = False) -> str:
     logger.info(f"close_app: {name!r} force={force}")
@@ -219,7 +219,7 @@ async def focus_window(title: str) -> str:
             },
         },
     },
-    dangerous=True,
+    dangerous=False,
 )
 async def click(x: int, y: int, button: str = "left", clicks: int = 1) -> str:
     _require_display("click")
@@ -256,7 +256,7 @@ async def click(x: int, y: int, button: str = "left", clicks: int = 1) -> str:
             },
         },
     },
-    dangerous=True,
+    dangerous=False,
 )
 async def type_text(text: str, interval: float = 0.02) -> str:
     _require_display("type_text")
@@ -295,7 +295,7 @@ async def type_text(text: str, interval: float = 0.02) -> str:
             },
         },
     },
-    dangerous=True,
+    dangerous=False,
 )
 async def press_keys(keys: str) -> str:
     _require_display("press_keys")

@@ -29,6 +29,8 @@ class EventType(str, Enum):
     AGENT_DONE      = "agent_done"
     AGENT_ERROR     = "agent_error"
     TOOL_CALL       = "tool_call"
+    TOOL_START      = "tool_start"       # tool execution beginning
+    TOOL_COMPLETE   = "tool_complete"    # tool execution finished
 
     # System
     SYSTEM_STATUS   = "system_status"

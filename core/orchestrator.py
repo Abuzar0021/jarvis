@@ -100,6 +100,16 @@ class Orchestrator:
         """Dispatch a task to an agent and return its output."""
         log_action("orchestrator", f"→ {agent_name}", task[:60])
 
+        # Broadcast agent starting
+        from backend.websocket_manager import manager, EventType
+        await manager.broadcast(EventType.AGENT_STATUS, {
+            "agent": agent_name, "status": "running",
+            "task_title": task[:60], "task_id": task_id or "",
+        })
+        await manager.broadcast(EventType.TASK_UPDATE, {
+            "title": task[:60], "status": "running", "agent": agent_name,
+        })
+
         if task_id:
             self.memory.update_task(task_id, "running", assigned_to=agent_name)
         if subtask_id:
@@ -114,6 +124,13 @@ class Orchestrator:
             if subtask_id:
                 self.memory.update_subtask(subtask_id, "done", result=result[:500])
 
+            await manager.broadcast(EventType.AGENT_STATUS, {
+                "agent": agent_name, "status": "done",
+                "task_title": task[:60], "task_id": task_id or "",
+            })
+            await manager.broadcast(EventType.TASK_UPDATE, {
+                "title": task[:60], "status": "done", "agent": agent_name,
+            })
             return result
 
         except Exception as exc:
@@ -125,6 +142,13 @@ class Orchestrator:
             if subtask_id:
                 self.memory.update_subtask(subtask_id, "failed", result=err)
 
+            await manager.broadcast(EventType.AGENT_STATUS, {
+                "agent": agent_name, "status": "failed",
+                "task_title": task[:60], "task_id": task_id or "",
+            })
+            await manager.broadcast(EventType.TASK_UPDATE, {
+                "title": task[:60], "status": "failed", "agent": agent_name,
+            })
             return err
 
     async def run_plan(

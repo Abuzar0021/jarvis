@@ -30,6 +30,7 @@ from backend.voice.audio_io import MicCapture, AudioPlayer
 from backend.voice.transcriber import WhisperTranscriber
 from backend.voice.detector import WakeWordDetector
 from backend.voice.speaker import create_speaker
+from core.intent_router import IntentRouter
 from core.logger import get_logger
 from core.memory import get_memory
 
@@ -233,20 +234,132 @@ class VoicePipeline:
         return text
 
     async def _phase_think(self, text: str) -> str:
-        """Send transcript to CEO agent and get response."""
+        """
+        Route command through the intent router.
+
+        Priority:
+          os / browser → direct tool execution (no LLM needed)
+          research     → ResearchAgent via orchestrator
+          conversation → CEOAgent chat (LLM)
+        """
+        intent = IntentRouter.classify(text)
+        logger.info(f"[pipeline] Intent: {intent}")
+
+        await manager.broadcast(EventType.TASK_UPDATE, {
+            "title": text[:80],
+            "status": "running",
+            "agent": intent.agent,
+        })
+
+        try:
+            if intent.type == "os":
+                response = await self._execute_tool_direct(intent)
+            elif intent.type == "browser":
+                response = await self._execute_tool_direct(intent)
+            elif intent.type == "research":
+                response = await self._execute_research(intent, text)
+            else:
+                response = await self._execute_conversation(text)
+
+            self._last_response = response
+            self.stats["commands_completed"] += 1
+
+            await manager.broadcast(EventType.TASK_UPDATE, {
+                "title": text[:80],
+                "status": "done",
+                "agent": intent.agent,
+            })
+            return response
+
+        except Exception as exc:
+            err = f"I hit an error: {exc}"
+            logger.error(f"_phase_think error: {exc}", exc_info=True)
+            self.stats["errors"] += 1
+            await manager.broadcast(EventType.TASK_UPDATE, {
+                "title": text[:80],
+                "status": "failed",
+                "agent": intent.agent,
+            })
+            await manager.broadcast(EventType.AGENT_ERROR, {"agent": intent.agent, "error": str(exc)})
+            return err
+
+    async def _execute_tool_direct(self, intent) -> str:
+        """
+        Execute a tool directly — no LLM, no approval gate.
+        The user explicitly issued this command, so it is pre-authorised.
+        """
+        import tools as tool_registry
+
+        tool_name = intent.tool
+        args = intent.args
+        agent_name = intent.agent
+
+        logger.info(f"[pipeline] DIRECT EXECUTE {tool_name}({args})")
+
+        # Announce to dashboard
+        await manager.broadcast(EventType.AGENT_STATUS, {
+            "agent": agent_name, "status": "running", "task_title": tool_name
+        })
+        await manager.broadcast(EventType.TOOL_START, {
+            "agent": agent_name, "tool": tool_name, "args": args
+        })
+
+        entry = tool_registry.TOOL_REGISTRY.get(tool_name)
+        if entry is None:
+            result = f"ERROR: tool '{tool_name}' is not registered"
+            logger.error(result)
+        else:
+            try:
+                result = await entry["handler"](**args)
+                logger.info(f"[pipeline] {tool_name} result: {result[:120]}")
+            except Exception as exc:
+                result = f"ERROR in {tool_name}: {exc}"
+                logger.error(result, exc_info=True)
+
+        await manager.broadcast(EventType.TOOL_COMPLETE, {
+            "agent": agent_name, "tool": tool_name, "result": result
+        })
+        await manager.broadcast(EventType.AGENT_STATUS, {
+            "agent": agent_name, "status": "done", "task_title": tool_name
+        })
+        await manager.broadcast(EventType.AGENT_DONE, {
+            "agent": agent_name, "result": result
+        })
+        return result
+
+    async def _execute_research(self, intent, original_text: str) -> str:
+        """Route to ResearchAgent via orchestrator."""
+        topic = intent.args.get("topic", original_text)
+        await manager.broadcast(EventType.AGENT_STATUS, {"agent": "research", "status": "running"})
+        try:
+            from core.orchestrator import get_orchestrator
+            orch = get_orchestrator()
+            result = await orch.run_task(
+                agent_name="research",
+                task=f"Research: {topic}",
+                context=None,
+            )
+        except Exception as exc:
+            result = f"Research failed: {exc}"
+        await manager.broadcast(EventType.AGENT_STATUS, {"agent": "research", "status": "done"})
+        await manager.broadcast(EventType.AGENT_DONE, {"agent": "research", "result": result[:200]})
+        return result
+
+    async def _execute_conversation(self, text: str) -> str:
+        """Conversational fallback via CEOAgent."""
         await manager.broadcast(EventType.AGENT_START, {"agent": "ceo", "task": text})
         try:
             ceo = self._get_ceo()
-            # Voice-optimised prompt
-            voice_text = f"[Voice command — respond concisely in 1-3 sentences, Jarvis style]\n\n{text}"
+            voice_text = (
+                "[Voice command — respond concisely in 1-3 sentences, Jarvis style]\n\n"
+                + text
+            )
             response = await ceo.chat(voice_text, session_id="voice_session")
-            self._last_response = response
-            self.stats["commands_completed"] += 1
             await manager.broadcast(EventType.AGENT_DONE, {"agent": "ceo", "result": response})
             return response
         except Exception as exc:
-            err = f"I encountered an issue processing that request. {exc}"
-            logger.error(f"CEO agent error: {exc}", exc_info=True)
+            err = f"I encountered an issue: {exc}"
+            logger.error(f"CEO chat error: {exc}", exc_info=True)
             await manager.broadcast(EventType.AGENT_ERROR, {"agent": "ceo", "error": str(exc)})
             return err
 
