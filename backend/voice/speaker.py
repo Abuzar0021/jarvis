@@ -29,6 +29,7 @@ class KokoroSpeaker:
         self.voice = voice
         self.speed = speed
         self._pipeline = None
+        self._lock = asyncio.Lock()
         self.player = AudioPlayer(default_rate=self.SAMPLE_RATE)
 
     def _load(self) -> None:
@@ -49,11 +50,12 @@ class KokoroSpeaker:
         return np.concatenate(parts).astype(np.float32)
 
     async def speak(self, text: str) -> None:
-        loop = asyncio.get_event_loop()
-        logger.info(f"[TTS-kokoro] {text[:60]!r}")
-        audio = await loop.run_in_executor(None, self._synthesize, text)
-        if audio.size > 0:
-            await self.player.play(audio, sample_rate=self.SAMPLE_RATE)
+        async with self._lock:
+            logger.info(f"[TTS-kokoro] {text[:60]!r}")
+            loop = asyncio.get_running_loop()
+            audio = await loop.run_in_executor(None, self._synthesize, text)
+            if audio.size > 0:
+                await self.player.play(audio, sample_rate=self.SAMPLE_RATE)
 
     def interrupt(self) -> None:
         self.player.interrupt()
@@ -94,7 +96,7 @@ class Pyttsx3Speaker:
     async def speak(self, text: str) -> None:
         logger.info(f"[TTS-pyttsx3] {text[:60]!r}")
         async with self._lock:
-            loop = asyncio.get_event_loop()
+            loop = asyncio.get_running_loop()
             await loop.run_in_executor(None, self._speak_sync, text)
 
     def interrupt(self) -> None:

@@ -117,6 +117,8 @@ class WakeWordDetector:
     Also supports a software-trigger for push-to-talk / testing.
     """
 
+    COOLDOWN_S: float = 3.0  # minimum seconds between wake events
+
     def __init__(
         self,
         transcriber,
@@ -126,6 +128,7 @@ class WakeWordDetector:
     ) -> None:
         self.wake_word = wake_word
         self._manual_trigger = asyncio.Event()
+        self._last_trigger_time: float = 0.0
 
         # Try OpenWakeWord first
         oww = OWWDetector(wake_word)
@@ -147,15 +150,27 @@ class WakeWordDetector:
 
     async def check(self, chunk: np.ndarray) -> bool:
         """Return True if wake word detected in this chunk."""
+        now = time.monotonic()
+
         if self._manual_trigger.is_set():
             self._manual_trigger.clear()
-            logger.info("Wake word triggered manually")
-            return True
+            if now - self._last_trigger_time >= self.COOLDOWN_S:
+                self._last_trigger_time = now
+                logger.info("Wake word triggered manually")
+                return True
+            logger.debug("Wake word cooldown active — manual trigger ignored")
+            return False
 
-        if self._oww is not None:
-            return self._oww.check(chunk)
+        if now - self._last_trigger_time < self.COOLDOWN_S:
+            return False  # debounce — don't even run detection
 
-        return await self._whisper.check(chunk)
+        detected = (
+            self._oww.check(chunk) if self._oww is not None
+            else await self._whisper.check(chunk)
+        )
+        if detected:
+            self._last_trigger_time = now
+        return detected
 
     def trigger(self) -> None:
         """Manually trigger wake word (API / PTT / hotkey)."""

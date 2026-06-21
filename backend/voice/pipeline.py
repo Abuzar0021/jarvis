@@ -67,6 +67,9 @@ class VoicePipeline:
         self._detector: Optional[WakeWordDetector] = None
         self._speaker = None
 
+        # Serialise concurrent LLM+TTS work (voice vs text commands)
+        self._command_lock = asyncio.Lock()
+
         # Runtime state
         self._ceo = None           # lazy-loaded CEOAgent
         self._last_transcript = ""
@@ -104,7 +107,7 @@ class VoicePipeline:
         self._running = True
         self._task = asyncio.create_task(self._loop(), name="voice_pipeline")
 
-        # Pre-load Whisper model in background to avoid first-command latency
+        # Pre-load Whisper and TTS in background to avoid first-command latency
         asyncio.create_task(self._preload_models())
 
         await self._set_state(VoiceState.IDLE)
@@ -150,10 +153,11 @@ class VoicePipeline:
                         await self._set_state(VoiceState.TRANSCRIBING)
                         text = await self._phase_transcribe(audio)
                         if text:
-                            await self._set_state(VoiceState.THINKING)
-                            response = await self._phase_think(text)
-                            await self._set_state(VoiceState.SPEAKING)
-                            await self._phase_speak(response)
+                            async with self._command_lock:
+                                await self._set_state(VoiceState.THINKING)
+                                response = await self._phase_think(text)
+                                await self._set_state(VoiceState.SPEAKING)
+                                await self._phase_speak(response)
                     await self._set_state(VoiceState.IDLE)
 
             except asyncio.CancelledError:
@@ -174,11 +178,14 @@ class VoicePipeline:
             return
         detected = await self._detector.check(chunk)
         if detected:
-            await self._mic.drain()  # clear buffered audio
             await self._set_state(VoiceState.LISTENING)
             await manager.broadcast(EventType.WAKE_DETECTED, {"wake_word": WAKE_WORD})
-            # Earcon: short beep-like acknowledgement via TTS
-            asyncio.create_task(self._speaker.speak("Yes?"))
+            # Earcon spoken synchronously — prevents overlap with mic capture in _phase_listen
+            try:
+                await asyncio.wait_for(self._speaker.speak("Yes?"), timeout=3.0)
+            except asyncio.TimeoutError:
+                pass
+            await self._mic.drain()  # discard audio accumulated during earcon
 
     async def _phase_listen(self) -> Optional[np.ndarray]:
         """
@@ -263,14 +270,46 @@ class VoicePipeline:
             self._ceo = CEOAgent()
         return self._ceo
 
+    async def process_text_command(self, text: str) -> str:
+        """
+        Process a text command from the API/WS.
+        Serialised via _command_lock so it never races with the voice pipeline.
+        """
+        if not text.strip():
+            return ""
+        async with self._command_lock:
+            try:
+                await manager.broadcast(EventType.TRANSCRIPT, {"text": text, "is_final": True, "source": "text"})
+                await self._set_state(VoiceState.THINKING)
+                response = await self._phase_think(text)
+                if self._speaker:
+                    await self._set_state(VoiceState.SPEAKING)
+                    await self._phase_speak(response)
+            except Exception as exc:
+                logger.error(f"process_text_command error: {exc}", exc_info=True)
+                response = f"I encountered an error: {exc}"
+                self.stats["errors"] += 1
+            finally:
+                await self._set_state(VoiceState.IDLE)
+        return response
+
     async def _preload_models(self) -> None:
-        """Pre-warm Whisper in background to reduce first-command latency."""
+        """Pre-warm Whisper and TTS in background to reduce first-command latency."""
         try:
             dummy = np.zeros(SAMPLE_RATE, dtype=np.float32)
             await self._transcriber.transcribe_short(dummy)
             logger.info("Whisper model pre-warmed")
         except Exception as exc:
-            logger.warning(f"Pre-warm failed: {exc}")
+            logger.warning(f"Whisper pre-warm failed: {exc}")
+        try:
+            # Force TTS model load without producing audible output
+            if hasattr(self._speaker, "_load"):
+                import asyncio as _asyncio
+                loop = _asyncio.get_running_loop()
+                await loop.run_in_executor(None, self._speaker._load)
+                logger.info("TTS model pre-warmed")
+        except Exception as exc:
+            logger.warning(f"TTS pre-warm failed: {exc}")
 
     def get_status(self) -> dict:
         uptime = 0

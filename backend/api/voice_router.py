@@ -49,30 +49,13 @@ async def voice_websocket(websocket: WebSocket):
                 text = data.get("text", "").strip()
                 if text:
                     import asyncio
-                    asyncio.create_task(_handle_text_command(text, pipeline))
+                    asyncio.create_task(pipeline.process_text_command(text))
 
     except WebSocketDisconnect:
         await manager.disconnect(websocket)
     except Exception as exc:
         logger.error(f"WS error: {exc}")
         await manager.disconnect(websocket)
-
-
-async def _handle_text_command(text: str, pipeline) -> None:
-    """Process a text command (from WS or API) through the full agent pipeline."""
-    from backend.websocket_manager import manager, EventType
-    await manager.broadcast(EventType.TRANSCRIPT, {"text": text, "is_final": True, "source": "text"})
-    await manager.broadcast(EventType.AGENT_START, {"agent": "ceo", "task": text})
-    try:
-        ceo = pipeline._get_ceo()
-        response = await ceo.chat(text, session_id="voice_session")
-        await manager.broadcast(EventType.AGENT_DONE, {"agent": "ceo", "result": response})
-        await manager.broadcast(EventType.RESPONSE, {"text": response})
-        await manager.broadcast(EventType.TTS_START, {"text": response})
-        await pipeline._speaker.speak(response)
-        await manager.broadcast(EventType.TTS_END, {})
-    except Exception as exc:
-        await manager.broadcast(EventType.AGENT_ERROR, {"agent": "ceo", "error": str(exc)})
 
 
 # ── REST ──────────────────────────────────────────────────────────────────────
@@ -109,5 +92,5 @@ async def send_text_command(cmd: TextCommand):
         raise HTTPException(400, "text cannot be empty")
     import asyncio
     pipeline = get_pipeline()
-    asyncio.create_task(_handle_text_command(cmd.text.strip(), pipeline))
+    asyncio.create_task(pipeline.process_text_command(cmd.text.strip()))
     return {"queued": True, "text": cmd.text}

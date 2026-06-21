@@ -68,14 +68,14 @@ class WhisperTranscriber:
 
     async def transcribe_short(self, audio: np.ndarray) -> str:
         """Fast transcription for wake-word keyword check."""
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
         return await loop.run_in_executor(
             None, lambda: self._run_transcribe(audio, beam_size=1)
         )
 
     async def transcribe(self, audio: np.ndarray) -> str:
         """Full-quality transcription for user commands."""
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
         t0 = time.monotonic()
         text = await loop.run_in_executor(
             None, lambda: self._run_transcribe(audio, beam_size=3)

@@ -1,4 +1,6 @@
-"""Async OpenRouter LLM client with tool-calling and retry support."""
+"""Async OpenRouter LLM client with tool-calling, retry, and model fallback."""
+
+from __future__ import annotations
 
 import asyncio
 import json
@@ -10,6 +12,24 @@ from config import OPENROUTER_API_KEY, OPENROUTER_BASE_URL, MODELS
 from core.logger import get_logger
 
 logger = get_logger("jarvis.llm")
+
+# Ordered fallback chain — tried in sequence when the requested model is unavailable.
+_FALLBACK_MODELS: list[str] = [
+    "openai/gpt-4o-mini",
+    "openai/gpt-4o",
+    "mistralai/mistral-large",
+    "anthropic/claude-3-haiku",
+]
+
+# HTTP status codes that indicate "this model doesn't exist here" vs transient errors.
+_MODEL_UNAVAILABLE_STATUSES: frozenset[int] = frozenset({400, 404, 422})
+_MODEL_UNAVAILABLE_PHRASES: tuple[str, ...] = (
+    "no endpoints found",
+    "model not found",
+    "invalid model",
+    "unknown model",
+    "model_not_found",
+)
 
 
 class LLMClient:
@@ -29,6 +49,14 @@ class LLMClient:
             },
         )
 
+    @staticmethod
+    def _is_model_unavailable(exc: APIStatusError) -> bool:
+        """Return True when the error means the model itself is not routable."""
+        if exc.status_code not in _MODEL_UNAVAILABLE_STATUSES:
+            return False
+        msg = str(exc.message).lower()
+        return any(phrase in msg for phrase in _MODEL_UNAVAILABLE_PHRASES)
+
     async def chat(
         self,
         messages: list[dict],
@@ -36,12 +64,21 @@ class LLMClient:
         model: Optional[str] = None,
         temperature: float = 0.7,
         max_tokens: int = 4096,
-        max_retries: int = 4,
+        max_retries: int = 2,
     ) -> Any:
-        """Raw chat completion — returns the full response object."""
-        model = model or MODELS["default"]
+        """
+        Chat completion with automatic model fallback.
+
+        If the requested model returns a "no endpoints / not found" error,
+        the next model in _FALLBACK_MODELS is tried automatically.
+        Rate-limit errors (429) are retried with exponential backoff on the same model.
+        """
+        resolved = model or MODELS["default"]
+
+        # Build a deduplicated fallback sequence: requested model first, then fallbacks.
+        chain: list[str] = [resolved] + [m for m in _FALLBACK_MODELS if m != resolved]
+
         kwargs: dict[str, Any] = {
-            "model": model,
             "messages": messages,
             "temperature": temperature,
             "max_tokens": max_tokens,
@@ -50,28 +87,47 @@ class LLMClient:
             kwargs["tools"] = tools
             kwargs["tool_choice"] = "auto"
 
-        for attempt in range(max_retries):
-            try:
-                logger.debug(f"LLM call model={model} msgs={len(messages)}")
-                resp = await self.client.chat.completions.create(**kwargs)
-                logger.debug(f"LLM usage: {resp.usage}")
-                return resp
-            except APIStatusError as exc:
-                if exc.status_code == 429:
-                    wait = 2 ** attempt
-                    logger.warning(f"Rate-limited, retrying in {wait}s…")
-                    await asyncio.sleep(wait)
-                else:
-                    logger.error(f"API error {exc.status_code}: {exc.message}")
-                    if attempt == max_retries - 1:
-                        raise
-                    await asyncio.sleep(1)
-            except APIConnectionError:
-                wait = 2 ** attempt
-                logger.warning(f"Connection error, retrying in {wait}s…")
-                await asyncio.sleep(wait)
+        last_exc: Optional[Exception] = None
 
-        raise RuntimeError("LLM max retries exceeded")
+        for try_model in chain:
+            for attempt in range(max_retries + 1):
+                try:
+                    logger.debug(f"LLM call model={try_model} msgs={len(messages)} attempt={attempt}")
+                    resp = await self.client.chat.completions.create(
+                        model=try_model, **kwargs
+                    )
+                    if try_model != resolved:
+                        logger.info(f"LLM fallback succeeded: {resolved} → {try_model}")
+                    return resp
+
+                except APIStatusError as exc:
+                    if self._is_model_unavailable(exc):
+                        logger.warning(
+                            f"Model unavailable: {try_model!r} ({exc.status_code}: {exc.message!r}) "
+                            f"— trying next fallback"
+                        )
+                        last_exc = exc
+                        break  # move to next model in chain
+
+                    if exc.status_code == 429:
+                        wait = 2 ** attempt
+                        logger.warning(f"Rate-limited on {try_model}, retrying in {wait}s…")
+                        await asyncio.sleep(wait)
+                        last_exc = exc
+                        continue  # retry same model
+
+                    # Other API error (500, auth, etc.) — surface immediately
+                    logger.error(f"API error {exc.status_code} on {try_model}: {exc.message}")
+                    raise
+
+                except APIConnectionError as exc:
+                    wait = 2 ** attempt
+                    logger.warning(f"Connection error on {try_model}, retrying in {wait}s…")
+                    await asyncio.sleep(wait)
+                    last_exc = exc
+                    continue
+
+        raise last_exc or RuntimeError("LLM: all models in fallback chain exhausted")
 
     async def simple(
         self,
@@ -97,26 +153,21 @@ class LLMClient:
         max_iterations: int = 15,
     ) -> tuple[str, list[dict]]:
         """
-        Run the full tool-calling loop.
-
+        Full tool-calling loop.
         tool_executor: async callable(tool_name, **kwargs) → str
-
         Returns (final_text, updated_messages).
         """
-        messages = list(messages)  # local copy
+        messages = list(messages)
 
         for _ in range(max_iterations):
             resp = await self.chat(messages=messages, tools=tools, model=model)
             msg = resp.choices[0].message
 
             if not msg.tool_calls:
-                # Final answer
                 return msg.content or "", messages
 
-            # Append assistant message (with tool_calls)
             messages.append(msg.model_dump(exclude_unset=True))
 
-            # Execute each tool call and append results
             for tc in msg.tool_calls:
                 fn_name = tc.function.name
                 try:
@@ -127,7 +178,7 @@ class LLMClient:
                 logger.debug(f"Tool call: {fn_name}({fn_args})")
                 try:
                     result = await tool_executor(fn_name, **fn_args)
-                except Exception as exc:  # noqa: BLE001
+                except Exception as exc:
                     result = f"ERROR: {exc}"
                     logger.error(f"Tool {fn_name} raised: {exc}")
 

@@ -54,12 +54,19 @@ class MicCapture:
             logger.debug(f"Audio callback status: {status}")
         if self._loop and self._queue and self._running:
             chunk = indata.copy().flatten().astype(np.float32)
-            self._loop.call_soon_threadsafe(self._queue.put_nowait, chunk)
+
+            def _safe_put() -> None:
+                try:
+                    self._queue.put_nowait(chunk)
+                except asyncio.QueueFull:
+                    pass  # drop silently — consumer is too slow, skip chunk
+
+            self._loop.call_soon_threadsafe(_safe_put)
 
     async def start(self) -> None:
         if not SOUNDDEVICE_AVAILABLE:
             raise RuntimeError("sounddevice is not installed. Run: pip install sounddevice")
-        self._loop = asyncio.get_event_loop()
+        self._loop = asyncio.get_running_loop()
         self._queue = asyncio.Queue(maxsize=200)
         self._running = True
         self._stream = sd.InputStream(
@@ -130,7 +137,7 @@ class AudioPlayer:
             finally:
                 self._playing.clear()
 
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
         await loop.run_in_executor(None, _play_sync)
 
     def interrupt(self) -> None:
