@@ -26,6 +26,7 @@ from backend.api.system_router import router as system_router
 from backend.api.vision_router import router as vision_router
 from backend.api.approval_router import router as approval_router
 from backend.api.dashboard_router import router as dashboard_router
+from backend.api.memory_router import router as memory_router
 from backend.voice.pipeline import get_pipeline
 from core.logger import get_logger, console
 from rich.panel import Panel
@@ -79,6 +80,7 @@ app.include_router(system_router)
 app.include_router(vision_router)
 app.include_router(approval_router)
 app.include_router(dashboard_router)
+app.include_router(memory_router)
 
 
 # ── Dashboard 3.0 ─────────────────────────────────────────────────────────────
