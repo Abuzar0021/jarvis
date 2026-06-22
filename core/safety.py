@@ -1,14 +1,9 @@
 """Safety guard — dangerous actions require explicit user approval."""
 
-from rich.console import Console
-from rich.panel import Panel
-from rich.prompt import Confirm
-
 from config import REQUIRE_APPROVAL, DANGEROUS_ACTIONS
 from core.logger import get_logger
 
 logger = get_logger("jarvis.safety")
-console = Console()
 
 
 class SafetyGuard:
