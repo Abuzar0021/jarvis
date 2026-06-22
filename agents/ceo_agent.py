@@ -137,11 +137,16 @@ class CEOAgent(BaseAgent):
             subtasks, task_id=task_id, show_progress=True, on_step_start=_on_step,
         )
 
-        # ── 3. Synthesise final output (1 LLM call, not N) ────────────────────
-        log_action("ceo", "SYNTHESISE")
-        if len(results) > 1:
+        # ── 3. Synthesise final output ────────────────────────────────────────
+        # A single-subtask plan needs no synthesis — return the result directly
+        # and save an LLM call. Only multi-result plans get a synthesis pass.
+        if len(results) <= 1:
+            synthesis = next(iter(results.values()), "No result produced.")
+            log_action("ceo", "SYNTHESISE", "skipped (single result)")
+        else:
+            log_action("ceo", "SYNTHESISE")
             await _speak("Synthesizing results.")
-        synthesis = await self._synthesise(goal, results)
+            synthesis = await self._synthesise(goal, results)
 
         elapsed = time.monotonic() - start
         self.memory.update_task(task_id, "done", result=synthesis[:500])

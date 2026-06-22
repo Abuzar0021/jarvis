@@ -23,6 +23,13 @@ async def health():
     }
 
 
+@router.get("/diagnose")
+async def diagnose():
+    """Full self-diagnostics: mic, speaker, WS, memory, agents, tools, API, browser."""
+    from core.diagnostics import run_diagnostics
+    return await run_diagnostics()
+
+
 @router.get("/status")
 async def full_status():
     """Full system status — voice, agents, tasks, memory."""

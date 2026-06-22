@@ -131,6 +131,20 @@ def chat(session: str | None):
     asyncio.run(_chat_loop())
 
 
+# ── jarvis diagnose ───────────────────────────────────────────────────────────
+
+@cli.command()
+def diagnose():
+    """Run full self-diagnostics: mic, speaker, WS, memory, agents, tools, API…"""
+    from core.diagnostics import run_diagnostics, render_report
+
+    report = asyncio.run(run_diagnostics())
+    color = {"ok": "green", "warn": "yellow", "fail": "red"}[report["overall"]]
+    console.print(render_report(report))
+    console.print(f"\n[bold {color}]Overall: {report['overall'].upper()}[/bold {color}]")
+    sys.exit(1 if report["overall"] == "fail" else 0)
+
+
 # ── jarvis status ─────────────────────────────────────────────────────────────
 
 @cli.command()

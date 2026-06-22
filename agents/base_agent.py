@@ -38,6 +38,13 @@ class BaseAgent(ABC):
     tool_names: list[str] = []
     model_key: str = "default"
 
+    # Self-review is a SECOND LLM call. It only ever runs on the no-tool path
+    # (tool results are already grounded in real system state and skip it), which
+    # in practice is just conversation — where a critique pass adds latency and
+    # tokens without improving a 1-3 sentence reply. Off by default; agents that
+    # genuinely benefit can opt in.
+    enable_self_review: bool = False
+
     @property
     @abstractmethod
     def system_prompt(self) -> str:  # pragma: no cover
@@ -150,9 +157,10 @@ class BaseAgent(ABC):
                 f"{final_text[:80]!r}"
             )
 
-        # Skip self-review when tools ran: results are already grounded in real
-        # system state so another LLM call adds cost without adding correctness.
-        if _tools_called:
+        # Skip self-review when tools ran (results already grounded in real system
+        # state) OR when self-review is disabled (default). This removes the extra
+        # LLM call from the conversational hot path.
+        if _tools_called or not self.enable_self_review:
             reviewed = final_text
         else:
             reviewed = await self._self_review(task, final_text)
