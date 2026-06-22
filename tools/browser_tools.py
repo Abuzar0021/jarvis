@@ -58,6 +58,60 @@ async def _page_text(page) -> str:
     return text[:8000] if text else "(no readable text)"
 
 
+# ── open_url ────────────────────────────────────────────────────────────────────
+# Phase 4: "open a website for the human" is a DIFFERENT operation from "scrape a
+# website for an agent". This opens the user's REAL default browser (visible) and
+# returns only a short confirmation — it never reads or returns page text, so
+# "open YouTube" can never be read aloud.
+
+@register(
+    schema={
+        "type": "function",
+        "function": {
+            "name": "open_url",
+            "description": (
+                "Open a website in the user's real default browser (visible). "
+                "Returns a short confirmation only — does NOT read the page. "
+                "Use this for 'open <website>' commands."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "url": {"type": "string", "description": "Full URL to open"},
+                },
+                "required": ["url"],
+            },
+        },
+    },
+    dangerous=False,
+)
+async def open_url(url: str) -> str:
+    import webbrowser
+
+    if not url:
+        return "ERROR: open_url requires a url"
+    if not url.startswith(("http://", "https://")):
+        url = "https://" + url
+    domain = url.split("//", 1)[-1].split("/", 1)[0]
+    logger.info(f"open_url: {url}")
+
+    def _open() -> bool:
+        try:
+            # register=False uses the OS default; new=2 opens a new tab
+            return webbrowser.open(url, new=2)
+        except Exception as exc:
+            logger.warning(f"webbrowser.open failed: {exc}")
+            return False
+
+    opened = await asyncio.to_thread(_open)
+    if opened:
+        return f"✓ Opened {domain}"
+    return (
+        f"ERROR: no system browser available to open {domain}. "
+        f"(Set $BROWSER or install a browser; on a server use search/browse instead.)"
+    )
+
+
 # ── browse ────────────────────────────────────────────────────────────────────
 
 @register(

@@ -143,6 +143,23 @@ def _url_keyword_match(target_lower: str, keyword: str) -> bool:
     return f" {keyword} " in padded
 
 
+def normalize_command(text: str) -> str:
+    """
+    Clean a raw transcript before classification.
+
+    Whisper returns punctuated, capitalized text ("Open YouTube.") whose trailing
+    period previously broke keyword matching (" youtube " not in " youtube. ").
+    This collapses whitespace and strips surrounding quotes and trailing sentence
+    punctuation while preserving inner case for display and tool arguments.
+    """
+    if not text:
+        return ""
+    s = " ".join(text.split()).strip().strip('"“”‘’\'')
+    while s and s[-1] in ".?!,;:":
+        s = s[:-1].rstrip()
+    return s
+
+
 def _platform_app(name: str) -> Optional[str]:
     """Resolve a friendly app name to the OS executable."""
     key = name.lower().strip()
@@ -270,7 +287,7 @@ class IntentRouter:
 
     @staticmethod
     def classify(text: str) -> Intent:
-        raw = text.strip()
+        raw = normalize_command(text)
         t = raw.lower()
 
         # ── 1. Screenshot ──────────────────────────────────────────────────────
@@ -333,21 +350,22 @@ class IntentRouter:
             target = m.group(1).strip()
             tl = target.lower()
 
-            # Check URL shortcuts first (longest keyword wins, word-boundary safe)
+            # Check URL shortcuts first (longest keyword wins, word-boundary safe).
+            # Websites use open_url (visible browser, no scraping) — NOT browse.
             for keyword, url in _URL_SHORTCUTS:
                 if _url_keyword_match(tl, keyword):
-                    logger.info(f"[intent] BROWSER(url) ← {target!r} → {url}")
-                    return Intent("browser", "browser", "browse", {"url": url}, raw)
+                    logger.info(f"[intent] OPEN_URL ← {target!r} → {url}")
+                    return Intent("browser", "browser", "open_url", {"url": url}, raw)
 
             # Direct URL in command
             url_m = _URL_RE.search(target)
             if url_m:
-                return Intent("browser", "browser", "browse", {"url": url_m.group()}, raw)
+                return Intent("browser", "browser", "open_url", {"url": url_m.group()}, raw)
 
-            # Resolve to OS app name
-            app_cmd = _platform_app(tl) or tl
-            logger.info(f"[intent] OPEN_APP ← {target!r} → {app_cmd!r}")
-            return Intent("os", "computer", "open_app", {"name": app_cmd}, raw)
+            # Otherwise it's an application — pass the raw phrase; app_launcher
+            # normalizes aliases ("calc", "task manager", "vs code") per-OS.
+            logger.info(f"[intent] OPEN_APP ← {target!r}")
+            return Intent("os", "computer", "open_app", {"name": target}, raw)
 
         # ── 9. Go to URL / navigate ────────────────────────────────────────────
         m = _GO_TO_RE.match(raw)
@@ -357,21 +375,20 @@ class IntentRouter:
 
             for keyword, url in _URL_SHORTCUTS:
                 if _url_keyword_match(tl, keyword):
-                    return Intent("browser", "browser", "browse", {"url": url}, raw)
+                    return Intent("browser", "browser", "open_url", {"url": url}, raw)
 
             url_m = _URL_RE.search(target)
             if url_m:
-                return Intent("browser", "browser", "browse", {"url": url_m.group()}, raw)
+                return Intent("browser", "browser", "open_url", {"url": url_m.group()}, raw)
 
             # Check if it's an app name for "go to" (rare but possible)
-            app_cmd = _platform_app(tl)
-            if app_cmd:
-                return Intent("os", "computer", "open_app", {"name": app_cmd}, raw)
+            if _platform_app(tl):
+                return Intent("os", "computer", "open_app", {"name": target}, raw)
 
             # Assume it's a website name; add .com only if no TLD already present
             raw_domain = tl.replace(" ", "")
             url = f"https://{raw_domain}" if "." in raw_domain else f"https://{raw_domain}.com"
-            return Intent("browser", "browser", "browse", {"url": url}, raw)
+            return Intent("browser", "browser", "open_url", {"url": url}, raw)
 
         # ── 10. Search / look up ───────────────────────────────────────────────
         m = _SEARCH_RE.match(raw)

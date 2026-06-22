@@ -373,7 +373,7 @@ class VoicePipeline:
             return f"Opening {friendly}."
         if tool == "close_app":
             return f"Closing {args.get('name', 'application')}."
-        if tool == "browse":
+        if tool in ("open_url", "browse"):
             url = args.get("url", "")
             site = url.replace("https://", "").replace("http://", "").replace("www.", "")
             site = site.split("/")[0].split(".")[0].capitalize()
