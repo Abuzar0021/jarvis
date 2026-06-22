@@ -87,7 +87,9 @@ async def browse(url: str, wait_for: Optional[str] = None) -> str:
         ctx = await _get_ctx()
         page = await ctx.new_page()
         try:
-            await page.goto(url, wait_until="domcontentloaded", timeout=25_000)
+            response = await page.goto(url, wait_until="domcontentloaded", timeout=25_000)
+            if response is not None and response.status >= 400:
+                return f"ERROR: HTTP {response.status} from {url}"
             if wait_for:
                 await page.wait_for_selector(wait_for, timeout=10_000)
             await asyncio.sleep(0.4)
@@ -252,11 +254,17 @@ async def click_element(url: str, selector: str) -> str:
         ctx = await _get_ctx()
         page = await ctx.new_page()
         try:
-            await page.goto(url, wait_until="domcontentloaded", timeout=25_000)
+            nav_response = await page.goto(url, wait_until="domcontentloaded", timeout=25_000)
+            if nav_response is not None and nav_response.status >= 400:
+                return f"ERROR: HTTP {nav_response.status} loading {url}"
             await page.locator(selector).first.click(timeout=10_000)
             await asyncio.sleep(0.6)
             title = await page.title()
             url_after = page.url
+            # Detect error pages after navigation
+            title_low = title.lower()
+            if any(kw in title_low for kw in ("404", "not found", "error", "forbidden", "403")):
+                return f"ERROR: click navigated to error page: {title} ({url_after})"
             return f"Clicked '{selector}' — now on: {title} ({url_after})"
         finally:
             await page.close()
@@ -301,15 +309,24 @@ async def fill_form(url: str, selector: str, value: str, submit: bool = False) -
         ctx = await _get_ctx()
         page = await ctx.new_page()
         try:
-            await page.goto(url, wait_until="domcontentloaded", timeout=25_000)
+            response = await page.goto(url, wait_until="domcontentloaded", timeout=25_000)
+            if response is not None and response.status >= 400:
+                return f"ERROR: HTTP {response.status} loading form page {url}"
             field = page.locator(selector).first
             await field.fill(value, timeout=10_000)
+            # Verify the field actually received the value
+            actual = await field.input_value(timeout=5_000)
+            if actual != value:
+                return (
+                    f"ERROR: field '{selector}' shows {actual!r} after fill, "
+                    f"expected {value[:40]!r}"
+                )
             if submit:
                 await page.keyboard.press("Enter")
                 await asyncio.sleep(1.2)
                 title = await page.title()
                 return f"Filled and submitted — now on: {title}"
-            return f"Filled '{selector}' with {len(value)} characters"
+            return f"Filled '{selector}' with {len(value)} characters (verified)"
         finally:
             await page.close()
     except Exception as exc:

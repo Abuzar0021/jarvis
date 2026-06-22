@@ -12,6 +12,17 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 
+def _is_error(result: str) -> bool:
+    """Detect error results more broadly than a simple uppercase prefix check."""
+    low = result.lower().strip()
+    return (
+        low.startswith("error")          # ERROR:, error:, Error:
+        or low.startswith("agent '")     # "Agent 'X' error: ..." from orchestrator
+        or low.startswith("exception")   # raw exception strings
+        or (not low and result == "")    # empty result = silent failure
+    )
+
+
 @dataclass
 class ToolRecord:
     agent:  str
@@ -43,14 +54,14 @@ class ExecutionState:
         self.step   = step
 
     def record_tool(self, agent: str, tool: str, args: dict, result: str) -> None:
-        ok = not result.upper().startswith("ERROR")
+        ok = not _is_error(result)
         ms = int((time.monotonic() - self._t0) * 1000)
         self.tools.append(ToolRecord(agent=agent, tool=tool, args=args,
                                      result=result, ok=ok, ms=ms))
 
     def finish(self, result: str) -> None:
         self.result = result
-        self.status = "failed" if result.upper().startswith("ERROR") else "done"
+        self.status = "failed" if _is_error(result) else "done"
 
     def fail(self, error: str) -> None:
         self.error  = error

@@ -89,6 +89,40 @@ class Orchestrator:
 
     # ── Task routing ───────────────────────────────────────────────────────────
 
+    @staticmethod
+    def _is_error_result(result: str) -> bool:
+        low = result.lower().strip()
+        return low.startswith("error") or low.startswith("agent '") or low.startswith("exception")
+
+    async def _run_with_retry(
+        self,
+        agent_name: str,
+        task: str,
+        context: Optional[dict],
+        task_id: Optional[str],
+        subtask_id: Optional[str],
+        max_retries: int = 1,
+    ) -> str:
+        result = await self.run_task(
+            agent_name=agent_name, task=task,
+            context=context, task_id=task_id, subtask_id=subtask_id,
+        )
+        for attempt in range(max_retries):
+            if not self._is_error_result(result):
+                break
+            delay = 2 ** attempt  # 1s then 2s
+            logger.warning(
+                f"[retry {attempt+1}/{max_retries}] {agent_name} failed, retrying in {delay}s. "
+                f"Error: {result[:120]}"
+            )
+            await asyncio.sleep(delay)
+            retry_ctx = {**(context or {}), "previous_error": result[:300]}
+            result = await self.run_task(
+                agent_name=agent_name, task=task,
+                context=retry_ctx, task_id=task_id, subtask_id=subtask_id,
+            )
+        return result
+
     async def run_task(
         self,
         agent_name: str,
@@ -200,7 +234,7 @@ class Orchestrator:
                 if show_progress:
                     logger.info(f"[orchestrator] [{agent_name}] {title}")
                 try:
-                    result = await self.run_task(
+                    result = await self._run_with_retry(
                         agent_name=agent_name,
                         task=f"{title}\n\n{st.get('description', '')}",
                         context=ctx,
@@ -209,8 +243,9 @@ class Orchestrator:
                     )
                 except Exception as exc:
                     result = f"ERROR: {exc}"
-                    failed_count += 1
                     logger.error(f"Subtask '{title}' raised: {exc}")
+                if self._is_error_result(result):
+                    failed_count += 1
                 results[title] = result
                 completed.add(title)
                 remaining.remove(st)
@@ -223,7 +258,7 @@ class Orchestrator:
                 async def _run_one(st: dict) -> tuple[str, str]:
                     title = st["title"]
                     try:
-                        res = await self.run_task(
+                        res = await self._run_with_retry(
                             agent_name=st.get("agent", "coding"),
                             task=f"{title}\n\n{st.get('description', '')}",
                             context=ctx,
@@ -245,7 +280,7 @@ class Orchestrator:
                         logger.error(f"Parallel subtask '{title}' raised: {outcome}")
                     else:
                         results[title] = outcome[1]
-                        if outcome[1].startswith("ERROR:"):
+                        if self._is_error_result(outcome[1]):
                             failed_count += 1
                     completed.add(title)
                     remaining.remove(st)

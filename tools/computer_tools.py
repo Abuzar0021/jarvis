@@ -136,27 +136,38 @@ async def open_app(name: str = "", app_name: str = "", args: Optional[list] = No
 async def close_app(name: str, force: bool = False) -> str:
     logger.info(f"close_app: {name!r} force={force}")
 
-    def _kill() -> list:
+    def _kill() -> tuple[list[int], list[int]]:
         try:
             import psutil
         except ImportError:
             raise RuntimeError("psutil not installed. Run: pip install psutil")
-        killed = []
+        killed_pids = []
         for proc in psutil.process_iter(["name", "pid"]):
             try:
                 pname = proc.info.get("name") or ""
                 if name.lower() in pname.lower():
                     proc.kill() if force else proc.terminate()
-                    killed.append(proc.info["pid"])
+                    killed_pids.append(proc.info["pid"])
             except Exception:
                 pass
-        return killed
+        # Verify processes are actually gone
+        import time as _time
+        _time.sleep(0.3)
+        still_alive = [
+            pid for pid in killed_pids if psutil.pid_exists(pid)
+        ]
+        return killed_pids, still_alive
 
     try:
-        pids = await asyncio.to_thread(_kill)
-        if pids:
-            return f"Terminated '{name}' (PIDs: {pids})"
-        return f"No running process matching '{name}'"
+        pids, still_alive = await asyncio.to_thread(_kill)
+        if not pids:
+            return f"No running process matching '{name}'"
+        if still_alive:
+            return (
+                f"ERROR: '{name}' still alive after termination "
+                f"(PIDs still running: {still_alive}). Try force=true."
+            )
+        return f"Terminated '{name}' (PIDs: {pids})"
     except Exception as exc:
         return f"ERROR closing '{name}': {exc}"
 

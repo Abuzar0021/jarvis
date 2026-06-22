@@ -82,8 +82,11 @@ async def file_write(path: str, content: str, mode: str = "w") -> str:
     try:
         async with aiofiles.open(p, mode, encoding="utf-8") as f:
             await f.write(content)
-        logger.info(f"file_write {path} ({len(content)} chars, mode={mode})")
-        return f"OK: wrote {len(content)} chars to {path}"
+        actual_size = p.stat().st_size
+        if content and actual_size == 0:
+            return f"ERROR: file_write to {path} produced an empty file (disk full or permission issue)"
+        logger.info(f"file_write {path} ({actual_size} bytes, mode={mode})")
+        return f"OK: wrote {len(content)} chars to {path} ({actual_size} bytes on disk)"
     except Exception as exc:
         return f"ERROR writing {path}: {exc}"
 
