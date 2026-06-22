@@ -30,6 +30,36 @@ async def diagnose():
     return await run_diagnostics()
 
 
+@router.get("/stats")
+async def system_stats():
+    """Live CPU / memory for the dashboard. Degrades gracefully without psutil."""
+    cpu = mem_pct = mem_used = mem_total = None
+    try:
+        import psutil
+        cpu = psutil.cpu_percent(interval=0.0)
+        vm = psutil.virtual_memory()
+        mem_pct = vm.percent
+        mem_used = round(vm.used / 1e9, 2)
+        mem_total = round(vm.total / 1e9, 2)
+    except Exception:
+        # Fallback: load average → rough CPU proxy; memory unavailable
+        try:
+            import os
+            load1 = os.getloadavg()[0]
+            ncpu = os.cpu_count() or 1
+            cpu = round(min(100.0, load1 / ncpu * 100), 1)
+        except Exception:
+            pass
+    return {
+        "cpu_pct": cpu,
+        "mem_pct": mem_pct,
+        "mem_used_gb": mem_used,
+        "mem_total_gb": mem_total,
+        "ws_clients": manager.count,
+        "have_psutil": mem_pct is not None,
+    }
+
+
 @router.get("/status")
 async def full_status():
     """Full system status — voice, agents, tasks, memory."""

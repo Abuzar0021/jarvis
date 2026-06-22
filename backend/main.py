@@ -109,7 +109,7 @@ html,body{height:100%;overflow:hidden;}
 body{
   background:var(--bg);color:var(--c);
   font-family:'Courier New',monospace;font-size:12px;
-  display:grid;grid-template-rows:50px 1fr 170px;height:100vh;
+  display:grid;grid-template-rows:50px auto 1fr 170px;height:100vh;
 }
 
 /* ── TOPBAR ── */
@@ -132,6 +132,17 @@ body{
   font-size:.6rem;letter-spacing:.2rem;padding:.18rem .7rem;
   border-radius:10px;border:1px solid var(--g);color:var(--g);white-space:nowrap;
 }
+#mode-pill{
+  font-size:.6rem;letter-spacing:.15rem;padding:.18rem .7rem;border-radius:10px;
+  border:1px solid var(--b);color:var(--dim);white-space:nowrap;
+}
+#mode-pill.voice{border-color:var(--g);color:var(--g);}
+#mode-pill.text {border-color:var(--o);color:var(--o);}
+#cap-banner{
+  padding:.3rem 1.2rem;font-size:.62rem;letter-spacing:.08rem;
+  background:rgba(255,136,0,.08);border-bottom:1px solid var(--o);color:var(--o);
+}
+body.speaking-overlay #core-btn{border-color:var(--c);box-shadow:0 0 22px var(--c);}
 #timing-display{
   font-size:.6rem;color:var(--dim);letter-spacing:.1rem;white-space:nowrap;
   display:flex;gap:.5rem;align-items:center;
@@ -393,9 +404,13 @@ body.thinking  #ring3{animation-duration:1s;}
     <span class="timing-pill" id="t-exec">exec —</span>
     <span class="timing-pill" id="t-total">total —</span>
   </div>
+  <div id="mode-pill" title="Voice/text capability">…</div>
   <div id="ws-pill" class="err">● CONNECTING</div>
   <div id="clock">—</div>
 </div>
+
+<!-- Degraded-mode banner: shown only when a capability is missing -->
+<div id="cap-banner" style="display:none;"></div>
 
 <!-- ── MAIN GRID ── -->
 <div id="main">
@@ -413,6 +428,8 @@ body.thinking  #ring3{animation-duration:1s;}
     <div class="panel" style="flex:0 0 auto;">
       <div class="ph"><div class="dot" style="background:var(--g)"></div>SYSTEM</div>
       <div class="pb" style="padding:.35rem .75rem;">
+        <div class="sys-row"><span>CPU</span><span class="sys-val" id="sys-cpu">—</span></div>
+        <div class="sys-row"><span>Memory</span><span class="sys-val" id="sys-mem">—</span></div>
         <div class="sys-row"><span>Commands</span><span class="sys-val" id="sys-cmds">0</span></div>
         <div class="sys-row"><span>Errors</span><span class="sys-val" id="sys-errs">0</span></div>
         <div class="sys-row"><span>Uptime</span><span class="sys-val" id="sys-uptime">—</span></div>
@@ -552,6 +569,8 @@ buildAgentList();
 startClock();
 startWaveform();
 connect();
+refreshCapabilities();
+startSysStats();
 
 // ── WebSocket ──────────────────────────────────────────
 function connect() {
@@ -563,6 +582,7 @@ function connect() {
     pill.className = 'ok'; pill.textContent = '● LIVE';
     log('sys','SYSTEM','Connected to Jarvis');
     fetchDash();
+    refreshCapabilities();
   };
   ws.onclose = () => {
     pill.className = 'err'; pill.textContent = '● OFFLINE';
@@ -588,8 +608,18 @@ function dispatch(msg) {
     case 'approval_request':  onApvRequest(msg);   break;
     case 'approval_response': onApvResponse(msg);  break;
     case 'research_progress': onResearch(msg);     break;
+    case 'tts_start':         onTtsStart(msg);     break;
+    case 'tts_end':           onTtsEnd(msg);       break;
   }
 }
+
+// ── TTS speaking overlay (non-blocking speech) ─────────
+function onTtsStart(msg){
+  document.body.classList.add('speaking-overlay');
+  const t = (msg.text||'').trim();
+  if (t) log('jarvis','SPEAKING', t);
+}
+function onTtsEnd(){ document.body.classList.remove('speaking-overlay'); }
 
 // ── State Change ───────────────────────────────────────
 function onState(msg) {
@@ -956,6 +986,52 @@ function startClock() {
 function fmtUptime(ms) {
   const s = Math.floor(ms/1000), m = Math.floor(s/60), h = Math.floor(m/60);
   return h ? h+'h '+String(m%60).padStart(2,'0')+'m' : m ? m+'m '+String(s%60).padStart(2,'0')+'s' : s+'s';
+}
+
+// ── Capabilities banner + voice mode ───────────────────
+async function refreshCapabilities() {
+  try {
+    const r = await fetch('/api/voice/status');
+    if (!r.ok) return;
+    const s = await r.json();
+    const pill = el('mode-pill');
+    if (s.voice_input) { pill.className='voice'; pill.textContent='🎙 VOICE'; }
+    else { pill.className='text'; pill.textContent='⌨ TEXT-ONLY'; }
+
+    const caps = s.capabilities || {};
+    const missing = [];
+    if (!s.voice_input)  missing.push('microphone');
+    if (!s.voice_output) missing.push('speaker');
+    if (caps.has_api_key === false) missing.push('OPENROUTER_API_KEY (research/goals/chat)');
+    if (caps.gui_control === false) missing.push('GUI control');
+    const banner = el('cap-banner');
+    if (missing.length) {
+      banner.style.display = 'block';
+      banner.textContent = '⚠ Running degraded — unavailable: ' + missing.join(' · ') +
+        '   (run: python jarvis.py diagnose)';
+    } else {
+      banner.style.display = 'none';
+    }
+  } catch(_){}
+}
+
+// ── System stats (CPU / memory) ────────────────────────
+function startSysStats() {
+  async function poll() {
+    try {
+      const r = await fetch('/api/system/stats');
+      if (r.ok) {
+        const s = await r.json();
+        el('sys-cpu').textContent = s.cpu_pct != null ? s.cpu_pct + '%' : 'n/a';
+        el('sys-mem').textContent = s.mem_pct != null
+          ? s.mem_pct + '% (' + s.mem_used_gb + '/' + s.mem_total_gb + 'G)'
+          : (s.have_psutil ? '—' : 'n/a');
+        if (s.ws_clients != null) el('sys-ws').textContent = s.ws_clients;
+      }
+    } catch(_){}
+  }
+  poll();
+  setInterval(poll, 3000);
 }
 
 // ── REST helpers ───────────────────────────────────────
