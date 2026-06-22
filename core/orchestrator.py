@@ -190,6 +190,7 @@ class Orchestrator:
         subtasks: list[dict],
         task_id: Optional[str] = None,
         show_progress: bool = True,
+        on_step_start=None,  # Optional[Callable[[int, int, str, str], Awaitable[None]]]
     ) -> dict[str, str]:
         """
         Execute subtasks respecting dependencies; independent groups run in parallel.
@@ -231,8 +232,14 @@ class Orchestrator:
                 title = st["title"]
                 agent_name = st.get("agent", "coding")
                 sid = subtask_ids.get(title)
+                step_num = len(completed) + 1
                 if show_progress:
                     logger.info(f"[orchestrator] [{agent_name}] {title}")
+                if on_step_start:
+                    try:
+                        await on_step_start(step_num, len(subtasks), title, agent_name)
+                    except Exception:
+                        pass
                 try:
                     result = await self._run_with_retry(
                         agent_name=agent_name,
@@ -251,9 +258,16 @@ class Orchestrator:
                 remaining.remove(st)
             else:
                 # Parallel execution for independent subtasks
+                step_num = len(completed) + 1
                 if show_progress:
                     titles = ", ".join(st["title"] for st in ready)
                     logger.info(f"[orchestrator] parallel({len(ready)}): {titles}")
+                if on_step_start:
+                    group_title = ", ".join(st["title"] for st in ready[:2])
+                    try:
+                        await on_step_start(step_num, len(subtasks), group_title, "parallel")
+                    except Exception:
+                        pass
 
                 async def _run_one(st: dict) -> tuple[str, str]:
                     title = st["title"]

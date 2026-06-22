@@ -368,9 +368,10 @@ class IntentRouter:
             if app_cmd:
                 return Intent("os", "computer", "open_app", {"name": app_cmd}, raw)
 
-            # Assume it's a website name
-            domain = tl.replace(" ", "") + ".com"
-            return Intent("browser", "browser", "browse", {"url": f"https://{domain}"}, raw)
+            # Assume it's a website name; add .com only if no TLD already present
+            raw_domain = tl.replace(" ", "")
+            url = f"https://{raw_domain}" if "." in raw_domain else f"https://{raw_domain}.com"
+            return Intent("browser", "browser", "browse", {"url": url}, raw)
 
         # ── 10. Search / look up ───────────────────────────────────────────────
         m = _SEARCH_RE.match(raw)

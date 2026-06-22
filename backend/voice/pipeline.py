@@ -445,7 +445,14 @@ class VoicePipeline:
         })
         try:
             ceo = self._get_ceo()
-            response = await ceo.execute_goal(text, session_id="voice_session")
+
+            async def _speak_progress(phrase: str) -> None:
+                """Emit TTS progress during goal execution without touching pipeline state."""
+                await self._phase_speak(phrase)
+
+            response = await ceo.execute_goal(
+                text, session_id="voice_session", speak=_speak_progress,
+            )
             await manager.broadcast(EventType.AGENT_DONE, {"agent": "ceo", "result": response[:200]})
             await manager.broadcast(EventType.AGENT_STATUS, {
                 "agent": "ceo", "status": "done", "task_title": text[:60]

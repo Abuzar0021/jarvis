@@ -71,6 +71,7 @@ class CEOAgent(BaseAgent):
         goal: str,
         context: str = "",
         session_id: Optional[str] = None,
+        speak=None,  # Optional[Callable[[str], Awaitable[None]]] — TTS progress callback
     ) -> str:
         """
         Full autonomous goal execution pipeline:
@@ -82,6 +83,13 @@ class CEOAgent(BaseAgent):
         """
         from core.execution_state import new_execution
         from backend.websocket_manager import manager as _ws, EventType as _ET
+
+        async def _speak(text: str) -> None:
+            if speak:
+                try:
+                    await speak(text)
+                except Exception:
+                    pass
 
         session_id = session_id or str(uuid.uuid4())
         task_id    = self.memory.create_task(goal)
@@ -114,15 +122,25 @@ class CEOAgent(BaseAgent):
         self._show_plan(subtasks)
         self.memory.update_task(task_id, "planning", assigned_to="ceo")
 
+        n = len(subtasks)
+        await _speak(f"Planning complete. Executing {n} step{'s' if n != 1 else ''}.")
+
         # ── 2. Execute ALL subtasks via Orchestrator (blocks until complete) ───
-        log_action("ceo", "EXECUTE", f"{len(subtasks)} subtasks")
+        log_action("ceo", "EXECUTE", f"{n} subtasks")
         self.memory.update_task(task_id, "running")
 
+        async def _on_step(step_num: int, total: int, title: str, agent: str) -> None:
+            await _speak(f"{title}.")
+
         orchestrator = get_orchestrator()
-        results = await orchestrator.run_plan(subtasks, task_id=task_id, show_progress=True)
+        results = await orchestrator.run_plan(
+            subtasks, task_id=task_id, show_progress=True, on_step_start=_on_step,
+        )
 
         # ── 3. Synthesise final output (1 LLM call, not N) ────────────────────
         log_action("ceo", "SYNTHESISE")
+        if len(results) > 1:
+            await _speak("Synthesizing results.")
         synthesis = await self._synthesise(goal, results)
 
         elapsed = time.monotonic() - start
