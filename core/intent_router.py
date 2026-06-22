@@ -89,26 +89,58 @@ _MAC_APPS: dict[str, str] = {
     "code":       "Visual Studio Code",
 }
 
-# Well-known URLs for "open X" commands
-_URL_SHORTCUTS: dict[str, str] = {
-    "youtube":     "https://youtube.com",
-    "google":      "https://google.com",
-    "gmail":       "https://mail.google.com",
-    "github":      "https://github.com",
-    "twitter":     "https://twitter.com",
-    "instagram":   "https://instagram.com",
-    "facebook":    "https://facebook.com",
-    "reddit":      "https://reddit.com",
-    "amazon":      "https://amazon.com",
-    "netflix":     "https://netflix.com",
-    "spotify":     "https://open.spotify.com",
-    "stackoverflow": "https://stackoverflow.com",
-    "chatgpt":     "https://chat.openai.com",
-    "claude":      "https://claude.ai",
-    "wikipedia":   "https://wikipedia.org",
-    "maps":        "https://maps.google.com",
-    "weather":     "https://weather.com",
-}
+# Well-known URLs for "open X" commands — sorted by keyword length (longest first)
+# so "google maps" matches before "google"
+_URL_SHORTCUTS: list[tuple[str, str]] = sorted([
+    ("youtube",       "https://youtube.com"),
+    ("google maps",   "https://maps.google.com"),
+    ("google",        "https://google.com"),
+    ("gmail",         "https://mail.google.com"),
+    ("github",        "https://github.com"),
+    ("twitter",       "https://twitter.com"),
+    ("x",             "https://x.com"),            # "Open X" → x.com
+    ("instagram",     "https://instagram.com"),
+    ("facebook",      "https://facebook.com"),
+    ("reddit",        "https://reddit.com"),
+    ("amazon",        "https://amazon.com"),
+    ("netflix",       "https://netflix.com"),
+    ("spotify",       "https://open.spotify.com"),
+    ("stackoverflow", "https://stackoverflow.com"),
+    ("chatgpt",       "https://chatgpt.com"),
+    ("openai",        "https://chatgpt.com"),
+    ("claude",        "https://claude.ai"),
+    ("wikipedia",     "https://wikipedia.org"),
+    ("maps",          "https://maps.google.com"),
+    ("weather",       "https://weather.com"),
+    ("linkedin",      "https://linkedin.com"),
+    ("discord",       "https://discord.com/app"),
+    ("slack",         "https://app.slack.com"),
+    ("zoom",          "https://zoom.us"),
+    ("whatsapp",      "https://web.whatsapp.com"),
+    ("telegram",      "https://web.telegram.org"),
+    ("notion",        "https://notion.so"),
+    ("figma",         "https://figma.com"),
+    ("twitch",        "https://twitch.tv"),
+    ("vercel",        "https://vercel.com"),
+    ("heroku",        "https://heroku.com"),
+    ("trello",        "https://trello.com"),
+    ("jira",          "https://atlassian.net"),
+    ("dropbox",       "https://dropbox.com"),
+    ("drive",         "https://drive.google.com"),
+    ("sheets",        "https://sheets.google.com"),
+    ("docs",          "https://docs.google.com"),
+    ("calendar",      "https://calendar.google.com"),
+    ("meet",          "https://meet.google.com"),
+], key=lambda t: -len(t[0]))
+
+
+def _url_keyword_match(target_lower: str, keyword: str) -> bool:
+    """Word-boundary–safe URL shortcut match."""
+    if keyword == target_lower:
+        return True
+    # Pad with spaces so " x " doesn't match inside "next" or "tax"
+    padded = f" {target_lower} "
+    return f" {keyword} " in padded
 
 
 def _platform_app(name: str) -> Optional[str]:
@@ -301,9 +333,9 @@ class IntentRouter:
             target = m.group(1).strip()
             tl = target.lower()
 
-            # Check URL shortcuts first
-            for keyword, url in _URL_SHORTCUTS.items():
-                if keyword in tl:
+            # Check URL shortcuts first (longest keyword wins, word-boundary safe)
+            for keyword, url in _URL_SHORTCUTS:
+                if _url_keyword_match(tl, keyword):
                     logger.info(f"[intent] BROWSER(url) ← {target!r} → {url}")
                     return Intent("browser", "browser", "browse", {"url": url}, raw)
 
@@ -323,8 +355,8 @@ class IntentRouter:
             target = m.group(1).strip()
             tl = target.lower()
 
-            for keyword, url in _URL_SHORTCUTS.items():
-                if keyword in tl:
+            for keyword, url in _URL_SHORTCUTS:
+                if _url_keyword_match(tl, keyword):
                     return Intent("browser", "browser", "browse", {"url": url}, raw)
 
             url_m = _URL_RE.search(target)

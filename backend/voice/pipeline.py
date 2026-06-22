@@ -154,11 +154,7 @@ class VoicePipeline:
                         await self._set_state(VoiceState.TRANSCRIBING)
                         text = await self._phase_transcribe(audio)
                         if text:
-                            async with self._command_lock:
-                                await self._set_state(VoiceState.THINKING)
-                                response = await self._phase_think(text)
-                                await self._set_state(VoiceState.SPEAKING)
-                                await self._phase_speak(response)
+                            await self._handle_command(text)
                     await self._set_state(VoiceState.IDLE)
 
             except asyncio.CancelledError:
@@ -233,58 +229,136 @@ class VoicePipeline:
         logger.info(f"Transcript: {text!r}")
         return text
 
-    async def _phase_think(self, text: str) -> str:
+    async def _handle_command(self, text: str) -> None:
         """
-        Route command through the intent router.
-
-        Priority:
-          os / browser → direct tool execution (no LLM needed)
-          research     → ResearchAgent via orchestrator
-          conversation → CEOAgent chat (LLM)
+        Two-phase command handler:
+          Phase A: classify intent → speak immediate acknowledgment  (<300ms)
+          Phase B: execute → speak result
         """
-        intent = IntentRouter.classify(text)
-        logger.info(f"[pipeline] Intent: {intent}")
+        t_start = time.monotonic()
+        async with self._command_lock:
+            await self._set_state(VoiceState.THINKING)
 
-        await manager.broadcast(EventType.TASK_UPDATE, {
-            "title": text[:80],
-            "status": "running",
-            "agent": intent.agent,
-        })
-
-        try:
-            if intent.type == "os":
-                response = await self._execute_tool_direct(intent)
-            elif intent.type == "browser":
-                response = await self._execute_tool_direct(intent)
-            elif intent.type == "research":
-                response = await self._execute_research(intent, text)
-            elif intent.type == "goal":
-                response = await self._execute_goal_pipeline(text)
-            else:
-                # Pure conversational (greeting / small-talk) — fast LLM response
-                response = await self._execute_conversation(text)
-
-            self._last_response = response
-            self.stats["commands_completed"] += 1
+            # Instant intent classification (no LLM)
+            t0 = time.monotonic()
+            intent = IntentRouter.classify(text)
+            intent_ms = int((time.monotonic() - t0) * 1000)
+            logger.info(f"[pipeline] intent={intent.type}/{intent.tool} ({intent_ms}ms)")
 
             await manager.broadcast(EventType.TASK_UPDATE, {
-                "title": text[:80],
-                "status": "done",
-                "agent": intent.agent,
+                "title": text[:80], "status": "running",
+                "agent": intent.agent, "intent_ms": intent_ms,
             })
-            return response
 
-        except Exception as exc:
-            err = f"I hit an error: {exc}"
-            logger.error(f"_phase_think error: {exc}", exc_info=True)
-            self.stats["errors"] += 1
-            await manager.broadcast(EventType.TASK_UPDATE, {
-                "title": text[:80],
-                "status": "failed",
-                "agent": intent.agent,
-            })
-            await manager.broadcast(EventType.AGENT_ERROR, {"agent": intent.agent, "error": str(exc)})
-            return err
+            # Phase A: speak acknowledgment BEFORE executing
+            ack = self._make_ack(intent)
+            if ack and self._speaker:
+                await self._set_state(VoiceState.SPEAKING)
+                await self._phase_speak(ack)
+                await self._set_state(VoiceState.THINKING)
+
+            # Phase B: execute
+            t_exec = time.monotonic()
+            try:
+                result = await self._phase_execute_intent(intent, text)
+                exec_ms = int((time.monotonic() - t_exec) * 1000)
+                total_ms = int((time.monotonic() - t_start) * 1000)
+
+                self._last_response = result
+                self.stats["commands_completed"] += 1
+
+                await manager.broadcast(EventType.TASK_UPDATE, {
+                    "title": text[:80], "status": "done", "agent": intent.agent,
+                    "exec_ms": exec_ms, "total_ms": total_ms,
+                })
+
+                voice_out = self._format_for_voice(result, ack)
+                if voice_out and self._speaker:
+                    await self._set_state(VoiceState.SPEAKING)
+                    await self._phase_speak(voice_out)
+
+            except Exception as exc:
+                err_msg = f"I encountered an error: {exc}"
+                logger.error(f"_handle_command error: {exc}", exc_info=True)
+                self.stats["errors"] += 1
+                self._last_response = err_msg
+                await manager.broadcast(EventType.AGENT_ERROR, {
+                    "agent": intent.agent, "error": str(exc),
+                })
+                await manager.broadcast(EventType.TASK_UPDATE, {
+                    "title": text[:80], "status": "failed", "agent": intent.agent,
+                })
+                if self._speaker:
+                    await self._set_state(VoiceState.SPEAKING)
+                    await self._phase_speak(err_msg)
+            finally:
+                await self._set_state(VoiceState.IDLE)
+
+    async def _phase_execute_intent(self, intent, text: str) -> str:
+        """Dispatch intent to the right execution handler."""
+        if intent.type in ("os", "browser"):
+            return await self._execute_tool_direct(intent)
+        elif intent.type == "research":
+            return await self._execute_research(intent, text)
+        elif intent.type == "goal":
+            return await self._execute_goal_pipeline(text)
+        else:
+            return await self._execute_conversation(text)
+
+    def _make_ack(self, intent) -> str:
+        """Immediate voice acknowledgment — spoken BEFORE execution starts."""
+        tool, args = intent.tool, intent.args
+        if tool == "open_app":
+            name = args.get("name", "")
+            friendly = name.replace("-", " ").replace("_", " ").split(".")[0].title()
+            return f"Opening {friendly}."
+        if tool == "close_app":
+            return f"Closing {args.get('name', 'application')}."
+        if tool == "browse":
+            url = args.get("url", "")
+            site = url.replace("https://", "").replace("http://", "").replace("www.", "")
+            site = site.split("/")[0].split(".")[0].capitalize()
+            return f"Opening {site}."
+        if tool == "search_google":
+            q = args.get("query", "")[:40]
+            return f"Searching for {q}."
+        if tool == "screenshot":
+            return "Taking a screenshot."
+        if tool == "type_text":
+            return "Typing."
+        if tool == "press_keys":
+            return f"Pressing {args.get('keys', '')}."
+        if tool == "click":
+            return f"Clicking at {args.get('x', 0)}, {args.get('y', 0)}."
+        if intent.type == "goal":
+            return "Understood. Working on it."
+        if intent.type == "research":
+            return "Researching now."
+        return ""  # No ack for conversation — respond naturally
+
+    def _format_for_voice(self, result: str, ack: str = "") -> str:
+        """Convert a tool result string into a concise voice phrase."""
+        if not result:
+            return ""
+        low = result.lower().strip()
+        # Error → surface it
+        if low.startswith("error"):
+            err = result.split(":", 1)[-1].strip() if ":" in result else result
+            return f"I hit an error. {err[:120]}"
+        # Verification success
+        if result.startswith("✓"):
+            return "Done." if ack else result.split("—")[0].replace("✓", "").strip()[:100]
+        # OK: prefix
+        if low.startswith("ok:"):
+            inner = result[3:].strip()
+            return "Done." if (ack and len(inner) < 80) else inner[:120]
+        # Long research/goal results → truncate
+        if len(result) > 400:
+            return result[:350].rsplit(" ", 1)[0] + "..."
+        # Short tool success already covered by ack
+        if ack and len(result) < 120 and not any(w in low for w in ("error", "fail", "exception")):
+            return "Done."
+        return result[:250]
 
     async def _execute_tool_direct(self, intent) -> str:
         """
@@ -393,8 +467,8 @@ class VoicePipeline:
         try:
             ceo = self._get_ceo()
             voice_text = (
-                "[Voice command — respond concisely in 1-3 sentences, Jarvis style]\n\n"
-                + text
+                "[Voice command — respond concisely in 1-3 sentences, Jarvis style. "
+                "ALWAYS reply in English only.]\n\n" + text
             )
             response = await ceo.chat(voice_text, session_id="voice_session")
             await manager.broadcast(EventType.AGENT_DONE, {"agent": "ceo", "result": response})
@@ -426,27 +500,12 @@ class VoicePipeline:
         return self._ceo
 
     async def process_text_command(self, text: str) -> str:
-        """
-        Process a text command from the API/WS.
-        Serialised via _command_lock so it never races with the voice pipeline.
-        """
+        """Process a text command from the API/WS (same two-phase flow as voice)."""
         if not text.strip():
             return ""
-        async with self._command_lock:
-            try:
-                await manager.broadcast(EventType.TRANSCRIPT, {"text": text, "is_final": True, "source": "text"})
-                await self._set_state(VoiceState.THINKING)
-                response = await self._phase_think(text)
-                if self._speaker:
-                    await self._set_state(VoiceState.SPEAKING)
-                    await self._phase_speak(response)
-            except Exception as exc:
-                logger.error(f"process_text_command error: {exc}", exc_info=True)
-                response = f"I encountered an error: {exc}"
-                self.stats["errors"] += 1
-            finally:
-                await self._set_state(VoiceState.IDLE)
-        return response
+        await manager.broadcast(EventType.TRANSCRIPT, {"text": text, "is_final": True, "source": "text"})
+        await self._handle_command(text)
+        return self._last_response
 
     async def _preload_models(self) -> None:
         """Pre-warm Whisper and TTS in background to reduce first-command latency."""

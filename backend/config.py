@@ -46,8 +46,15 @@ VISION_CAPTURE_DIR = DATA_DIR / "captures"              # DATA_DIR from config.*
 
 # ── Personality ───────────────────────────────────────────────────────────────
 JARVIS_GREETING = "Jarvis online. How can I assist you?"
+
+# Language enforcement — never change unless user explicitly requests it
+VOICE_LANGUAGE: str = os.getenv("VOICE_LANGUAGE", "en")
+
 JARVIS_VOICE_SYSTEM = """\
 You are Jarvis, the AI operating system. You respond to voice commands.
+
+LANGUAGE: ALWAYS respond in English only. Never switch to another language regardless of \
+the user's input language. If the user speaks another language, reply in English.
 
 Rules for voice responses:
 - Be concise (1-3 sentences maximum unless detail is specifically requested)

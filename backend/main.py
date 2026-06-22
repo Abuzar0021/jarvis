@@ -41,7 +41,7 @@ async def lifespan(app: FastAPI):
     console.print(
         Panel(
             "[bold magenta]JARVIS AI OPERATING SYSTEM[/bold magenta]\n"
-            "[dim]Autonomous Agent OS — Phase 3[/dim]",
+            "[dim]Autonomous Agent OS — Dashboard 3.0[/dim]",
             border_style="magenta",
         )
     )
@@ -61,19 +61,18 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Jarvis AI OS",
     description="Local Autonomous AI Operating System — Backend",
-    version="2.0.0",
+    version="3.0.0",
     lifespan=lifespan,
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # tightened in production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Mount API routers
 app.include_router(voice_router)
 app.include_router(agent_router)
 app.include_router(system_router)
@@ -82,722 +81,922 @@ app.include_router(approval_router)
 app.include_router(dashboard_router)
 
 
-# ── Phase 3 Dashboard ─────────────────────────────────────────────────────────
+# ── Dashboard 3.0 ─────────────────────────────────────────────────────────────
 
 @app.get("/", response_class=HTMLResponse)
 async def status_page():
-    """Full Jarvis Phase 3 autonomous agent dashboard."""
     return HTMLResponse(_DASHBOARD_HTML)
 
-
-# ── Phase 3 Dashboard HTML ─────────────────────────────────────────────────────
 
 _DASHBOARD_HTML = """<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jarvis AI OS — Phase 3</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JARVIS · Command Center</title>
 <style>
-:root {
-  --cyan: #00f5ff;
-  --magenta: #ff00ff;
-  --green: #00ff88;
-  --yellow: #ffff00;
-  --red: #ff3333;
-  --orange: #ff8800;
-  --bg: #030a1a;
-  --bg2: #060f20;
-  --card: rgba(0,245,255,0.04);
-  --card2: rgba(0,245,255,0.08);
-  --border: rgba(0,245,255,0.18);
-  --border2: rgba(0,245,255,0.35);
-  --dim: rgba(0,245,255,0.45);
+:root{
+  --c:#00f5ff;--m:#ff00ff;--g:#00ff88;--y:#ffff00;--r:#ff3333;--o:#ff8800;
+  --bg:#020810;--bg2:#04101e;--bg3:#061526;
+  --card:rgba(0,245,255,0.035);--card2:rgba(0,245,255,0.07);
+  --b:rgba(0,245,255,0.14);--b2:rgba(0,245,255,0.28);
+  --dim:rgba(0,245,255,0.38);--text:rgba(255,255,255,0.85);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;overflow:hidden;}
 body{
-  background:var(--bg);
-  color:var(--cyan);
-  font-family:'Courier New',monospace;
-  font-size:13px;
-  display:grid;
-  grid-template-rows:56px 1fr 52px;
-  height:100vh;
+  background:var(--bg);color:var(--c);
+  font-family:'Courier New',monospace;font-size:12px;
+  display:grid;grid-template-rows:50px 1fr 170px;height:100vh;
 }
 
-/* ── TOP BAR ── */
+/* ── TOPBAR ── */
 #topbar{
-  display:flex;align-items:center;gap:1.5rem;
-  padding:0 1.5rem;
-  border-bottom:1px solid var(--border);
-  background:var(--bg2);
+  display:flex;align-items:center;gap:1rem;padding:0 1.2rem;
+  border-bottom:1px solid var(--b);background:var(--bg2);flex-shrink:0;
 }
-#topbar h1{font-size:1.3rem;letter-spacing:.5rem;text-shadow:0 0 20px var(--cyan);}
-#topbar .sub{font-size:.6rem;letter-spacing:.25rem;color:var(--dim);}
+#topbar h1{font-size:1.15rem;letter-spacing:.55rem;text-shadow:0 0 18px var(--c);white-space:nowrap;}
+.top-sub{font-size:.55rem;letter-spacing:.2rem;color:var(--dim);white-space:nowrap;}
+#state-badge{
+  font-size:.6rem;letter-spacing:.25rem;padding:.18rem .7rem;border-radius:10px;
+  border:1px solid var(--b);transition:all .3s;white-space:nowrap;
+}
+#state-badge.idle      {border-color:var(--c);color:var(--c);}
+#state-badge.listening {border-color:var(--g);color:var(--g);}
+#state-badge.thinking  {border-color:var(--m);color:var(--m);}
+#state-badge.speaking  {border-color:var(--c);color:var(--c);}
+#state-badge.error     {border-color:var(--r);color:var(--r);}
+#lang-badge{
+  font-size:.6rem;letter-spacing:.2rem;padding:.18rem .7rem;
+  border-radius:10px;border:1px solid var(--g);color:var(--g);white-space:nowrap;
+}
+#timing-display{
+  font-size:.6rem;color:var(--dim);letter-spacing:.1rem;white-space:nowrap;
+  display:flex;gap:.5rem;align-items:center;
+}
+.timing-pill{
+  padding:.12rem .45rem;border-radius:.5rem;border:1px solid var(--b);
+  font-size:.55rem;
+}
 #ws-pill{
-  margin-left:auto;font-size:.65rem;letter-spacing:.2rem;
-  padding:.2rem .8rem;border-radius:1rem;
-  border:1px solid var(--border);transition:all .3s;
+  font-size:.6rem;letter-spacing:.15rem;padding:.18rem .7rem;border-radius:10px;
+  border:1px solid var(--b);transition:all .3s;white-space:nowrap;
 }
-#ws-pill.ok{border-color:var(--green);color:var(--green);}
-#ws-pill.err{border-color:var(--red);color:var(--red);}
-#core-orb{
-  width:36px;height:36px;border-radius:50%;
-  border:2px solid var(--cyan);
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;
-  animation:pulse 3s ease-in-out infinite;
-  cursor:pointer;flex-shrink:0;
+#ws-pill.ok{border-color:var(--g);color:var(--g);}
+#ws-pill.err{border-color:var(--r);color:var(--r);}
+#clock{font-size:.65rem;color:var(--dim);letter-spacing:.1rem;margin-left:auto;white-space:nowrap;}
+#core-btn{
+  width:32px;height:32px;border-radius:50%;border:1.5px solid var(--c);
+  display:flex;align-items:center;justify-content:center;font-size:.9rem;
+  cursor:pointer;flex-shrink:0;animation:btn-pulse 3s ease-in-out infinite;
 }
-#core-orb.listening{border-color:var(--green);animation:none;box-shadow:0 0 12px var(--green);}
-#core-orb.thinking {border-color:var(--magenta);animation:spin 1s linear infinite;}
-#core-orb.speaking {border-color:var(--cyan);animation:glow .3s ease-in-out infinite alternate;}
-#core-orb.error    {border-color:var(--red);animation:none;}
-#state-badge{font-size:.65rem;letter-spacing:.25rem;color:var(--dim);}
-@keyframes pulse{0%,100%{box-shadow:0 0 8px var(--cyan);}50%{box-shadow:0 0 20px var(--cyan);}}
+@keyframes btn-pulse{0%,100%{box-shadow:0 0 6px var(--c);}50%{box-shadow:0 0 18px var(--c);}}
+#core-btn.listening{border-color:var(--g);animation:none;box-shadow:0 0 14px var(--g);}
+#core-btn.thinking {border-color:var(--m);animation:spin .8s linear infinite;}
+#core-btn.speaking {border-color:var(--c);animation:glow .4s ease-in-out infinite alternate;}
+#core-btn.error    {border-color:var(--r);animation:none;box-shadow:0 0 10px var(--r);}
 @keyframes spin{to{transform:rotate(360deg);}}
-@keyframes glow{from{box-shadow:0 0 8px var(--cyan);}to{box-shadow:0 0 28px var(--cyan);}}
+@keyframes glow{from{box-shadow:0 0 6px var(--c);}to{box-shadow:0 0 22px var(--c),0 0 40px rgba(0,245,255,.3);}}
 
 /* ── MAIN GRID ── */
 #main{
   display:grid;
-  grid-template-columns:260px 1fr 300px;
-  grid-template-rows:1fr 1fr;
-  gap:6px;
-  padding:6px;
-  overflow:hidden;
-  min-height:0;
+  grid-template-columns:220px 1fr 280px;
+  gap:5px;padding:5px;overflow:hidden;min-height:0;
 }
 
 /* ── PANELS ── */
 .panel{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:8px;
-  display:flex;flex-direction:column;
-  overflow:hidden;
-  min-height:0;
+  background:var(--card);border:1px solid var(--b);border-radius:7px;
+  display:flex;flex-direction:column;overflow:hidden;min-height:0;
 }
-.panel-hdr{
-  padding:.4rem .8rem;
-  font-size:.6rem;letter-spacing:.25rem;text-transform:uppercase;
-  color:var(--dim);
-  border-bottom:1px solid var(--border);
-  flex-shrink:0;
-  display:flex;align-items:center;gap:.5rem;
+.ph{
+  padding:.35rem .75rem;font-size:.55rem;letter-spacing:.22rem;
+  text-transform:uppercase;color:var(--dim);
+  border-bottom:1px solid var(--b);flex-shrink:0;
+  display:flex;align-items:center;gap:.4rem;
 }
-.panel-hdr .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);flex-shrink:0;}
-.panel-body{flex:1;overflow-y:auto;padding:.6rem .8rem;min-height:0;}
-.panel-body::-webkit-scrollbar{width:4px;}
-.panel-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.ph .dot{width:5px;height:5px;border-radius:50%;background:var(--c);flex-shrink:0;animation:dot-blink 2s ease-in-out infinite;}
+@keyframes dot-blink{0%,100%{opacity:.4;}50%{opacity:1;}}
+.pb{flex:1;overflow-y:auto;padding:.5rem .75rem;min-height:0;}
+.pb::-webkit-scrollbar{width:3px;}
+.pb::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px;}
 
-/* ── AGENT FLOW (spans col 2, row 1) ── */
-#panel-flow{grid-column:2;grid-row:1;}
-.flow-row{
-  display:flex;align-items:center;gap:8px;
-  padding:.35rem 0;
-  border-bottom:1px solid rgba(0,245,255,.05);
+/* ── LEFT: AGENTS ── */
+.agent-row{
+  display:flex;align-items:center;gap:.5rem;padding:.28rem 0;
+  border-bottom:1px solid rgba(0,245,255,.05);transition:all .2s;
 }
-.flow-row:last-child{border-bottom:none;}
-.agent-node{
-  display:flex;align-items:center;gap:6px;
-  padding:.25rem .6rem;border-radius:20px;
-  border:1px solid var(--border);
-  font-size:.7rem;letter-spacing:.1rem;
-  transition:all .25s;white-space:nowrap;
+.agent-row:last-child{border-bottom:none;}
+.adot{
+  width:7px;height:7px;border-radius:50%;flex-shrink:0;
+  border:1px solid var(--dim);transition:all .25s;
 }
-.agent-node.running {border-color:var(--magenta);color:var(--magenta);box-shadow:0 0 8px rgba(255,0,255,.4);animation:pulse-mg .8s ease-in-out infinite;}
-.agent-node.waiting {border-color:var(--yellow);color:var(--yellow);}
-.agent-node.done    {border-color:var(--green);color:var(--green);}
-.agent-node.failed  {border-color:var(--red);color:var(--red);}
-.agent-node.idle    {border-color:var(--border);color:var(--dim);}
-@keyframes pulse-mg{0%,100%{box-shadow:0 0 6px rgba(255,0,255,.3);}50%{box-shadow:0 0 16px rgba(255,0,255,.7);}}
-.arrow{color:var(--dim);font-size:.8rem;flex-shrink:0;}
-.task-label{flex:1;font-size:.7rem;color:rgba(0,245,255,.7);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.task-badge{
-  font-size:.55rem;letter-spacing:.15rem;padding:.15rem .45rem;
-  border-radius:.8rem;border:1px solid;flex-shrink:0;
-}
-.task-badge.running{border-color:var(--magenta);color:var(--magenta);}
-.task-badge.waiting{border-color:var(--yellow);color:var(--yellow);}
-.task-badge.done   {border-color:var(--green);color:var(--green);}
-.task-badge.failed {border-color:var(--red);color:var(--red);}
+.adot.running{background:var(--m);border-color:var(--m);box-shadow:0 0 6px var(--m);animation:dot-run .6s ease-in-out infinite;}
+.adot.done   {background:var(--g);border-color:var(--g);}
+.adot.failed {background:var(--r);border-color:var(--r);}
+.adot.idle   {background:transparent;border-color:var(--dim);}
+@keyframes dot-run{0%,100%{opacity:.6;}50%{opacity:1;box-shadow:0 0 10px var(--m);}}
+.aname{font-size:.68rem;letter-spacing:.12rem;flex:1;text-transform:uppercase;}
+.astat{font-size:.55rem;letter-spacing:.1rem;color:var(--dim);}
+.atimer{font-size:.5rem;color:var(--o);letter-spacing:.05rem;min-width:2.5rem;text-align:right;}
 
-/* ── LEFT COL ── */
-#panel-goal{grid-column:1;grid-row:1;}
-#panel-memory{grid-column:1;grid-row:2;}
+.sys-row{display:flex;justify-content:space-between;padding:.25rem 0;font-size:.6rem;color:var(--dim);}
+.sys-val{color:var(--c);}
 
-/* ── CENTER BOTTOM ── */
-#panel-conv{grid-column:2;grid-row:2;}
-.msg{padding:.3rem 0;border-bottom:1px solid rgba(0,245,255,.05);line-height:1.5;}
+/* ── CENTER: CORE ── */
+#center-panel{display:flex;flex-direction:column;overflow:hidden;min-height:0;}
+
+#core-display{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:.75rem;flex:0 0 auto;gap:.5rem;background:var(--bg2);
+  border-bottom:1px solid var(--b);
+}
+
+/* SVG Core Orb */
+#core-svg{width:160px;height:160px;overflow:visible;}
+#ring1{
+  transform-origin:100px 100px;
+  animation:cw 10s linear infinite;
+}
+#ring2{
+  transform-origin:100px 100px;
+  animation:ccw 6s linear infinite;
+}
+#ring3{
+  transform-origin:100px 100px;
+  animation:cw 4s linear infinite;
+}
+#hex{transition:all .4s;}
+#core-dot{animation:core-pulse 2s ease-in-out infinite;}
+@keyframes cw{to{transform:rotate(360deg);}}
+@keyframes ccw{to{transform:rotate(-360deg);}}
+@keyframes core-pulse{0%,100%{r:7;opacity:.7;}50%{r:10;opacity:1;}}
+
+/* State-dependent ring colors */
+body.idle     #ring1{stroke:var(--c);}
+body.idle     #ring2{stroke:var(--c);}
+body.idle     #ring3{stroke:var(--c);}
+body.listening #ring1,body.listening #ring2,body.listening #ring3{stroke:var(--g);}
+body.thinking  #ring1,body.thinking  #ring2,body.thinking  #ring3{stroke:var(--m);}
+body.speaking  #ring1,body.speaking  #ring2,body.speaking  #ring3{stroke:var(--c);}
+body.thinking  #ring1{animation-duration:2s;}
+body.thinking  #ring2{animation-duration:1.5s;}
+body.thinking  #ring3{animation-duration:1s;}
+
+/* Waveform canvas */
+#waveform{
+  width:320px;height:42px;display:block;
+  border-radius:4px;border:1px solid var(--b);
+  background:rgba(0,0,0,.3);
+}
+
+/* Execution info below core */
+#exec-info{
+  display:flex;flex-direction:column;gap:.3rem;
+  padding:.5rem .75rem;flex-shrink:0;
+  border-bottom:1px solid var(--b);
+  background:rgba(0,0,0,.2);
+}
+#current-task{
+  font-size:.8rem;color:#fff;font-weight:bold;line-height:1.4;
+  max-height:2.4rem;overflow:hidden;text-overflow:ellipsis;
+}
+#exec-meta{display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;}
+.exec-badge{
+  font-size:.55rem;letter-spacing:.12rem;padding:.12rem .45rem;
+  border-radius:.5rem;border:1px solid var(--b);color:var(--dim);
+}
+.exec-badge.running{border-color:var(--m);color:var(--m);}
+.exec-badge.done   {border-color:var(--g);color:var(--g);}
+.exec-badge.failed {border-color:var(--r);color:var(--r);}
+#progress-bar-wrap{width:100%;height:3px;background:var(--b);border-radius:2px;display:none;}
+#progress-bar{height:100%;background:var(--m);border-radius:2px;width:0%;transition:width .4s;}
+
+/* Conversation log */
+#conv-panel{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0;}
+.msg{padding:.28rem 0;border-bottom:1px solid rgba(0,245,255,.04);line-height:1.45;}
 .msg:last-child{border-bottom:none;}
-.msg .who{font-size:.6rem;letter-spacing:.2rem;margin-bottom:.15rem;}
-.msg .who.user{color:var(--cyan);}
-.msg .who.jarvis{color:var(--green);}
-.msg .who.error{color:var(--red);}
-.msg .body{font-size:.8rem;color:rgba(255,255,255,.85);word-break:break-word;}
+.msg .who{font-size:.55rem;letter-spacing:.18rem;margin-bottom:.1rem;}
+.who.user  {color:var(--c);}
+.who.jarvis{color:var(--g);}
+.who.exec  {color:var(--m);}
+.who.tool  {color:var(--o);}
+.who.error {color:var(--r);}
+.who.sys   {color:var(--dim);}
+.msg .body {font-size:.75rem;color:var(--text);word-break:break-word;}
 
-/* ── RIGHT COL ── */
-#panel-tasks{grid-column:3;grid-row:1;}
-#panel-approvals{grid-column:3;grid-row:2;}
+/* ── RIGHT: TOOLS + APPROVALS ── */
+.tool-entry{
+  padding:.3rem 0;border-bottom:1px solid rgba(0,245,255,.05);
+  display:flex;flex-direction:column;gap:.1rem;
+}
+.tool-entry:last-child{border-bottom:none;}
+.tool-hdr{display:flex;align-items:center;gap:.4rem;}
+.tool-name{font-size:.7rem;letter-spacing:.1rem;color:#fff;}
+.tool-ok{font-size:.7rem;color:var(--g);}
+.tool-err{font-size:.7rem;color:var(--r);}
+.tool-ms{font-size:.55rem;color:var(--o);margin-left:auto;}
+.tool-result{font-size:.65rem;color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tool-agent-tag{font-size:.5rem;letter-spacing:.1rem;padding:.08rem .3rem;border-radius:.3rem;border:1px solid var(--b);color:var(--dim);}
 
-.task-item{padding:.35rem 0;border-bottom:1px solid rgba(0,245,255,.05);}
+.task-item{padding:.3rem 0;border-bottom:1px solid rgba(0,245,255,.04);}
 .task-item:last-child{border-bottom:none;}
-.task-item .t-title{font-size:.75rem;color:#fff;margin-bottom:.15rem;}
-.task-item .t-meta{font-size:.6rem;color:var(--dim);}
-.task-item.running .t-title{color:var(--magenta);}
-.task-item.done .t-title{color:var(--green);}
-.task-item.failed .t-title{color:var(--red);}
+.t-title{font-size:.72rem;color:#fff;margin-bottom:.1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.t-meta{font-size:.56rem;color:var(--dim);}
+.task-item.running .t-title{color:var(--m);}
+.task-item.done    .t-title{color:var(--g);}
+.task-item.failed  .t-title{color:var(--r);}
 
-.approval-card{
-  padding:.5rem;border-radius:6px;margin-bottom:.4rem;
-  border:1px solid var(--orange);background:rgba(255,136,0,.05);
+.apv-card{
+  padding:.45rem;border-radius:5px;margin-bottom:.35rem;
+  border:1px solid var(--o);background:rgba(255,136,0,.05);
 }
-.approval-card .a-agent{font-size:.6rem;color:var(--orange);letter-spacing:.15rem;margin-bottom:.2rem;}
-.approval-card .a-action{font-size:.75rem;color:#fff;margin-bottom:.3rem;}
-.approval-card .a-btns{display:flex;gap:.4rem;}
-.a-btn{
-  font-size:.6rem;letter-spacing:.15rem;padding:.2rem .6rem;border-radius:3px;
-  cursor:pointer;font-family:inherit;border:1px solid;background:transparent;
-  transition:all .2s;
+.apv-agent{font-size:.55rem;color:var(--o);letter-spacing:.12rem;margin-bottom:.15rem;}
+.apv-action{font-size:.72rem;color:#fff;margin-bottom:.25rem;word-break:break-word;}
+.apv-btns{display:flex;gap:.35rem;}
+.apv-btn{
+  font-size:.55rem;letter-spacing:.12rem;padding:.18rem .55rem;border-radius:3px;
+  cursor:pointer;font-family:inherit;border:1px solid;background:transparent;transition:all .2s;
 }
-.a-btn.approve{border-color:var(--green);color:var(--green);}
-.a-btn.approve:hover{background:rgba(0,255,136,.15);}
-.a-btn.reject{border-color:var(--red);color:var(--red);}
-.a-btn.reject:hover{background:rgba(255,51,51,.15);}
+.apv-btn.ok {border-color:var(--g);color:var(--g);}
+.apv-btn.ok:hover{background:rgba(0,255,136,.12);}
+.apv-btn.no {border-color:var(--r);color:var(--r);}
+.apv-btn.no:hover{background:rgba(255,51,51,.1);}
 
-/* ── BOTTOM BAR ── */
-#bottombar{
-  display:flex;align-items:center;gap:.6rem;
-  padding:0 1rem;
-  border-top:1px solid var(--border);
-  background:var(--bg2);
+/* ── BOTTOM ── */
+#bottom{display:flex;flex-direction:column;border-top:1px solid var(--b);flex-shrink:0;}
+
+/* Timeline */
+#timeline{
+  flex:1;display:flex;align-items:center;gap:0;
+  overflow-x:auto;overflow-y:hidden;
+  padding:.3rem .75rem;background:var(--bg2);
+  border-bottom:1px solid var(--b);
+  scrollbar-width:thin;scrollbar-color:var(--b) transparent;
+}
+#timeline::-webkit-scrollbar{height:3px;}
+#timeline::-webkit-scrollbar-thumb{background:var(--b);border-radius:2px;}
+#tl-track{display:flex;align-items:center;gap:0;flex-shrink:0;}
+.tl-evt{
+  display:flex;flex-direction:column;align-items:center;
+  padding:0 .6rem;border-right:1px solid var(--b);flex-shrink:0;
+  min-width:80px;cursor:default;
+}
+.tl-evt:last-child{border-right:none;}
+.tl-time{font-size:.5rem;color:var(--dim);letter-spacing:.05rem;}
+.tl-agent{font-size:.52rem;letter-spacing:.08rem;margin:.06rem 0;}
+.tl-txt{font-size:.58rem;color:#fff;text-align:center;max-width:75px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tl-evt.done   .tl-agent{color:var(--g);}
+.tl-evt.failed .tl-agent{color:var(--r);}
+.tl-evt.running .tl-agent{color:var(--m);}
+.tl-dot{width:5px;height:5px;border-radius:50%;margin:.08rem auto;background:var(--dim);}
+.tl-evt.done   .tl-dot{background:var(--g);}
+.tl-evt.failed .tl-dot{background:var(--r);}
+.tl-evt.running .tl-dot{background:var(--m);animation:dot-run .6s ease-in-out infinite;}
+
+/* Input bar */
+#inputbar{
+  display:flex;align-items:center;gap:.5rem;padding:.35rem 1rem;height:40px;
 }
 #text-input{
   flex:1;background:transparent;border:none;outline:none;
-  color:var(--cyan);font-family:inherit;font-size:.85rem;
+  color:var(--c);font-family:inherit;font-size:.85rem;
 }
 #text-input::placeholder{color:var(--dim);}
 .bar-btn{
-  background:transparent;border:1px solid var(--border);color:var(--cyan);
-  padding:.3rem .9rem;border-radius:4px;cursor:pointer;
-  font-family:inherit;font-size:.65rem;letter-spacing:.15rem;text-transform:uppercase;
-  transition:all .2s;
+  background:transparent;border:1px solid var(--b);color:var(--c);
+  padding:.25rem .8rem;border-radius:4px;cursor:pointer;
+  font-family:inherit;font-size:.6rem;letter-spacing:.12rem;
+  text-transform:uppercase;transition:all .2s;white-space:nowrap;
 }
-.bar-btn:hover{border-color:var(--cyan);box-shadow:0 0 10px rgba(0,245,255,.2);}
-.bar-btn.danger{border-color:var(--red);color:var(--red);}
-.bar-btn.danger:hover{background:rgba(255,51,51,.1);}
-
-/* ── MEMORY ITEMS ── */
-.mem-item{padding:.25rem 0;border-bottom:1px solid rgba(0,245,255,.05);font-size:.72rem;color:rgba(255,255,255,.7);line-height:1.4;}
-.mem-item:last-child{border-bottom:none;}
-.mem-item .m-role{font-size:.55rem;color:var(--dim);letter-spacing:.15rem;}
-
-/* ── REVIEW BADGE ── */
-.review-bar{
-  display:flex;align-items:center;gap:.5rem;padding:.4rem .8rem;
-  border-top:1px solid var(--border);flex-shrink:0;font-size:.7rem;
-}
-.score-pill{
-  padding:.15rem .5rem;border-radius:10px;font-size:.65rem;letter-spacing:.1rem;border:1px solid;
-}
-.score-pill.pass{border-color:var(--green);color:var(--green);}
-.score-pill.warn{border-color:var(--yellow);color:var(--yellow);}
-.score-pill.fail{border-color:var(--red);color:var(--red);}
-
-/* ── RESEARCH PROGRESS ── */
-.research-step{padding:.25rem .5rem;border-left:2px solid var(--border);margin:.2rem 0;font-size:.7rem;color:rgba(255,255,255,.7);}
-.research-step.active{border-color:var(--magenta);color:#fff;}
-.research-step.done{border-color:var(--green);color:var(--dim);}
-
-/* scrollbar global */
-*::-webkit-scrollbar{width:4px;}
-*::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.bar-btn:hover{border-color:var(--c);box-shadow:0 0 8px rgba(0,245,255,.2);}
+.bar-btn.danger{border-color:var(--r);color:var(--r);}
+.bar-btn.danger:hover{background:rgba(255,51,51,.08);}
 </style>
 </head>
-<body>
+<body class="idle">
 
-<!-- TOP BAR -->
+<!-- ── TOPBAR ── -->
 <div id="topbar">
-  <div id="core-orb" onclick="triggerWake()" title="Click to wake Jarvis">⬡</div>
+  <div id="core-btn" onclick="triggerWake()" title="Click to wake Jarvis">⬡</div>
   <div>
     <h1>JARVIS</h1>
-    <div class="sub">AUTONOMOUS AGENT OS · PHASE 3</div>
+    <div class="top-sub">COMMAND CENTER · v3.0</div>
   </div>
-  <div id="state-badge">INITIALISING</div>
+  <div id="state-badge" class="idle">INITIALISING</div>
+  <div id="lang-badge">🌐 EN</div>
+  <div id="timing-display">
+    <span class="timing-pill" id="t-intent">intent —</span>
+    <span class="timing-pill" id="t-exec">exec —</span>
+    <span class="timing-pill" id="t-total">total —</span>
+  </div>
   <div id="ws-pill" class="err">● CONNECTING</div>
+  <div id="clock">—</div>
 </div>
 
-<!-- MAIN GRID -->
+<!-- ── MAIN GRID ── -->
 <div id="main">
 
-  <!-- LEFT: Goal + Memory -->
-  <div class="panel" id="panel-goal">
-    <div class="panel-hdr"><div class="dot"></div>CURRENT GOAL</div>
-    <div class="panel-body" id="goal-body">
-      <div style="color:var(--dim);font-size:.75rem;">Awaiting goal…</div>
-    </div>
-  </div>
+  <!-- LEFT: Agents + System -->
+  <div style="display:flex;flex-direction:column;gap:5px;overflow:hidden;min-height:0;">
 
-  <!-- CENTER TOP: Agent Flow -->
-  <div class="panel" id="panel-flow">
-    <div class="panel-hdr"><div class="dot" style="background:var(--magenta)"></div>AGENT FLOW · REAL-TIME</div>
-    <div class="panel-body" id="flow-body">
-      <div class="flow-row" id="flow-ceo">
-        <div class="agent-node idle" id="node-ceo">⊛ CEO</div>
-        <div class="arrow">→</div>
-        <div class="agent-node idle" id="node-research">⊕ RESEARCH</div>
-        <div class="arrow">→</div>
-        <div class="agent-node idle" id="node-browser">⊜ BROWSER</div>
-        <div class="arrow">→</div>
-        <div class="agent-node idle" id="node-reviewer">⊘ REVIEWER</div>
-      </div>
-      <div class="flow-row" id="flow-extra" style="flex-wrap:wrap;gap:6px;">
-        <div class="agent-node idle" id="node-coding">✎ CODING</div>
-        <div class="arrow">·</div>
-        <div class="agent-node idle" id="node-computer">⌨ COMPUTER</div>
-        <div class="arrow">·</div>
-        <div class="agent-node idle" id="node-vision">◉ VISION</div>
-        <div class="arrow">·</div>
-        <div class="agent-node idle" id="node-data">⊞ DATA</div>
-      </div>
-      <div id="research-progress" style="margin-top:.5rem;display:none;">
-        <div style="font-size:.6rem;letter-spacing:.2rem;color:var(--dim);margin-bottom:.3rem;">RESEARCH PROGRESS</div>
-        <div class="research-step" id="rp-search">1. SEARCHING SOURCES</div>
-        <div class="research-step" id="rp-fetch">2. FETCHING PAGES</div>
-        <div class="research-step" id="rp-cross">3. CROSS-REFERENCING</div>
-        <div class="research-step" id="rp-write">4. WRITING REPORT</div>
-        <div class="research-step" id="rp-save">5. SAVING</div>
+    <div class="panel" style="flex:1;min-height:0;">
+      <div class="ph"><div class="dot"></div>AGENTS</div>
+      <div class="pb" id="agents-list">
+        <!-- populated by JS -->
       </div>
     </div>
+
+    <div class="panel" style="flex:0 0 auto;">
+      <div class="ph"><div class="dot" style="background:var(--g)"></div>SYSTEM</div>
+      <div class="pb" style="padding:.35rem .75rem;">
+        <div class="sys-row"><span>Commands</span><span class="sys-val" id="sys-cmds">0</span></div>
+        <div class="sys-row"><span>Errors</span><span class="sys-val" id="sys-errs">0</span></div>
+        <div class="sys-row"><span>Uptime</span><span class="sys-val" id="sys-uptime">—</span></div>
+        <div class="sys-row"><span>WS clients</span><span class="sys-val" id="sys-ws">1</span></div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- RIGHT TOP: Tasks -->
-  <div class="panel" id="panel-tasks">
-    <div class="panel-hdr"><div class="dot" style="background:var(--yellow)"></div>TASK QUEUE</div>
-    <div class="panel-body" id="tasks-body">
-      <div style="color:var(--dim);font-size:.72rem;">No active tasks</div>
+  <!-- CENTER: Core + Conversation -->
+  <div id="center-panel" class="panel">
+
+    <!-- Core orb + waveform + exec info -->
+    <div id="core-display">
+      <svg id="core-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer ring -->
+        <circle id="ring1" cx="100" cy="100" r="88" fill="none"
+                stroke="#00f5ff" stroke-width="1" stroke-dasharray="18 9" opacity=".25"/>
+        <!-- Middle ring -->
+        <circle id="ring2" cx="100" cy="100" r="70" fill="none"
+                stroke="#00f5ff" stroke-width="1" stroke-dasharray="6 14" opacity=".35"/>
+        <!-- Inner ring -->
+        <circle id="ring3" cx="100" cy="100" r="54" fill="none"
+                stroke="#00f5ff" stroke-width="1.5" stroke-dasharray="3 5" opacity=".5"/>
+        <!-- Hexagon -->
+        <polygon id="hex"
+                 points="100,64 131,82 131,118 100,136 69,118 69,82"
+                 fill="rgba(0,245,255,0.05)" stroke="#00f5ff" stroke-width="1.5" opacity=".8"/>
+        <!-- Center dot -->
+        <circle id="core-dot" cx="100" cy="100" r="7" fill="#00f5ff" opacity=".85"/>
+        <!-- State text -->
+        <text id="core-text" x="100" y="158" text-anchor="middle"
+              fill="rgba(0,245,255,0.5)" font-family="Courier New" font-size="7"
+              letter-spacing="4">IDLE</text>
+      </svg>
+      <canvas id="waveform" width="320" height="42"></canvas>
     </div>
+
+    <!-- Execution state info -->
+    <div id="exec-info">
+      <div id="current-task" style="color:var(--dim);font-size:.75rem;">Awaiting command…</div>
+      <div id="exec-meta">
+        <span class="exec-badge" id="exec-status">IDLE</span>
+        <span class="exec-badge" id="exec-agent" style="display:none;"></span>
+        <span class="exec-badge" id="exec-step"  style="display:none;"></span>
+        <span class="exec-badge" id="exec-elapsed" style="display:none;"></span>
+      </div>
+      <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+    </div>
+
+    <!-- Conversation log -->
+    <div id="conv-panel">
+      <div class="ph"><div class="dot" style="background:var(--g)"></div>CONVERSATION</div>
+      <div class="pb" id="conv-body">
+        <div class="msg">
+          <div class="who jarvis">JARVIS</div>
+          <div class="body">Online. Dashboard 3.0 active. How can I help?</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- LEFT BOTTOM: Memory -->
-  <div class="panel" id="panel-memory">
-    <div class="panel-hdr"><div class="dot" style="background:var(--green)"></div>MEMORY</div>
-    <div class="panel-body" id="memory-body">
-      <div style="color:var(--dim);font-size:.72rem;">No memories yet</div>
-    </div>
-  </div>
+  <!-- RIGHT: Tools + Tasks + Approvals -->
+  <div style="display:flex;flex-direction:column;gap:5px;overflow:hidden;min-height:0;">
 
-  <!-- CENTER BOTTOM: Conversation -->
-  <div class="panel" id="panel-conv">
-    <div class="panel-hdr"><div class="dot"></div>CONVERSATION</div>
-    <div class="panel-body" id="conv-body">
-      <div class="msg"><div class="who jarvis">JARVIS</div><div class="body">Online. How can I help?</div></div>
+    <div class="panel" style="flex:1;min-height:0;">
+      <div class="ph"><div class="dot" style="background:var(--o)"></div>TOOL ACTIVITY</div>
+      <div class="pb" id="tool-log">
+        <div style="color:var(--dim);font-size:.7rem;">No tool calls yet</div>
+      </div>
     </div>
-    <div id="review-bar" class="review-bar" style="display:none;">
-      <span style="color:var(--dim);">REVIEW</span>
-      <span id="review-score-pill" class="score-pill pass">—</span>
-      <span id="review-verdict" style="flex:1;color:var(--dim);">—</span>
-    </div>
-  </div>
 
-  <!-- RIGHT BOTTOM: Approvals -->
-  <div class="panel" id="panel-approvals">
-    <div class="panel-hdr"><div class="dot" style="background:var(--orange)"></div>APPROVALS</div>
-    <div class="panel-body" id="approvals-body">
-      <div style="color:var(--dim);font-size:.72rem;">No pending approvals</div>
+    <div class="panel" style="flex:0 0 110px;min-height:0;">
+      <div class="ph"><div class="dot" style="background:var(--y)"></div>TASK QUEUE</div>
+      <div class="pb" id="tasks-body">
+        <div style="color:var(--dim);font-size:.7rem;">No active tasks</div>
+      </div>
     </div>
+
+    <div class="panel" style="flex:0 0 auto;">
+      <div class="ph"><div class="dot" style="background:var(--r)"></div>APPROVALS</div>
+      <div class="pb" id="approvals-body">
+        <div style="color:var(--dim);font-size:.7rem;">No pending approvals</div>
+      </div>
+    </div>
+
   </div>
 
 </div>
 
-<!-- BOTTOM BAR -->
-<div id="bottombar">
-  <span style="color:var(--dim);font-size:.75rem;">▶</span>
-  <input id="text-input" type="text" placeholder="Type a goal or command and press Enter…"
-         onkeydown="if(event.key==='Enter')sendText()">
-  <button class="bar-btn" onclick="triggerWake()">⬡ WAKE</button>
-  <button class="bar-btn" onclick="sendText()">SEND</button>
-  <button class="bar-btn danger" onclick="interrupt()">✕ STOP</button>
+<!-- ── BOTTOM ── -->
+<div id="bottom">
+  <div id="timeline">
+    <div id="tl-track"></div>
+  </div>
+  <div id="inputbar">
+    <span style="color:var(--dim);font-size:.75rem;">▶</span>
+    <input id="text-input" type="text"
+           placeholder="Type a goal or command and press Enter…"
+           onkeydown="if(event.key==='Enter')sendText()">
+    <button class="bar-btn" onclick="triggerWake()">⬡ WAKE</button>
+    <button class="bar-btn" onclick="sendText()">SEND</button>
+    <button class="bar-btn danger" onclick="interrupt()">✕ STOP</button>
+  </div>
 </div>
 
 <script>
-// ── State ──
-let ws, reconnectTimer;
-const agentNodes = {};
-const taskMap = {};
-let approvalMap = {};
+// ══════════════════════════════════════════════════════
+//  JARVIS DASHBOARD 3.0 — Client JS
+// ══════════════════════════════════════════════════════
 
-const STATE_COLORS = {
-  idle:'#00f5ff', listening:'#00ff88', transcribing:'#ffff00',
-  thinking:'#ff00ff', speaking:'#00f5ff', error:'#ff3333', stopped:'#666'
-};
+// ── State ──────────────────────────────────────────────
+let ws, reconnTimer;
+let currentState = 'idle';
+let taskMap = {}, approvalMap = {}, toolLog = [];
+let sysStats = {cmds:0, errs:0, start: Date.now()};
+let wavePhase = 0, animFrame;
 
-// ── WebSocket ──
+const AGENTS = [
+  {id:'ceo',      icon:'⊛', name:'CEO'},
+  {id:'computer', icon:'⌨', name:'COMPUTER'},
+  {id:'browser',  icon:'⊜', name:'BROWSER'},
+  {id:'research', icon:'⊕', name:'RESEARCH'},
+  {id:'coding',   icon:'✎', name:'CODING'},
+  {id:'qa',       icon:'⊙', name:'QA'},
+  {id:'debug',    icon:'⊘', name:'DEBUG'},
+  {id:'vision',   icon:'◉', name:'VISION'},
+  {id:'data',     icon:'⊞', name:'DATA'},
+  {id:'reviewer', icon:'⊗', name:'REVIEWER'},
+];
+let agentState = {}; // name → {status, timer, t0}
+AGENTS.forEach(a => agentState[a.id] = {status:'idle', timer:null, t0:0});
+
+// ── Boot ───────────────────────────────────────────────
+buildAgentList();
+startClock();
+startWaveform();
+connect();
+
+// ── WebSocket ──────────────────────────────────────────
 function connect() {
-  clearTimeout(reconnectTimer);
-  const pill = document.getElementById('ws-pill');
-  pill.className = 'err';
-  pill.textContent = '● CONNECTING';
+  clearTimeout(reconnTimer);
+  const pill = el('ws-pill');
+  pill.className = 'err'; pill.textContent = '● CONNECTING';
   ws = new WebSocket(`ws://${location.host}/api/voice/ws`);
-
   ws.onopen = () => {
-    pill.className = 'ok';
-    pill.textContent = '● LIVE';
-    sysLog('Connected to Jarvis backend');
-    fetchState();
-    fetchApprovals();
+    pill.className = 'ok'; pill.textContent = '● LIVE';
+    log('sys','SYSTEM','Connected to Jarvis');
+    fetchDash();
   };
   ws.onclose = () => {
-    pill.className = 'err';
-    pill.textContent = '● OFFLINE';
-    reconnectTimer = setTimeout(connect, 3000);
+    pill.className = 'err'; pill.textContent = '● OFFLINE';
+    reconnTimer = setTimeout(connect, 3000);
   };
-  ws.onerror = () => sysLog('WebSocket error — retrying…');
-  ws.onmessage = (e) => {
-    try { handleEvent(JSON.parse(e.data)); } catch(_) {}
-  };
+  ws.onerror = () => log('sys','SYSTEM','WebSocket error — retrying…');
+  ws.onmessage = e => { try { dispatch(JSON.parse(e.data)); } catch(_){} };
 }
 
-// ── Event Router ──
-function handleEvent(msg) {
+// ── Event Dispatcher ───────────────────────────────────
+function dispatch(msg) {
   switch(msg.type) {
-    case 'state_change':      onStateChange(msg);      break;
-    case 'wake_detected':     sysLog('Wake word detected');  break;
-    case 'transcript':        onTranscript(msg);       break;
+    case 'state_change':      onState(msg);        break;
+    case 'transcript':        onTranscript(msg);   break;
     case 'agent_done':
-    case 'response':          onResponse(msg);         break;
-    case 'agent_error':       onAgentError(msg);       break;
-    case 'system_status':     onSystemStatus(msg);     break;
-    case 'agent_status':      onAgentStatus(msg);      break;
-    case 'task_update':       onTaskUpdate(msg);       break;
-    case 'approval_request':  onApprovalRequest(msg);  break;
-    case 'approval_response': onApprovalResponse(msg); break;
-    case 'research_progress': onResearchProgress(msg); break;
-    case 'review_result':     onReviewResult(msg);     break;
-    case 'tool_start':        onToolStart(msg);        break;
-    case 'tool_complete':     onToolComplete(msg);     break;
-    case 'execution_state':   onExecutionState(msg);   break;
+    case 'response':          onResponse(msg);     break;
+    case 'agent_error':       onError(msg);        break;
+    case 'agent_status':      onAgentStatus(msg);  break;
+    case 'task_update':       onTaskUpdate(msg);   break;
+    case 'tool_start':        onToolStart(msg);    break;
+    case 'tool_complete':     onToolDone(msg);     break;
+    case 'execution_state':   onExecState(msg);    break;
+    case 'approval_request':  onApvRequest(msg);   break;
+    case 'approval_response': onApvResponse(msg);  break;
+    case 'research_progress': onResearch(msg);     break;
   }
 }
 
-// ── State Change ──
-function onStateChange(msg) {
+// ── State Change ───────────────────────────────────────
+function onState(msg) {
   const s = msg.state || msg.data?.state || 'idle';
-  const orb = document.getElementById('core-orb');
-  const badge = document.getElementById('state-badge');
-  orb.className = s;
+  currentState = s;
+  document.body.className = s;
+
+  const badge = el('state-badge');
+  badge.className = s;
   badge.textContent = s.toUpperCase();
-  orb.style.borderColor = STATE_COLORS[s] || '#00f5ff';
+
+  const btn = el('core-btn');
+  btn.className = s;
+
+  // Update SVG core text
+  el('core-text').textContent = s.toUpperCase();
+
+  // Waveform color
+  const colors = {idle:'rgba(0,245,255,0.3)', listening:'#00ff88',
+                  thinking:'#ff00ff', speaking:'#00f5ff', error:'#ff3333'};
+  window._waveColor = colors[s] || 'rgba(0,245,255,0.3)';
 }
 
-// ── Transcript ──
+// ── Transcript ─────────────────────────────────────────
 function onTranscript(msg) {
   const d = msg.data || msg;
   if (!d.is_final) return;
   const text = d.text || '';
-  addConvMsg('USER', 'user', text);
-  updateGoal(text);
+  log('user','YOU', text);
+  setTask(text, 'running', '');
 }
 
-// ── Response ──
+// ── Response ───────────────────────────────────────────
 function onResponse(msg) {
   const d = msg.data || msg;
   const text = d.result || d.text || '';
-  if (text) addConvMsg('JARVIS', 'jarvis', text);
+  if (text) log('jarvis','JARVIS', text);
 }
 
-// ── Agent Error ──
-function onAgentError(msg) {
+// ── Agent Error ────────────────────────────────────────
+function onError(msg) {
   const d = msg.data || msg;
-  addConvMsg('ERROR', 'error', d.error || 'Unknown error');
+  log('error','ERROR', d.error || 'Unknown error');
+  sysStats.errs++;
+  el('sys-errs').textContent = sysStats.errs;
 }
 
-// ── System Status ──
-function onSystemStatus(msg) {
-  const d = msg.data || msg;
-  const s = d.state || 'ready';
-  document.getElementById('state-badge').textContent = s.toUpperCase();
-}
-
-// ── Agent Status ──
+// ── Agent Status ───────────────────────────────────────
 function onAgentStatus(msg) {
   const d = msg.data || msg;
-  const name = (d.agent || '').toLowerCase();
-  const status = (d.status || 'idle').toLowerCase();
-  const nodeId = 'node-' + name;
-  const node = document.getElementById(nodeId);
-  if (node) {
-    node.className = 'agent-node ' + status;
+  const name = (d.agent||'').toLowerCase();
+  const status = (d.status||'idle').toLowerCase();
+  if (!agentState[name]) agentState[name] = {};
+  const prev = agentState[name];
+
+  if (status === 'running' && prev.status !== 'running') {
+    prev.t0 = Date.now();
+    prev.timer = setInterval(() => updateAgentTimer(name), 100);
+  } else if (status !== 'running') {
+    clearInterval(prev.timer);
+    prev.timer = null;
   }
-  // Update task queue if task_id given
-  if (d.task_title) updateTaskItem(d.task_title, status, name);
+  prev.status = status;
+  renderAgent(name);
+
+  if (d.task_title) updateTask(d.task_title, status, name);
 }
 
-// ── Task Update ──
+function updateAgentTimer(name) {
+  const row = el('arow-' + name);
+  if (!row) return;
+  const t = el('atimer-' + name);
+  if (t && agentState[name].t0) {
+    const ms = Date.now() - agentState[name].t0;
+    t.textContent = ms < 1000 ? ms + 'ms' : (ms/1000).toFixed(1) + 's';
+  }
+}
+
+// ── Task Update ────────────────────────────────────────
 function onTaskUpdate(msg) {
   const d = msg.data || msg;
   const title = d.title || d.task_title || '';
-  const status = (d.status || 'running').toLowerCase();
-  const agent = (d.agent || '').toLowerCase();
+  const status = (d.status||'').toLowerCase();
+  const agent = (d.agent||'').toLowerCase();
   if (!title) return;
-  taskMap[title] = {title, status, agent, updated: Date.now()};
-  renderTaskQueue();
-  if (status === 'running') updateGoal(title);
-}
 
-// ── Approval Request ──
-function onApprovalRequest(msg) {
-  const d = msg.data || msg;
-  approvalMap[d.id] = d;
-  renderApprovals();
-}
+  updateTask(title, status, agent);
 
-// ── Approval Response ──
-function onApprovalResponse(msg) {
-  const d = msg.data || msg;
-  delete approvalMap[d.id];
-  renderApprovals();
-}
+  // Update timing pills
+  if (d.intent_ms !== undefined) el('t-intent').textContent = 'intent ' + d.intent_ms + 'ms';
+  if (d.exec_ms !== undefined)   el('t-exec').textContent   = 'exec '   + d.exec_ms   + 'ms';
+  if (d.total_ms !== undefined)  el('t-total').textContent  = 'total '  + d.total_ms  + 'ms';
 
-// ── Research Progress ──
-function onResearchProgress(msg) {
-  const d = msg.data || msg;
-  const step = (d.step || '').toLowerCase();
-  const box = document.getElementById('research-progress');
-  box.style.display = 'block';
-  const steps = ['search','fetch','cross','write','save'];
-  steps.forEach((s, i) => {
-    const el = document.getElementById('rp-' + s);
-    if (!el) return;
-    if (step === s) el.className = 'research-step active';
-    else if (steps.indexOf(step) > i) el.className = 'research-step done';
-    else el.className = 'research-step';
-  });
-  if (step === 'done' || step === 'save') {
-    setTimeout(() => { box.style.display = 'none'; }, 4000);
+  if (status === 'running') setTask(title, 'running', agent);
+  else if (status === 'done') {
+    sysStats.cmds++;
+    el('sys-cmds').textContent = sysStats.cmds;
+    setTask(title, 'done', agent);
+    tlAdd(agent||'sys', title.substring(0,22), 'done');
+  } else if (status === 'failed') {
+    setTask(title, 'failed', agent);
+    tlAdd(agent||'sys', title.substring(0,22), 'failed');
   }
 }
 
-// ── Review Result ──
-function onReviewResult(msg) {
-  const d = msg.data || msg;
-  const score = d.score || 0;
-  const verdict = (d.verdict || '').replace(/_/g, ' ').toUpperCase();
-  const bar = document.getElementById('review-bar');
-  const pill = document.getElementById('review-score-pill');
-  const vEl  = document.getElementById('review-verdict');
-  bar.style.display = 'flex';
-  pill.textContent = score + '/100';
-  pill.className = 'score-pill ' + (score >= 80 ? 'pass' : score >= 50 ? 'warn' : 'fail');
-  vEl.textContent = verdict;
-}
-
-// ── Tool Execution Events ──
+// ── Tool Start ─────────────────────────────────────────
 function onToolStart(msg) {
   const d = msg.data || msg;
-  const tool = d.tool || '?';
+  const tool  = d.tool  || '?';
   const agent = d.agent || '?';
-  const args = d.args || {};
-  // Log to conversation panel
-  addConvMsg('EXECUTING', 'user', `[${agent.toUpperCase()}] ${tool}(${JSON.stringify(args)})`);
-  // Update agent node
-  const nodeId = 'node-' + agent.toLowerCase();
-  const node = document.getElementById(nodeId);
-  if (node) node.className = 'agent-node running';
-  updateTaskItem(tool, 'running', agent);
+  const args  = d.args  || {};
+  toolLog.unshift({tool, agent, args, status:'running', t0: Date.now(), result:''});
+  if (toolLog.length > 30) toolLog.pop();
+  renderToolLog();
+  log('tool','EXEC', `[${agent.toUpperCase()}] ${tool}(${fmtArgs(args)})`);
+  setAgentStatus(agent, 'running');
 }
 
-function onToolComplete(msg) {
+// ── Tool Done ──────────────────────────────────────────
+function onToolDone(msg) {
   const d = msg.data || msg;
-  const tool = d.tool || '?';
-  const agent = d.agent || '?';
+  const tool   = d.tool   || '?';
+  const agent  = d.agent  || '?';
   const result = d.result || '';
-  const ok = !result.startsWith('ERROR');
-  addConvMsg(ok ? 'DONE' : 'ERROR', ok ? 'jarvis' : 'error',
-    `[${tool}] ${result.substring(0, 120)}${result.length > 120 ? '…' : ''}`);
-  const nodeId = 'node-' + agent.toLowerCase();
-  const node = document.getElementById(nodeId);
-  if (node) node.className = 'agent-node ' + (ok ? 'done' : 'failed');
-  updateTaskItem(tool, ok ? 'done' : 'failed', agent);
+  const ok = !result.toLowerCase().startsWith('error');
+
+  const entry = toolLog.find(t => t.tool === tool && t.agent === agent && t.status === 'running');
+  if (entry) {
+    entry.status = ok ? 'done' : 'failed';
+    entry.result = result;
+    entry.ms = Date.now() - entry.t0;
+  }
+  renderToolLog();
+  log(ok ? 'jarvis' : 'error', ok ? 'DONE' : 'ERROR',
+    `[${tool}] ${result.substring(0,120)}${result.length>120?'…':''}`);
+  setAgentStatus(agent, ok ? 'done' : 'failed');
+  tlAdd(agent, tool, ok ? 'done' : 'failed');
 }
 
-function onExecutionState(msg) {
+// ── Execution State ────────────────────────────────────
+function onExecState(msg) {
   const d = msg.data || msg;
-  const tid    = d.task_id  || '';
-  const goal   = d.goal     || '';
-  const status = d.status   || 'unknown';
-  const agent  = d.agent    || '';
-  const step   = d.step     || '';
-  const done   = d.tools_done || 0;
-  const total  = d.plan_size  || 0;
-  const result = d.result   || '';
-  const error  = d.error    || '';
-  const ms     = d.elapsed_ms || 0;
+  const {task_id,goal,status,agent,step,tools_done,plan_size,result,error,elapsed_ms} = d;
 
-  // Update goal panel with real execution state
-  updateGoal(`[${tid}] ${goal}`);
+  if (goal) setTask(goal.substring(0,60), status, agent);
 
-  // Update agent node colour
-  const nodeId = 'node-' + agent.toLowerCase();
-  const node   = document.getElementById(nodeId);
-  const nodeClass = {running:'running', done:'done', failed:'failed', planning:'thinking'}[status] || '';
-  if (node && nodeClass) node.className = 'agent-node ' + nodeClass;
+  // Update exec-info bar
+  const badge = el('exec-status');
+  badge.textContent = status.toUpperCase();
+  badge.className = 'exec-badge ' + (status==='running'?'running':status==='done'?'done':status==='failed'?'failed':'');
 
-  // Update task queue entry
-  if (goal) updateTaskItem(goal.substring(0,50), status, agent);
+  if (agent) { el('exec-agent').textContent = agent.toUpperCase(); el('exec-agent').style.display=''; }
+  if (step)  { el('exec-step').textContent  = step;                el('exec-step').style.display='';  }
+  if (elapsed_ms) { el('exec-elapsed').textContent = elapsed_ms+'ms'; el('exec-elapsed').style.display=''; }
 
-  // Log final result to conversation
+  // Progress bar
+  if (plan_size > 0) {
+    const pw = el('progress-bar-wrap');
+    pw.style.display = 'block';
+    el('progress-bar').style.width = Math.round((tools_done/plan_size)*100)+'%';
+    el('progress-bar').style.background = status==='failed'?'var(--r)':'var(--m)';
+  }
+
   if (status === 'done' && result) {
-    addConvMsg('RESULT', 'jarvis', `[${tid}] ${result.substring(0,200)}`);
-    const nodeEl = document.getElementById(nodeId);
-    if (nodeEl) nodeEl.className = 'agent-node done';
+    el('progress-bar').style.background = 'var(--g)';
+    el('progress-bar').style.width = '100%';
+    log('jarvis','RESULT', `[${task_id}] ${result.substring(0,200)}`);
   } else if (status === 'failed') {
-    const msg2 = error || result || 'execution failed';
-    addConvMsg('FAILED', 'error', `[${tid}] ${msg2.substring(0,200)}`);
-    const nodeEl = document.getElementById(nodeId);
-    if (nodeEl) nodeEl.className = 'agent-node failed';
+    const m = error || result || 'execution failed';
+    log('error','FAILED', `[${task_id}] ${m.substring(0,200)}`);
   } else if (status === 'running' && step) {
-    // Brief progress note (not spammy — only logged first time)
-    addConvMsg('EXEC', 'user', `[${agent}] ${step}` + (total ? ` (${done}/${total})` : '') + ` +${ms}ms`);
+    log('exec','EXEC', `[${agent||'?'}] ${step}${plan_size?' ('+tools_done+'/'+plan_size+')':''} +${elapsed_ms}ms`);
   }
 }
 
-// ── Goal Panel ──
-function updateGoal(text) {
-  const el = document.getElementById('goal-body');
-  el.innerHTML = `<div style="font-size:.8rem;color:#fff;line-height:1.6;">${esc(text)}</div>
-    <div style="margin-top:.5rem;font-size:.6rem;color:var(--dim);">${new Date().toLocaleTimeString()}</div>`;
+// ── Approval ───────────────────────────────────────────
+function onApvRequest(msg) {
+  const d = msg.data||msg; approvalMap[d.id]=d; renderApprovals();
+}
+function onApvResponse(msg) {
+  const d = msg.data||msg; delete approvalMap[d.id]; renderApprovals();
 }
 
-// ── Conversation Panel ──
-function addConvMsg(who, cls, text) {
-  const body = document.getElementById('conv-body');
-  const div = document.createElement('div');
-  div.className = 'msg';
-  div.innerHTML = `<div class="who ${cls}">${esc(who)}</div><div class="body">${esc(text)}</div>`;
-  body.appendChild(div);
-  body.scrollTop = body.scrollHeight;
-  if (body.children.length > 120) body.removeChild(body.firstChild);
+// ── Research ───────────────────────────────────────────
+function onResearch(msg) {
+  const d = msg.data||msg;
+  log('exec','RESEARCH', d.step || JSON.stringify(d).substring(0,80));
 }
 
-function sysLog(text) {
-  addConvMsg('SYSTEM', 'error', text);
-}
-
-// ── Task Queue ──
-function renderTaskQueue() {
-  const body = document.getElementById('tasks-body');
-  const tasks = Object.values(taskMap).sort((a,b) => b.updated - a.updated);
-  if (!tasks.length) {
-    body.innerHTML = '<div style="color:var(--dim);font-size:.72rem;">No active tasks</div>';
-    return;
-  }
-  body.innerHTML = tasks.slice(0,20).map(t => `
-    <div class="task-item ${t.status}">
-      <div class="t-title">${esc(t.title)}</div>
-      <div class="t-meta">${esc(t.agent || '—')} · ${esc(t.status)}</div>
+// ── Agent List ─────────────────────────────────────────
+function buildAgentList() {
+  const list = el('agents-list');
+  list.innerHTML = AGENTS.map(a => `
+    <div class="agent-row" id="arow-${a.id}">
+      <div class="adot idle" id="adot-${a.id}"></div>
+      <span class="aname">${a.icon} ${a.name}</span>
+      <span class="astat" id="astat-${a.id}">IDLE</span>
+      <span class="atimer" id="atimer-${a.id}"></span>
     </div>`).join('');
 }
 
-function updateTaskItem(title, status, agent) {
-  taskMap[title] = {...(taskMap[title]||{}), title, status, agent, updated: Date.now()};
-  renderTaskQueue();
+function renderAgent(name) {
+  const s = (agentState[name]||{}).status || 'idle';
+  const dot  = el('adot-' + name);
+  const stat = el('astat-' + name);
+  if (dot)  dot.className  = 'adot ' + s;
+  if (stat) stat.textContent = s.toUpperCase();
+  if (s !== 'running') {
+    const t = el('atimer-' + name);
+    if (t) t.textContent = '';
+  }
 }
 
-// ── Approvals Panel ──
-function renderApprovals() {
-  const body = document.getElementById('approvals-body');
-  const list = Object.values(approvalMap);
-  if (!list.length) {
-    body.innerHTML = '<div style="color:var(--dim);font-size:.72rem;">No pending approvals</div>';
+function setAgentStatus(name, status) {
+  if (!agentState[name]) agentState[name] = {};
+  agentState[name].status = status;
+  if (status === 'running') agentState[name].t0 = Date.now();
+  renderAgent(name);
+}
+
+// ── Tool Log ───────────────────────────────────────────
+function renderToolLog() {
+  const body = el('tool-log');
+  if (!toolLog.length) {
+    body.innerHTML = '<div style="color:var(--dim);font-size:.7rem;">No tool calls yet</div>';
     return;
   }
-  body.innerHTML = list.map(a => `
-    <div class="approval-card">
-      <div class="a-agent">${esc(a.agent || '?')} · ${esc(a.action || '?')}</div>
-      <div class="a-action">${esc(JSON.stringify(a.details || {})).substring(0,120)}</div>
-      <div class="a-btns">
-        <button class="a-btn approve" onclick="respond('${esc(a.id)}',true)">APPROVE</button>
-        <button class="a-btn reject"  onclick="respond('${esc(a.id)}',false)">REJECT</button>
+  body.innerHTML = toolLog.slice(0,15).map(t => {
+    const ok = t.status === 'done';
+    const fail = t.status === 'failed';
+    const icon = ok ? '<span class="tool-ok">✓</span>' : fail ? '<span class="tool-err">✗</span>' : '<span style="color:var(--m)">…</span>';
+    return `
+    <div class="tool-entry">
+      <div class="tool-hdr">
+        <span class="tool-agent-tag">${esc(t.agent)}</span>
+        <span class="tool-name">${esc(t.tool)}</span>
+        ${icon}
+        <span class="tool-ms">${t.ms ? t.ms+'ms' : ''}</span>
+      </div>
+      <div class="tool-result">${esc(t.result.substring(0,80))}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── Task Queue ─────────────────────────────────────────
+function updateTask(title, status, agent) {
+  taskMap[title] = {...(taskMap[title]||{}), title, status, agent, ts: Date.now()};
+  renderTasks();
+}
+
+function renderTasks() {
+  const body = el('tasks-body');
+  const tasks = Object.values(taskMap).sort((a,b)=>b.ts-a.ts);
+  if (!tasks.length) { body.innerHTML='<div style="color:var(--dim);font-size:.7rem;">No active tasks</div>'; return; }
+  body.innerHTML = tasks.slice(0,8).map(t=>`
+    <div class="task-item ${t.status}">
+      <div class="t-title">${esc(t.title)}</div>
+      <div class="t-meta">${esc(t.agent||'—')} · ${esc(t.status)}</div>
+    </div>`).join('');
+}
+
+// ── Approvals ──────────────────────────────────────────
+function renderApprovals() {
+  const body = el('approvals-body');
+  const list = Object.values(approvalMap);
+  if (!list.length) { body.innerHTML='<div style="color:var(--dim);font-size:.7rem;">No pending approvals</div>'; return; }
+  body.innerHTML = list.map(a=>`
+    <div class="apv-card">
+      <div class="apv-agent">${esc(a.agent||'?')} · ${esc(a.action||'?')}</div>
+      <div class="apv-action">${esc(JSON.stringify(a.details||{}).substring(0,100))}</div>
+      <div class="apv-btns">
+        <button class="apv-btn ok" onclick="apvRespond('${esc(a.id)}',true)">APPROVE</button>
+        <button class="apv-btn no" onclick="apvRespond('${esc(a.id)}',false)">REJECT</button>
       </div>
     </div>`).join('');
 }
 
-async function respond(id, approved) {
-  const url = `/api/approval/${id}/${approved ? 'approve' : 'reject'}`;
-  try { await fetch(url, {method:'POST'}); } catch(_) {}
-  delete approvalMap[id];
-  renderApprovals();
+async function apvRespond(id, ok) {
+  try { await fetch(`/api/approval/${id}/${ok?'approve':'reject'}`, {method:'POST'}); } catch(_){}
+  delete approvalMap[id]; renderApprovals();
 }
 
-// ── REST helpers ──
-async function fetchState() {
+// ── Current Task / Goal Display ────────────────────────
+function setTask(title, status, agent) {
+  const t = el('current-task');
+  t.textContent = title;
+  t.style.color = status==='running'?'#fff':status==='done'?'var(--g)':status==='failed'?'var(--r)':'var(--dim)';
+}
+
+// ── Timeline ───────────────────────────────────────────
+function tlAdd(agent, text, status) {
+  const track = el('tl-track');
+  const now = new Date().toLocaleTimeString('en-GB',{hour12:false});
+  const div = document.createElement('div');
+  div.className = 'tl-evt ' + status;
+  div.innerHTML = `
+    <span class="tl-time">${now}</span>
+    <div class="tl-dot"></div>
+    <span class="tl-agent">${esc(agent.toUpperCase())}</span>
+    <span class="tl-txt">${esc(text)}</span>`;
+  track.appendChild(div);
+  // Auto-scroll right
+  const tl = el('timeline');
+  tl.scrollLeft = tl.scrollWidth;
+  // Trim
+  while (track.children.length > 50) track.removeChild(track.firstChild);
+}
+
+// ── Conversation Log ───────────────────────────────────
+function log(cls, who, text) {
+  const body = el('conv-body');
+  const div  = document.createElement('div');
+  div.className = 'msg';
+  const ts = new Date().toLocaleTimeString('en-GB',{hour12:false});
+  div.innerHTML = `<div class="who ${cls}">${esc(who)} <span style="font-size:.45rem;color:var(--dim)">${ts}</span></div><div class="body">${esc(text)}</div>`;
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
+  if (body.children.length > 150) body.removeChild(body.firstChild);
+}
+
+// ── Waveform Canvas ────────────────────────────────────
+window._waveColor = 'rgba(0,245,255,0.3)';
+
+function startWaveform() {
+  const canvas = el('waveform');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    const color = window._waveColor;
+    const state = currentState;
+    let amp = 2, freq = 0.08, speed = 0.04;
+    if (state === 'listening')  { amp = 16; freq = 0.25; speed = 0.12; }
+    else if (state === 'thinking') { amp = 8;  freq = 0.18; speed = 0.18; }
+    else if (state === 'speaking') { amp = 10; freq = 0.20; speed = 0.10; }
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = state === 'idle' ? 1 : 1.5;
+    ctx.beginPath();
+    for (let x = 0; x < W; x++) {
+      const noise = state === 'listening' ? (Math.random()-0.5)*amp*0.4 : 0;
+      const y = H/2 + Math.sin(x*freq + wavePhase)*amp + Math.sin(x*freq*2.1 + wavePhase*1.3)*(amp*0.4) + noise;
+      x === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    wavePhase += speed;
+    animFrame = requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// ── Clock ──────────────────────────────────────────────
+function startClock() {
+  function tick() {
+    el('clock').textContent = new Date().toLocaleTimeString('en-GB',{hour12:false});
+    el('sys-uptime').textContent = fmtUptime(Date.now() - sysStats.start);
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+function fmtUptime(ms) {
+  const s = Math.floor(ms/1000), m = Math.floor(s/60), h = Math.floor(m/60);
+  return h ? h+'h '+String(m%60).padStart(2,'0')+'m' : m ? m+'m '+String(s%60).padStart(2,'0')+'s' : s+'s';
+}
+
+// ── REST helpers ───────────────────────────────────────
+async function fetchDash() {
   try {
     const r = await fetch('/api/dashboard/state');
     if (!r.ok) return;
     const d = await r.json();
-    if (d.voice_state) onStateChange({state: d.voice_state});
-    // Populate memory
-    if (d.recent_messages?.length) renderMemory(d.recent_messages);
-  } catch(_) {}
-}
-
-async function fetchApprovals() {
-  try {
-    const r = await fetch('/api/approval/pending');
-    if (!r.ok) return;
-    const list = await r.json();
-    list.forEach(a => { approvalMap[a.id] = a; });
+    if (d.pending_approvals?.length) d.pending_approvals.forEach(a => { approvalMap[a.id]=a; });
     renderApprovals();
-  } catch(_) {}
+  } catch(_){}
 }
 
-// ── Memory Panel ──
-function renderMemory(msgs) {
-  const body = document.getElementById('memory-body');
-  if (!msgs?.length) return;
-  body.innerHTML = msgs.slice(-12).reverse().map(m => `
-    <div class="mem-item">
-      <div class="m-role">${esc(m.role || '?')}</div>
-      ${esc((m.content||'').substring(0,100))}${(m.content||'').length>100?'…':''}
-    </div>`).join('');
-}
-
-// ── Controls ──
+// ── Controls ───────────────────────────────────────────
 function triggerWake() {
-  if (ws?.readyState === WebSocket.OPEN)
-    ws.send(JSON.stringify({action:'trigger'}));
+  if (ws?.readyState === WebSocket.OPEN) ws.send(JSON.stringify({action:'trigger'}));
 }
-
 function interrupt() {
-  if (ws?.readyState === WebSocket.OPEN)
-    ws.send(JSON.stringify({action:'interrupt'}));
-  // reset agent nodes
-  document.querySelectorAll('.agent-node').forEach(n => n.className = 'agent-node idle');
+  if (ws?.readyState === WebSocket.OPEN) ws.send(JSON.stringify({action:'interrupt'}));
+  AGENTS.forEach(a => { agentState[a.id].status='idle'; renderAgent(a.id); });
+  el('exec-status').textContent = 'STOPPED';
+  el('exec-status').className = 'exec-badge';
 }
-
 function sendText() {
-  const input = document.getElementById('text-input');
+  const input = el('text-input');
   const text = input.value.trim();
   if (!text) return;
   if (ws?.readyState === WebSocket.OPEN) {
     ws.send(JSON.stringify({action:'text', text}));
-    addConvMsg('YOU', 'user', text);
+    log('user','YOU', text);
     input.value = '';
   }
 }
 
-// ── Util ──
+// ── Util ───────────────────────────────────────────────
+const el = id => document.getElementById(id);
 function esc(s) {
-  return String(s)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
-// Boot
-connect();
+function fmtArgs(args) {
+  const s = JSON.stringify(args);
+  return s.length > 50 ? s.substring(0,48)+'…' : s;
+}
 </script>
 </body>
 </html>"""

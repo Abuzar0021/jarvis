@@ -24,6 +24,7 @@ console = Console()
 
 _CEO_SYSTEM = """\
 You are Jarvis, an autonomous AI operating system CEO.
+LANGUAGE: ALWAYS respond in English only. Never switch languages.
 
 You receive high-level goals from the user and coordinate a team of specialist agents:
 - research:   web research and information gathering (10-20 sources, structured reports)
