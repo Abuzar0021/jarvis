@@ -30,6 +30,8 @@ from backend.voice.audio_io import MicCapture, AudioPlayer
 from backend.voice.transcriber import WhisperTranscriber
 from backend.voice.detector import WakeWordDetector
 from backend.voice.speaker import create_speaker
+from backend.voice.speech_queue import SpeechQueue
+from core.capabilities import get_capabilities
 from core.intent_router import IntentRouter
 from core.logger import get_logger
 from core.memory import get_memory
@@ -67,6 +69,13 @@ class VoicePipeline:
         self._transcriber: Optional[WhisperTranscriber] = None
         self._detector: Optional[WakeWordDetector] = None
         self._speaker = None
+        self._speech: Optional[SpeechQueue] = None
+
+        # Capability flags — set in start(). Voice is OPTIONAL; the server and
+        # dashboard run fully even when none of these are available.
+        self.caps = None
+        self._voice_in = False     # mic + STT available
+        self._voice_out = False    # TTS available
 
         # Serialise concurrent LLM+TTS work (voice vs text commands)
         self._command_lock = asyncio.Lock()
@@ -85,37 +94,76 @@ class VoicePipeline:
     # ── Public API ─────────────────────────────────────────────────────────────
 
     async def start(self) -> None:
-        """Initialise components and start the pipeline loop."""
+        """
+        Initialise components and start the pipeline loop.
+
+        CRITICAL: this method NEVER raises. Voice hardware (mic, speaker) and
+        models are OPTIONAL. If any are unavailable we log it and degrade to
+        text-only mode so the server, dashboard, and WebSocket always come up.
+        (Previously a missing PortAudio crashed the whole server, leaving the
+        dashboard stuck on "Connecting".)
+        """
         logger.info("Voice pipeline starting…")
         self.stats["uptime_start"] = time.time()
+        self.caps = get_capabilities()
 
-        # Build components
-        self._transcriber = WhisperTranscriber(
-            model_size=WHISPER_MODEL_SIZE,
-            device=WHISPER_DEVICE,
-            compute_type=WHISPER_COMPUTE,
-        )
-        self._speaker = create_speaker(backend=TTS_BACKEND, voice=TTS_VOICE, speed=TTS_SPEED)
-        self._mic = MicCapture(sample_rate=SAMPLE_RATE, chunk_ms=CHUNK_MS)
-        self._detector = WakeWordDetector(
-            transcriber=self._transcriber,
-            wake_word=WAKE_WORD,
-            sample_rate=SAMPLE_RATE,
-            chunk_ms=CHUNK_MS,
-        )
+        # ── TTS (output) — independent of mic ──────────────────────────────────
+        if self.caps.voice_output:
+            try:
+                self._speaker = create_speaker(
+                    backend=TTS_BACKEND, voice=TTS_VOICE, speed=TTS_SPEED
+                )
+                self._speech = SpeechQueue(self._speaker)
+                self._voice_out = True
+                logger.info(f"TTS ready — backend={getattr(self._speaker, 'NAME', '?')}")
+            except Exception as exc:
+                logger.warning(f"TTS init failed — continuing muted: {exc}")
+                self._speaker = self._speech = None
 
-        await self._mic.start()
+        # ── STT + mic (input) — only if BOTH are available ─────────────────────
+        if self.caps.stt:
+            try:
+                self._transcriber = WhisperTranscriber(
+                    model_size=WHISPER_MODEL_SIZE,
+                    device=WHISPER_DEVICE,
+                    compute_type=WHISPER_COMPUTE,
+                )
+            except Exception as exc:
+                logger.warning(f"Whisper init failed: {exc}")
+                self._transcriber = None
+
+        if self.caps.audio_in and self._transcriber is not None:
+            try:
+                self._mic = MicCapture(sample_rate=SAMPLE_RATE, chunk_ms=CHUNK_MS)
+                self._detector = WakeWordDetector(
+                    transcriber=self._transcriber,
+                    wake_word=WAKE_WORD,
+                    sample_rate=SAMPLE_RATE,
+                    chunk_ms=CHUNK_MS,
+                )
+                await self._mic.start()
+                self._voice_in = True
+                logger.info(f"Voice input ready — wake word: '{WAKE_WORD}'")
+            except Exception as exc:
+                logger.warning(f"Mic init failed — text-only mode: {exc}")
+                self._mic = self._detector = None
+                self._voice_in = False
+
         self._running = True
         self._task = asyncio.create_task(self._loop(), name="voice_pipeline")
 
-        # Pre-load Whisper and TTS in background to avoid first-command latency
-        asyncio.create_task(self._preload_models())
+        # Pre-load models in background to avoid first-command latency
+        if self._voice_in or self._voice_out:
+            asyncio.create_task(self._preload_models())
 
         await self._set_state(VoiceState.IDLE)
-        logger.info(f"Voice pipeline running — wake word: '{WAKE_WORD}'")
+        mode = "voice+text" if self._voice_in else "text-only"
+        logger.info(f"Voice pipeline running — mode={mode}")
 
     async def stop(self) -> None:
         self._running = False
+        if self._speech:
+            self._speech.clear()
         if self._speaker:
             self._speaker.interrupt()
         if self._mic:
@@ -135,8 +183,10 @@ class VoicePipeline:
             self._detector.trigger()
 
     def interrupt(self) -> None:
-        """Interrupt Jarvis while speaking."""
-        if self._speaker:
+        """Interrupt Jarvis while speaking (barge-in) — drops queued speech."""
+        if self._speech:
+            self._speech.clear()
+        elif self._speaker:
             self._speaker.interrupt()
         asyncio.create_task(manager.broadcast(EventType.INTERRUPT))
 
@@ -145,6 +195,12 @@ class VoicePipeline:
     async def _loop(self) -> None:
         while self._running:
             try:
+                # Text-only mode: no mic to poll. Idle until a text command
+                # arrives via process_text_command() (driven by the WebSocket).
+                if not self._voice_in:
+                    await asyncio.sleep(0.2)
+                    continue
+
                 if self.state in (VoiceState.IDLE,):
                     await self._phase_idle()
 
@@ -177,11 +233,13 @@ class VoicePipeline:
         if detected:
             await self._set_state(VoiceState.LISTENING)
             await manager.broadcast(EventType.WAKE_DETECTED, {"wake_word": WAKE_WORD})
-            # Earcon spoken synchronously — prevents overlap with mic capture in _phase_listen
-            try:
-                await asyncio.wait_for(self._speaker.speak("Yes?"), timeout=3.0)
-            except asyncio.TimeoutError:
-                pass
+            # Earcon spoken synchronously here (this is the ONE place blocking is
+            # correct) so it doesn't bleed into the command capture that follows.
+            if self._speaker is not None:
+                try:
+                    await asyncio.wait_for(self._speaker.speak("Yes?"), timeout=3.0)
+                except (asyncio.TimeoutError, Exception):
+                    pass
             await self._mic.drain()  # discard audio accumulated during earcon
 
     async def _phase_listen(self) -> Optional[np.ndarray]:
@@ -231,9 +289,12 @@ class VoicePipeline:
 
     async def _handle_command(self, text: str) -> None:
         """
-        Two-phase command handler:
-          Phase A: classify intent → speak immediate acknowledgment  (<300ms)
-          Phase B: execute → speak result
+        Command handler with concurrent acknowledgement:
+          1. classify intent (no LLM, microseconds)
+          2. enqueue acknowledgement  (NON-BLOCKING — plays while step 3 runs)
+          3. execute                  (starts immediately, in parallel with audio)
+          4. enqueue result
+        Speech never sits on the execution critical path.
         """
         t_start = time.monotonic()
         async with self._command_lock:
@@ -250,14 +311,12 @@ class VoicePipeline:
                 "agent": intent.agent, "intent_ms": intent_ms,
             })
 
-            # Phase A: speak acknowledgment BEFORE executing
+            # Phase A: acknowledge IMMEDIATELY, non-blocking. Execution (Phase B)
+            # begins on the very next line while this audio is still playing.
             ack = self._make_ack(intent)
-            if ack and self._speaker:
-                await self._set_state(VoiceState.SPEAKING)
-                await self._phase_speak(ack)
-                await self._set_state(VoiceState.THINKING)
+            self._speak(ack)
 
-            # Phase B: execute
+            # Phase B: execute — concurrent with the acknowledgement audio
             t_exec = time.monotonic()
             try:
                 result = await self._phase_execute_intent(intent, text)
@@ -272,10 +331,7 @@ class VoicePipeline:
                     "exec_ms": exec_ms, "total_ms": total_ms,
                 })
 
-                voice_out = self._format_for_voice(result, ack)
-                if voice_out and self._speaker:
-                    await self._set_state(VoiceState.SPEAKING)
-                    await self._phase_speak(voice_out)
+                self._speak(self._format_for_voice(result, ack))
 
             except Exception as exc:
                 err_msg = f"I encountered an error: {exc}"
@@ -288,11 +344,14 @@ class VoicePipeline:
                 await manager.broadcast(EventType.TASK_UPDATE, {
                     "title": text[:80], "status": "failed", "agent": intent.agent,
                 })
-                if self._speaker:
-                    await self._set_state(VoiceState.SPEAKING)
-                    await self._phase_speak(err_msg)
+                self._speak(err_msg)
             finally:
                 await self._set_state(VoiceState.IDLE)
+
+    def _speak(self, text: str) -> None:
+        """Non-blocking speech: enqueue and return. No-op in text-only mode."""
+        if text and self._speech is not None:
+            self._speech.say(text)
 
     async def _phase_execute_intent(self, intent, text: str) -> str:
         """Dispatch intent to the right execution handler."""
@@ -314,7 +373,7 @@ class VoicePipeline:
             return f"Opening {friendly}."
         if tool == "close_app":
             return f"Closing {args.get('name', 'application')}."
-        if tool == "browse":
+        if tool in ("open_url", "browse"):
             url = args.get("url", "")
             site = url.replace("https://", "").replace("http://", "").replace("www.", "")
             site = site.split("/")[0].split(".")[0].capitalize()
@@ -487,11 +546,8 @@ class VoicePipeline:
             return err
 
     async def _phase_speak(self, text: str) -> None:
-        await manager.broadcast(EventType.TTS_START, {"text": text})
-        try:
-            await self._speaker.speak(text)
-        finally:
-            await manager.broadcast(EventType.TTS_END, {})
+        """Non-blocking narration (goal progress, etc.) via the speech queue."""
+        self._speak(text)
 
     # ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -516,21 +572,20 @@ class VoicePipeline:
 
     async def _preload_models(self) -> None:
         """Pre-warm Whisper and TTS in background to reduce first-command latency."""
-        try:
-            dummy = np.zeros(SAMPLE_RATE, dtype=np.float32)
-            await self._transcriber.transcribe_short(dummy)
-            logger.info("Whisper model pre-warmed")
-        except Exception as exc:
-            logger.warning(f"Whisper pre-warm failed: {exc}")
-        try:
-            # Force TTS model load without producing audible output
-            if hasattr(self._speaker, "_load"):
-                import asyncio as _asyncio
-                loop = _asyncio.get_running_loop()
+        if self._transcriber is not None:
+            try:
+                dummy = np.zeros(SAMPLE_RATE, dtype=np.float32)
+                await self._transcriber.transcribe_short(dummy)
+                logger.info("Whisper model pre-warmed")
+            except Exception as exc:
+                logger.warning(f"Whisper pre-warm failed: {exc}")
+        if self._speaker is not None and hasattr(self._speaker, "_load"):
+            try:
+                loop = asyncio.get_running_loop()
                 await loop.run_in_executor(None, self._speaker._load)
                 logger.info("TTS model pre-warmed")
-        except Exception as exc:
-            logger.warning(f"TTS pre-warm failed: {exc}")
+            except Exception as exc:
+                logger.warning(f"TTS pre-warm failed: {exc}")
 
     def get_status(self) -> dict:
         uptime = 0
@@ -539,10 +594,14 @@ class VoicePipeline:
         return {
             "state": self.state.value,
             "running": self._running,
+            "mode": "voice+text" if self._voice_in else "text-only",
+            "voice_input": self._voice_in,
+            "voice_output": self._voice_out,
             "wake_word": WAKE_WORD,
             "detector_backend": self._detector.backend if self._detector else None,
-            "tts_backend": getattr(self._speaker, "NAME", "unknown"),
-            "whisper_model": WHISPER_MODEL_SIZE,
+            "tts_backend": getattr(self._speaker, "NAME", "none"),
+            "whisper_model": WHISPER_MODEL_SIZE if self._voice_in else None,
+            "capabilities": self.caps.summary() if self.caps else {},
             "last_transcript": self._last_transcript,
             "last_response": self._last_response,
             "uptime_seconds": uptime,

@@ -1,7 +1,7 @@
 """Tests for the safety guard."""
 
 import pytest
-from unittest.mock import patch
+from unittest.mock import patch, AsyncMock
 
 
 def test_is_dangerous():
@@ -23,10 +23,13 @@ async def test_safe_action_always_approved():
 
 @pytest.mark.asyncio
 async def test_dangerous_action_approved_by_user():
+    # Approval is delegated to ApprovalManager; with no WS clients it uses the
+    # terminal prompt. Patch that to simulate the user approving.
     from core.safety import SafetyGuard
+    from core.approval import ApprovalManager
     guard = SafetyGuard(require_approval=True)
 
-    with patch("core.safety.Confirm.ask", return_value=True):
+    with patch.object(ApprovalManager, "_terminal_prompt", new=AsyncMock(return_value=True)):
         approved = await guard.request_approval("deployment", "run_terminal", {"command": "ls"})
     assert approved is True
 
@@ -34,9 +37,10 @@ async def test_dangerous_action_approved_by_user():
 @pytest.mark.asyncio
 async def test_dangerous_action_rejected_by_user():
     from core.safety import SafetyGuard
+    from core.approval import ApprovalManager
     guard = SafetyGuard(require_approval=True)
 
-    with patch("core.safety.Confirm.ask", return_value=False):
+    with patch.object(ApprovalManager, "_terminal_prompt", new=AsyncMock(return_value=False)):
         approved = await guard.request_approval("deployment", "run_terminal", {"command": "rm -rf /"})
     assert approved is False
 

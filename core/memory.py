@@ -311,6 +311,68 @@ class Memory:
         db_size = Path(self.db_path).stat().st_size if Path(self.db_path).exists() else 0
         return {**counts, "db_size_bytes": db_size}
 
+    # ── Search & history (Phase 7: searchable memory) ─────────────────────────
+
+    def search(self, query: str, limit: int = 30) -> list[dict]:
+        """
+        Unified case-insensitive search across tasks, conversation messages, and
+        action logs. Returns a flat, recency-sorted list of typed hits:
+            {"kind": "task|message|action", "text", "meta", "when"}
+        """
+        if not query or not query.strip():
+            return []
+        like = f"%{query.strip()}%"
+        hits: list[dict] = []
+
+        for r in self._exec(
+            "SELECT id, goal, status, result, updated_at FROM tasks "
+            "WHERE goal LIKE ? OR result LIKE ? ORDER BY updated_at DESC LIMIT ?",
+            (like, like, limit),
+        ).fetchall():
+            hits.append({
+                "kind": "task", "text": r["goal"],
+                "meta": {"id": r["id"][:8], "status": r["status"],
+                         "result": (r["result"] or "")[:160]},
+                "when": r["updated_at"],
+            })
+
+        for r in self._exec(
+            "SELECT role, content, agent_name, created_at FROM conversations "
+            "WHERE content LIKE ? ORDER BY created_at DESC LIMIT ?",
+            (like, limit),
+        ).fetchall():
+            hits.append({
+                "kind": "message", "text": r["content"][:200],
+                "meta": {"role": r["role"], "agent": r["agent_name"]},
+                "when": r["created_at"],
+            })
+
+        for r in self._exec(
+            "SELECT agent_name, action, details, result, created_at FROM action_logs "
+            "WHERE action LIKE ? OR details LIKE ? OR result LIKE ? "
+            "ORDER BY created_at DESC LIMIT ?",
+            (like, like, like, limit),
+        ).fetchall():
+            hits.append({
+                "kind": "action", "text": f"{r['action']}",
+                "meta": {"agent": r["agent_name"],
+                         "details": (r["details"] or "")[:120],
+                         "result": (r["result"] or "")[:120]},
+                "when": r["created_at"],
+            })
+
+        hits.sort(key=lambda h: h["when"] or "", reverse=True)
+        return hits[:limit]
+
+    def recent_activity(self, limit: int = 20) -> dict:
+        """Snapshot for the dashboard memory panel: short-term + long-term + stats."""
+        return {
+            "short_term": self.get_messages("voice_session", limit=10),
+            "tasks": self.list_tasks()[:limit],
+            "actions": self.get_recent_logs(limit=limit),
+            "stats": self.get_stats(),
+        }
+
 
 # Singleton
 _memory: Optional[Memory] = None

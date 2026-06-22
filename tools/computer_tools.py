@@ -73,38 +73,20 @@ def _pag():
     dangerous=False,
 )
 async def open_app(name: str = "", app_name: str = "", args: Optional[list] = None) -> str:
+    """
+    Launch an application by friendly name, alias, or executable.
+
+    Delegates to tools.app_launcher, which normalizes aliases ("calc",
+    "vs code", "task manager") and picks the right per-OS launch strategy
+    (URI for UWP apps like Calculator/Settings, exec for Win32, `open -a` on
+    macOS, candidate executables on Linux). A launcher stub that exits 0 counts
+    as success — fixing the old false-failure on Windows Calculator/Notepad.
+    """
     name = name or app_name  # accept either parameter name
     if not name:
         return "ERROR: open_app requires 'name' or 'app_name'"
-    args = args or []
-    logger.info(f"open_app: {name!r} args={args}")
-
-    def _launch_and_verify() -> tuple[int, str]:
-        try:
-            proc = subprocess.Popen(
-                [name] + args,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-            # Brief pause so fast-crashing processes surface an error immediately
-            time.sleep(0.35)
-            rc = proc.poll()
-            if rc is not None:
-                return 0, f"ERROR: '{name}' exited immediately (exit code {rc})"
-            return proc.pid, ""
-        except FileNotFoundError:
-            return 0, f"ERROR: '{name}' not found in PATH — is it installed?"
-        except PermissionError:
-            return 0, f"ERROR: permission denied launching '{name}'"
-        except Exception as exc:
-            return 0, f"ERROR launching '{name}': {exc}"
-
-    pid, err = await asyncio.to_thread(_launch_and_verify)
-    if err:
-        logger.error(f"open_app: {err}")
-        return err
-    logger.info(f"open_app: '{name}' verified running — PID {pid}")
-    return f"✓ Launched '{name}' — PID {pid} verified running"
+    from tools.app_launcher import launch
+    return await launch(name, args)
 
 
 # ── close_app ─────────────────────────────────────────────────────────────────
