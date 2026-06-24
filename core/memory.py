@@ -364,6 +364,76 @@ class Memory:
         hits.sort(key=lambda h: h["when"] or "", reverse=True)
         return hits[:limit]
 
+    def semantic_search(self, query: str, limit: int = 10) -> list[dict]:
+        """
+        Local semantic retrieval via TF-IDF cosine similarity — ranks stored text
+        by relevance, not just substring match. Pure Python: no embeddings API, no
+        external service, runs entirely on the laptop.
+        Returns ranked hits: {"kind", "text", "meta", "when", "score"}.
+        """
+        import math
+        import re
+        from collections import Counter
+
+        if not query or not query.strip():
+            return []
+
+        def tok(s: str) -> list[str]:
+            return re.findall(r"[a-z0-9]+", (s or "").lower())
+
+        # Build a bounded corpus from the existing memory tables.
+        docs: list[tuple] = []
+        for r in self._exec(
+            "SELECT role, content, agent_name, created_at FROM conversations "
+            "ORDER BY created_at DESC LIMIT 500"
+        ).fetchall():
+            docs.append(("message", r["content"], {"role": r["role"], "agent": r["agent_name"]}, r["created_at"]))
+        for r in self._exec(
+            "SELECT goal, result, status, updated_at FROM tasks ORDER BY updated_at DESC LIMIT 300"
+        ).fetchall():
+            docs.append(("task", f"{r['goal']} {r['result'] or ''}", {"status": r["status"]}, r["updated_at"]))
+        try:
+            for r in self._exec(
+                "SELECT kind, content, created_at FROM learnings ORDER BY created_at DESC LIMIT 300"
+            ).fetchall():
+                docs.append(("learning", r["content"], {"kind": r["kind"]}, r["created_at"]))
+        except Exception:
+            pass  # learnings table may not exist yet
+
+        if not docs:
+            return []
+
+        tokenized = [tok(d[1]) for d in docs]
+        df: Counter = Counter()
+        for toks in tokenized:
+            for t in set(toks):
+                df[t] += 1
+        n_docs = len(docs)
+
+        def idf(t: str) -> float:
+            return math.log((n_docs + 1) / (df.get(t, 0) + 1)) + 1.0
+
+        def vec(toks: list[str]) -> dict:
+            tf = Counter(toks)
+            total = len(toks) or 1
+            return {t: (c / total) * idf(t) for t, c in tf.items()}
+
+        qv = vec(tok(query))
+        qnorm = math.sqrt(sum(v * v for v in qv.values())) or 1.0
+
+        scored: list[dict] = []
+        for (kind, text, meta, when), toks in zip(docs, tokenized):
+            dv = vec(toks)
+            dot = sum(qv.get(t, 0.0) * w for t, w in dv.items())
+            dnorm = math.sqrt(sum(w * w for w in dv.values())) or 1.0
+            sim = dot / (qnorm * dnorm)
+            if sim > 0:
+                scored.append({"kind": kind, "text": (text or "")[:200],
+                               "meta": meta, "when": when, "score": round(sim, 4)})
+
+        scored.sort(key=lambda h: h["score"], reverse=True)
+        return scored[:limit]
+
     def recent_activity(self, limit: int = 20) -> dict:
         """Snapshot for the dashboard memory panel: short-term + long-term + stats."""
         return {

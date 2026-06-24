@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: jarvis-v2
-  labels:
-    app: jarvis-v2

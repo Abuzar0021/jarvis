@@ -17,6 +17,12 @@ async def search(q: str, limit: int = 30):
     return {"query": q, "results": get_memory().search(q, limit=limit)}
 
 
+@router.get("/semantic")
+async def semantic(q: str, limit: int = 10):
+    """Local TF-IDF semantic retrieval — ranked by relevance, no external API."""
+    return {"query": q, "results": get_memory().semantic_search(q, limit=limit)}
+
+
 @router.get("/recent")
 async def recent(limit: int = 20):
     """Short-term + long-term memory snapshot for the dashboard memory panel."""

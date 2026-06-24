@@ -519,5 +519,64 @@ def models(task: str, tools: bool):
                   f"over {cost['total_calls']} calls")
 
 
+# ── jarvis workflow ──────────────────────────────────────────────────────────────
+
+@cli.command(name="workflow")
+@click.argument("action", type=click.Choice(["run", "list", "status", "resume", "recover"]))
+@click.argument("arg", nargs=-1)
+def workflow(action: str, arg: tuple):
+    """Manage durable workflows: run <goal> | list | status <id> | resume <id> | recover <id>."""
+    async def _run():
+        from core.workflows import get_workflow_engine
+        eng = get_workflow_engine()
+
+        if action == "list":
+            wfs = eng.list_workflows()
+            if not wfs:
+                console.print("[dim]No workflows yet.[/dim]"); return
+            table = Table(title="Workflows", border_style="cyan")
+            table.add_column("ID"); table.add_column("Goal"); table.add_column("Status")
+            table.add_column("Steps")
+            for w in wfs:
+                counts = " ".join(f"{k}:{v}" for k, v in (w.get("step_counts") or {}).items())
+                table.add_row(w["id"][:8], w["goal"][:48], w["status"], counts)
+            console.print(table)
+            return
+
+        if action in ("status", "resume", "recover"):
+            if not arg:
+                console.print("[red]Need a workflow id[/red]"); return
+            wf_id = arg[0]
+            if action == "status":
+                wf = eng.get(wf_id)
+                if not wf:
+                    console.print(f"[red]Workflow {wf_id} not found[/red]"); return
+                console.print(Panel(
+                    f"[bold]{wf['goal']}[/bold]\nStatus: {wf['status']}\n\n" +
+                    "\n".join(f"  {s['status']:10} [{s['agent']}] {s['title']}" for s in wf["steps"]),
+                    title=f"Workflow {wf_id[:8]}", border_style="cyan"))
+                return
+            if not _check_env():
+                console.print("[dim](resume/recover re-run steps via agents — needs API key)[/dim]")
+            result = await (eng.resume(wf_id) if action == "resume" else eng.recover(wf_id))
+            console.print(Panel(result.get("summary", "")[:1000],
+                                title=f"{action} → {result.get('status')}", border_style="green"))
+            return
+
+        # action == "run"
+        if not arg:
+            console.print("[red]Need a goal[/red]"); return
+        if not _check_env():
+            sys.exit(1)
+        goal = " ".join(arg)
+        console.print(f"[cyan]Planning + running workflow:[/cyan] {goal}")
+        result = await eng.run_goal(goal)
+        console.print(Panel(result.get("summary", "")[:1500],
+                            title=f"[cyan]{result.get('status')}[/cyan] · {result.get('workflow_id','')[:8]}",
+                            border_style="cyan"))
+
+    asyncio.run(_run())
+
+
 if __name__ == "__main__":
     cli()

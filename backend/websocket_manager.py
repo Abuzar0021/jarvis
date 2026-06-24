@@ -52,6 +52,9 @@ class EventType(str, Enum):
     # Lead-generation pipeline
     LEAD_UPDATE       = "lead_update"       # a lead advanced through the pipeline
 
+    # Workflow engine
+    WORKFLOW_UPDATE   = "workflow_update"   # a workflow/step changed state
+
 
 class ConnectionManager:
     """Manages active WebSocket connections and broadcasts events."""

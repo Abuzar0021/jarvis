@@ -43,6 +43,11 @@ MODELS: dict[str, str] = {
     "lead_scoring":      os.getenv("SCORING_MODEL",  "anthropic/claude-3-haiku"),
     "proposal":          os.getenv("PROPOSAL_MODEL", "anthropic/claude-3.5-sonnet"),
     "crm":               os.getenv("CRM_MODEL",      "anthropic/claude-3-haiku"),
+    # Workflow / automation / sales / learning agents
+    "workflow":          os.getenv("WORKFLOW_MODEL", "anthropic/claude-3.5-sonnet"),
+    "automation":        os.getenv("AUTOMATION_MODEL","anthropic/claude-3.5-sonnet"),
+    "sales":             os.getenv("SALES_MODEL",     "anthropic/claude-3-haiku"),
+    "learning":          os.getenv("LEARNING_MODEL",  "anthropic/claude-3-haiku"),
     "default":    os.getenv("DEFAULT_MODEL",    "anthropic/claude-3.5-sonnet"),
 }
 

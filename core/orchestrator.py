@@ -43,6 +43,11 @@ _BUILTIN_AGENTS = {
     "lead_scoring":      "agents.lead_scoring_agent.LeadScoringAgent",
     "proposal":          "agents.proposal_agent.ProposalAgent",
     "crm":               "agents.crm_agent.CrmAgent",
+    # Workflow / automation / sales / learning
+    "workflow":          "agents.workflow_agent.WorkflowAgent",
+    "automation":        "agents.automation_agent.AutomationAgent",
+    "sales":             "agents.sales_agent.SalesAgent",
+    "learning":          "agents.learning_agent.LearningAgent",
 }
 
 
@@ -198,27 +203,52 @@ class Orchestrator:
         task_id: Optional[str] = None,
         show_progress: bool = True,
         on_step_start=None,  # Optional[Callable[[int, int, str, str], Awaitable[None]]]
+        on_step_complete=None,  # Optional[Callable[[str, str], Awaitable[None]]] — (title, result)
+        prior_results: Optional[dict[str, str]] = None,  # already-completed steps (resume)
+        should_continue=None,  # Optional[Callable[[], bool]] — return False to pause
     ) -> dict[str, str]:
         """
         Execute subtasks respecting dependencies; independent groups run in parallel.
         Returns mapping of subtask title → result.
+
+        Checkpoint/resume hooks (used by the WorkflowEngine — all optional and
+        backward compatible):
+          on_step_complete(title, result)  fired after each step finishes (persist).
+          prior_results                     results from a previous run; their steps
+                                            are treated as already done (resume skips
+                                            them and downstream deps see their output).
+          should_continue()                 checked before each pass; False → pause
+                                            (returns the results gathered so far).
         """
         task_id = task_id or str(uuid.uuid4())
         _t0 = time.monotonic()
-        results: dict[str, str] = {}
-        completed: set[str] = set()
+        results: dict[str, str] = dict(prior_results or {})
+        completed: set[str] = set(results.keys())
         failed_count = 0
 
-        # Persist subtasks
+        async def _checkpoint(title: str, result: str) -> None:
+            if on_step_complete:
+                try:
+                    await on_step_complete(title, result)
+                except Exception:
+                    pass
+
+        # Persist only the subtasks that still need to run; skip resumed ones.
         subtask_ids: dict[str, str] = {}
         for st in subtasks:
+            if st["title"] in completed:
+                continue
             sid = self.memory.add_subtask(task_id, st)
             subtask_ids[st["title"]] = sid
 
-        remaining = list(subtasks)
-        max_passes = len(subtasks) + 1  # guard against circular deps
+        # On resume, drop already-completed steps from the work list.
+        remaining = [st for st in subtasks if st["title"] not in completed]
+        max_passes = len(remaining) + 1  # guard against circular deps
 
         for _ in range(max_passes):
+            if should_continue is not None and not should_continue():
+                logger.info("[orchestrator] plan paused before next step")
+                break
             if not remaining:
                 break
 
@@ -263,6 +293,7 @@ class Orchestrator:
                 results[title] = result
                 completed.add(title)
                 remaining.remove(st)
+                await _checkpoint(title, result)
             else:
                 # Parallel execution for independent subtasks
                 step_num = len(completed) + 1
@@ -305,6 +336,7 @@ class Orchestrator:
                             failed_count += 1
                     completed.add(title)
                     remaining.remove(st)
+                    await _checkpoint(title, results[title])
 
         elapsed = time.monotonic() - _t0
         logger.info(

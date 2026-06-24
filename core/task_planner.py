@@ -26,6 +26,16 @@ Available specialist agents and their strengths:
 - computer:   OS automation — opening/closing apps, keyboard, mouse, screenshots
 - browser:    headless browser — visiting URLs, form filling, web scraping
 - vision:     screen/webcam analysis — reading what is on screen
+- lead_generation:   discover candidate businesses matching an ideal customer profile
+- contact_discovery: find decision-maker emails/phones for a lead
+- website_audit:     audit a lead's website for SEO/mobile/speed/security gaps
+- lead_scoring:      score/qualify leads as prospects (0-100)
+- proposal:          write a tailored proposal from audit findings
+- crm:               manage the lead pipeline (add, advance stages, report)
+- sales:             personalised outreach, follow-up sequences, opportunity tracking
+- workflow:          build/run/resume/recover durable multi-step workflows
+- automation:        compose multi-step automation chains with conditional branching
+- learning:          analyse past runs and record learnings (proposes, never applies)
 
 Break the user's goal into concrete, self-contained subtasks.
 Each subtask must be assignable to exactly one agent.
