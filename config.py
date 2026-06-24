@@ -36,6 +36,13 @@ MODELS: dict[str, str] = {
     "computer":   os.getenv("COMPUTER_MODEL",   "anthropic/claude-3.5-sonnet"),
     "browser":    os.getenv("BROWSER_MODEL",    "anthropic/claude-3.5-sonnet"),
     "reviewer":   os.getenv("REVIEWER_MODEL",   "anthropic/claude-3-haiku"),
+    # Lead-generation pipeline agents
+    "lead_generation":   os.getenv("LEADGEN_MODEL",  "anthropic/claude-3-haiku"),
+    "contact_discovery": os.getenv("CONTACT_MODEL",  "anthropic/claude-3-haiku"),
+    "website_audit":     os.getenv("AUDIT_MODEL",    "anthropic/claude-3-haiku"),
+    "lead_scoring":      os.getenv("SCORING_MODEL",  "anthropic/claude-3-haiku"),
+    "proposal":          os.getenv("PROPOSAL_MODEL", "anthropic/claude-3.5-sonnet"),
+    "crm":               os.getenv("CRM_MODEL",      "anthropic/claude-3-haiku"),
     "default":    os.getenv("DEFAULT_MODEL",    "anthropic/claude-3.5-sonnet"),
 }
 

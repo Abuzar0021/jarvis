@@ -417,5 +417,107 @@ def run_agent(agent_name: str, task: tuple):
     asyncio.run(_run())
 
 
+# ── jarvis leads ───────────────────────────────────────────────────────────────
+
+@cli.command(name="leads")
+@click.argument("business", nargs=-1, required=False)
+@click.option("--url", "-u", default="", help="Lead website URL")
+@click.option("--industry", "-i", default="", help="Industry / vertical")
+@click.option("--location", "-l", default="", help="Location (for local SEO angle)")
+@click.option("--no-proposal", is_flag=True, help="Skip proposal generation")
+def leads(business: tuple, url: str, industry: str, location: str, no_proposal: bool):
+    """Run the lead-generation pipeline, or show the pipeline funnel if no business given.
+
+    Audit, contact discovery, and scoring run WITHOUT an API key. The proposal
+    uses the LLM when a key is set, otherwise a concrete audit-driven template.
+    """
+    async def _run():
+        from core.lead_pipeline import get_lead_pipeline
+        from core.crm import get_crm, STAGES
+
+        if not business:
+            # Show the funnel + top leads
+            crm = get_crm()
+            summary = crm.pipeline_summary()
+            table = Table(title="Lead Pipeline", border_style="cyan")
+            table.add_column("Stage"); table.add_column("Count", justify="right")
+            table.add_column("Avg score", justify="right")
+            for stage in STAGES:
+                s = summary["by_stage"][stage]
+                table.add_row(stage, str(s["count"]), f"{s['avg_score']:.0f}")
+            console.print(table)
+            console.print(
+                f"[dim]Total {summary['total']} · active {summary['active']} · "
+                f"conversion {summary['conversion_rate']*100:.0f}%[/dim]"
+            )
+            top = crm.list_leads(limit=10)
+            if top:
+                lt = Table(title="Top leads", border_style="magenta")
+                lt.add_column("Business"); lt.add_column("Score", justify="right")
+                lt.add_column("Stage"); lt.add_column("Email")
+                for l in top:
+                    lt.add_row(l.business, f"{l.score:.0f}", l.stage, l.contact_email or "—")
+                console.print(lt)
+            return
+
+        biz = " ".join(business)
+        import os
+        if not os.getenv("OPENROUTER_API_KEY"):
+            console.print("[dim]No API key — proposal will use the deterministic template.[/dim]")
+
+        console.print(f"[cyan]Running pipeline for[/cyan] [bold]{biz}[/bold]…")
+        trace = await get_lead_pipeline().run(
+            business=biz, url=url, industry=industry, location=location,
+            generate_proposal=not no_proposal,
+        )
+
+        audit = trace.get("audit", {})
+        console.print(Panel(
+            f"[bold]Stages:[/bold] " + " → ".join(s["stage"] for s in trace["stages"]) + "\n"
+            f"[bold]Contacts:[/bold] {trace['contacts'].get('primary_email') or 'none found'}\n"
+            f"[bold]Audit:[/bold] quality {audit.get('quality')}/100 · "
+            f"opportunity {audit.get('opportunity')}/100\n"
+            f"[bold]Issues:[/bold] {', '.join(audit.get('issues', [])) or 'none'}\n"
+            f"[bold]Score:[/bold] {trace['final_score']:.0f}/100 → stage [green]{trace['final_stage']}[/green]",
+            title=f"[cyan]{biz}[/cyan]", border_style="cyan",
+        ))
+        for r in trace["score"]["reasons"]:
+            console.print(f"  [dim]• {r}[/dim]")
+        if trace.get("proposal"):
+            console.print(Panel(trace["proposal"], title="Proposal", border_style="green"))
+
+    asyncio.run(_run())
+
+
+# ── jarvis models ────────────────────────────────────────────────────────────────
+
+@cli.command(name="models")
+@click.option("--task", "-t", default="write",
+              help="Task type: classify/extract/score/summarise/write/plan/code/research")
+@click.option("--tools", is_flag=True, help="Require tool-calling support")
+def models(task: str, tools: bool):
+    """Show the model routing chain (cheapest-capable-first) and cost report."""
+    from core.model_router import get_router
+    router = get_router()
+    decision = router.route(task_type=task, needs_tools=tools)
+
+    table = Table(title=f"Routing for task='{task}'" + (" (+tools)" if tools else ""),
+                  border_style="cyan")
+    table.add_column("#", justify="right"); table.add_column("Model")
+    table.add_column("Provider"); table.add_column("Cap", justify="right")
+    table.add_column("$/1K in", justify="right"); table.add_column("$/1K out", justify="right")
+    for i, m in enumerate(decision.chain):
+        marker = "→" if i == 0 else str(i + 1)
+        table.add_row(marker, m.id, m.provider, str(m.capability),
+                      f"{m.cost_in:.5f}", f"{m.cost_out:.5f}")
+    console.print(table)
+    console.print(f"[green]Chosen:[/green] {decision.chosen.id} "
+                  f"[dim](required capability {decision.required_capability})[/dim]")
+
+    cost = router.usage_summary()
+    console.print(f"\n[bold]Cost to date:[/bold] ${cost['total_cost_usd']:.4f} "
+                  f"over {cost['total_calls']} calls")
+
+
 if __name__ == "__main__":
     cli()

@@ -49,6 +49,9 @@ class EventType(str, Enum):
     # Execution state — unified snapshot (single source of truth)
     EXECUTION_STATE   = "execution_state"   # full ExecutionState.to_ws() payload
 
+    # Lead-generation pipeline
+    LEAD_UPDATE       = "lead_update"       # a lead advanced through the pipeline
+
 
 class ConnectionManager:
     """Manages active WebSocket connections and broadcasts events."""

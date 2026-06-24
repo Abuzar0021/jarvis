@@ -36,6 +36,13 @@ _BUILTIN_AGENTS = {
     "computer":   "agents.computer_agent.ComputerAgent",
     "browser":    "agents.browser_agent.BrowserAgent",
     "reviewer":   "agents.reviewer_agent.ReviewerAgent",
+    # Lead-generation pipeline
+    "lead_generation":   "agents.lead_generation_agent.LeadGenerationAgent",
+    "contact_discovery": "agents.contact_discovery_agent.ContactDiscoveryAgent",
+    "website_audit":     "agents.website_audit_agent.WebsiteAuditAgent",
+    "lead_scoring":      "agents.lead_scoring_agent.LeadScoringAgent",
+    "proposal":          "agents.proposal_agent.ProposalAgent",
+    "crm":               "agents.crm_agent.CrmAgent",
 }
 
 
