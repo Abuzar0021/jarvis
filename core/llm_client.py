@@ -1,19 +1,32 @@
-"""Async OpenRouter LLM client with tool-calling, retry, and model fallback."""
+"""Async LLM client supporting NVIDIA NIM (primary) and OpenRouter (fallback).
+
+Routing logic:
+  • Models whose ID starts with "nim/" are sent to NVIDIA NIM
+    (https://integrate.api.nvidia.com/v1) with the "nim/" prefix stripped.
+  • All other models are sent to OpenRouter.
+  • When a NIM call fails with a 401 (no key) or model-unavailable error,
+    the client falls through to the next model in the chain automatically.
+"""
 
 from __future__ import annotations
 
 import asyncio
 import json
+import time
 from typing import Any, Optional
 
 from openai import AsyncOpenAI, APIStatusError, APIConnectionError
 
-from config import OPENROUTER_API_KEY, OPENROUTER_BASE_URL, MODELS
+from config import (
+    OPENROUTER_API_KEY, OPENROUTER_BASE_URL,
+    NVIDIA_NIM_API_KEY, NVIDIA_NIM_BASE_URL,
+    MODELS,
+)
 from core.logger import get_logger
 
 logger = get_logger("jarvis.llm")
 
-# Ordered fallback chain — tried in sequence when the requested model is unavailable.
+# Ordered fallback chain for OpenRouter — tried when the requested model errors.
 _FALLBACK_MODELS: list[str] = [
     "openai/gpt-4o-mini",
     "openai/gpt-4o",
@@ -21,7 +34,7 @@ _FALLBACK_MODELS: list[str] = [
     "anthropic/claude-3-haiku",
 ]
 
-# HTTP status codes that indicate "this model doesn't exist here" vs transient errors.
+# HTTP status codes that signal "this model doesn't exist" rather than transient errors.
 _MODEL_UNAVAILABLE_STATUSES: frozenset[int] = frozenset({400, 404, 422})
 _MODEL_UNAVAILABLE_PHRASES: tuple[str, ...] = (
     "no endpoints found",
@@ -31,14 +44,17 @@ _MODEL_UNAVAILABLE_PHRASES: tuple[str, ...] = (
     "model_not_found",
 )
 
+_NIM_PREFIX = "nim/"
+
 
 class LLMClient:
-    """Thin async wrapper around OpenRouter (OpenAI-compatible)."""
+    """Async wrapper supporting NVIDIA NIM and OpenRouter providers."""
 
     def __init__(self) -> None:
-        self._has_key = bool(OPENROUTER_API_KEY)
-        if self._has_key:
-            self.client = AsyncOpenAI(
+        # OpenRouter client
+        self._has_openrouter = bool(OPENROUTER_API_KEY)
+        if self._has_openrouter:
+            self._or_client = AsyncOpenAI(
                 api_key=OPENROUTER_API_KEY,
                 base_url=OPENROUTER_BASE_URL,
                 default_headers={
@@ -47,16 +63,42 @@ class LLMClient:
                 },
             )
         else:
-            self.client = None
-            logger.warning("OPENROUTER_API_KEY not set — LLM calls will fail at runtime")
+            self._or_client = None
+            logger.warning("OPENROUTER_API_KEY not set — OpenRouter calls will fail")
+
+        # NVIDIA NIM client
+        self._has_nim = bool(NVIDIA_NIM_API_KEY)
+        if self._has_nim:
+            self._nim_client = AsyncOpenAI(
+                api_key=NVIDIA_NIM_API_KEY,
+                base_url=NVIDIA_NIM_BASE_URL,
+            )
+            logger.info("NVIDIA NIM enabled — NIM models are the primary stack")
+        else:
+            self._nim_client = None
+            logger.info("NVIDIA_NIM_API_KEY not set — NIM models skipped, using OpenRouter")
+
+    # ── Internal ───────────────────────────────────────────────────────────
 
     @staticmethod
     def _is_model_unavailable(exc: APIStatusError) -> bool:
-        """Return True when the error means the model itself is not routable."""
         if exc.status_code not in _MODEL_UNAVAILABLE_STATUSES:
             return False
         msg = str(exc.message).lower()
         return any(phrase in msg for phrase in _MODEL_UNAVAILABLE_PHRASES)
+
+    def _resolve_client_and_id(self, model_id: str):
+        """Return (client, actual_model_id) for the given model identifier."""
+        if model_id.startswith(_NIM_PREFIX):
+            actual = model_id[len(_NIM_PREFIX):]          # strip "nim/" prefix
+            if self._nim_client is not None:
+                return self._nim_client, actual
+            # NIM key absent — skip, will fall through to OpenRouter in the chain
+            return None, actual
+        client = self._or_client
+        return client, model_id
+
+    # ── Public API ─────────────────────────────────────────────────────────
 
     async def chat(
         self,
@@ -68,19 +110,16 @@ class LLMClient:
         max_retries: int = 2,
     ) -> Any:
         """
-        Chat completion with automatic model fallback.
+        Chat completion with automatic provider routing and fallback.
 
-        If the requested model returns a "no endpoints / not found" error,
-        the next model in _FALLBACK_MODELS is tried automatically.
-        Rate-limit errors (429) are retried with exponential backoff on the same model.
+        • nim/* models → NVIDIA NIM (falls through if key absent).
+        • Other models → OpenRouter.
+        • Rate-limit (429): retried with exponential backoff on the same model.
+        • Model-unavailable (400/404/422): next model in chain is tried.
         """
-        if not self._has_key:
-            raise EnvironmentError(
-                "OPENROUTER_API_KEY is not set. Copy .env.example → .env and add your key."
-            )
         resolved = model or MODELS["default"]
 
-        # Build a deduplicated fallback sequence: requested model first, then fallbacks.
+        # Build deduplicated fallback chain: requested model first, then OpenRouter fallbacks.
         chain: list[str] = [resolved] + [m for m in _FALLBACK_MODELS if m != resolved]
 
         kwargs: dict[str, Any] = {
@@ -95,39 +134,68 @@ class LLMClient:
         last_exc: Optional[Exception] = None
 
         for try_model in chain:
+            client, actual_id = self._resolve_client_and_id(try_model)
+
+            if client is None:
+                # No client available for this model (NIM absent, OR absent)
+                logger.debug(f"Skipping {try_model!r} — provider client not configured")
+                continue
+
+            provider_name = "NIM" if try_model.startswith(_NIM_PREFIX) else "OpenRouter"
+
             for attempt in range(max_retries + 1):
                 try:
-                    logger.debug(f"LLM call model={try_model} msgs={len(messages)} attempt={attempt}")
-                    resp = await self.client.chat.completions.create(
-                        model=try_model, **kwargs
+                    logger.debug(
+                        f"LLM call provider={provider_name} model={actual_id} "
+                        f"msgs={len(messages)} attempt={attempt}"
+                    )
+                    resp = await client.chat.completions.create(
+                        model=actual_id, **kwargs
                     )
                     if try_model != resolved:
-                        logger.info(f"LLM fallback succeeded: {resolved} → {try_model}")
+                        logger.info(
+                            f"LLM fallback succeeded: {resolved!r} → "
+                            f"{provider_name}/{actual_id!r}"
+                        )
                     return resp
 
                 except APIStatusError as exc:
+                    # 401 from NIM = no key / bad key — treat as model-unavailable
+                    if exc.status_code == 401 and try_model.startswith(_NIM_PREFIX):
+                        logger.warning(
+                            f"NIM auth failed for {actual_id!r} — falling back to OpenRouter"
+                        )
+                        last_exc = exc
+                        break  # next model in chain
+
                     if self._is_model_unavailable(exc):
                         logger.warning(
-                            f"Model unavailable: {try_model!r} ({exc.status_code}: {exc.message!r}) "
+                            f"Model unavailable: {actual_id!r} ({exc.status_code}) "
                             f"— trying next fallback"
                         )
                         last_exc = exc
-                        break  # move to next model in chain
+                        break  # next model in chain
 
                     if exc.status_code == 429:
                         wait = 2 ** attempt
-                        logger.warning(f"Rate-limited on {try_model}, retrying in {wait}s…")
+                        logger.warning(
+                            f"Rate-limited on {actual_id!r}, retrying in {wait}s…"
+                        )
                         await asyncio.sleep(wait)
                         last_exc = exc
                         continue  # retry same model
 
-                    # Other API error (500, auth, etc.) — surface immediately
-                    logger.error(f"API error {exc.status_code} on {try_model}: {exc.message}")
+                    # Other API error (500, etc.) — surface immediately
+                    logger.error(
+                        f"API error {exc.status_code} on {actual_id!r}: {exc.message}"
+                    )
                     raise
 
                 except APIConnectionError as exc:
                     wait = 2 ** attempt
-                    logger.warning(f"Connection error on {try_model}, retrying in {wait}s…")
+                    logger.warning(
+                        f"Connection error on {actual_id!r}, retrying in {wait}s…"
+                    )
                     await asyncio.sleep(wait)
                     last_exc = exc
                     continue
@@ -148,6 +216,18 @@ class LLMClient:
         messages.append({"role": "user", "content": prompt})
         resp = await self.chat(messages, model=model, temperature=temperature)
         return resp.choices[0].message.content or ""
+
+    async def timed_simple(
+        self,
+        prompt: str,
+        system: str = "",
+        model: Optional[str] = None,
+        temperature: float = 0.7,
+    ) -> tuple[str, float]:
+        """Like simple() but also returns wall-clock latency in milliseconds."""
+        t0 = time.monotonic()
+        text = await self.simple(prompt, system=system, model=model, temperature=temperature)
+        return text, (time.monotonic() - t0) * 1000.0
 
     async def tool_loop(
         self,
