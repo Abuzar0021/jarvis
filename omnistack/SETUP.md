@@ -48,9 +48,14 @@ docker compose up -d --build
 ## Deploy without Docker (Node host: Railway / Render / Fly / VPS)
 
 ```bash
+export NEXT_PUBLIC_SITE_URL=https://yourdomain.com   # needed at BUILD time
 pnpm install && pnpm build
 node .next/standalone/server.js     # or: pnpm start
 ```
+
+> `NEXT_PUBLIC_SITE_URL` must be set **before `pnpm build`** so canonical, OG,
+> and sitemap URLs bake into the static pages. With Docker, set it in `.env`
+> (passed as a build arg by `docker-compose.yml`).
 
 Ensure `content/` and `public/uploads/` are on a **persistent disk** so admin
 edits and uploads are retained.

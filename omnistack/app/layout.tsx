@@ -28,14 +28,13 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       type: "website",
       siteName: site.brand,
-      title: `${site.brand} — ${site.tagline}`,
-      description: site.description,
       url: siteUrl,
+      // title/description intentionally omitted so each page's own
+      // title + description cascade into og:title / og:description.
     },
     twitter: {
       card: "summary_large_image",
-      title: `${site.brand} — ${site.tagline}`,
-      description: site.description,
+      // title/description cascade from each page as above.
     },
     icons: {
       icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],

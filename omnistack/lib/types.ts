@@ -221,11 +221,3 @@ export interface SiteContent {
 
   footerTagline: string;
 }
-
-export type ContentBundle = {
-  site: SiteContent;
-  projects: Project[];
-  services: Service[];
-  testimonials: Testimonial[];
-  faqs: Faq[];
-};
