@@ -1,0 +1,26 @@
+[
+  {
+    "id": "tst_1",
+    "quote": "They didn't just build what we asked for — they made it better than we imagined, and it shipped on time. One team owned everything, so there was never a gap to fall through.",
+    "authorName": "",
+    "authorRole": "Founder",
+    "company": "Startup client",
+    "featured": true
+  },
+  {
+    "id": "tst_2",
+    "quote": "Fast, calm, and genuinely senior. We finally have a website that loads instantly and brings in bookings instead of just sitting there.",
+    "authorName": "",
+    "authorRole": "Owner",
+    "company": "Restaurant client",
+    "featured": false
+  },
+  {
+    "id": "tst_3",
+    "quote": "The app feels effortless for our clients, and it was delivered end to end without the usual back-and-forth. Exactly the partner we'd been looking for.",
+    "authorName": "",
+    "authorRole": "Product Lead",
+    "company": "Fitness client",
+    "featured": false
+  }
+]

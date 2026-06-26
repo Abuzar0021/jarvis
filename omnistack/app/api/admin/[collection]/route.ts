@@ -1,0 +1,91 @@
+import type { NextRequest } from "next/server";
+import { isAuthenticated } from "@/lib/auth";
+import {
+  faqSchema,
+  projectSchema,
+  serviceSchema,
+  testimonialSchema,
+} from "@/lib/validation";
+import {
+  saveFaqs,
+  saveLeads,
+  saveProjects,
+  saveServices,
+  saveTestimonials,
+} from "@/lib/content";
+import { genId, slugify } from "@/lib/utils";
+import type { Faq, Lead, Project, Service, Testimonial } from "@/lib/types";
+
+export const runtime = "nodejs";
+
+export async function PUT(
+  req: NextRequest,
+  ctx: { params: Promise<{ collection: string }> },
+) {
+  if (!(await isAuthenticated())) {
+    return Response.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { collection } = await ctx.params;
+  const body = await req.json().catch(() => ({}));
+  const items: unknown[] = Array.isArray(body?.items) ? body.items : [];
+
+  try {
+    switch (collection) {
+      case "projects": {
+        const out: Project[] = items.map((raw, i) => {
+          const p = projectSchema.parse(raw);
+          return {
+            ...p,
+            id: p.id || genId("prj"),
+            slug: p.slug || slugify(p.title),
+            sortOrder: Number.isFinite(p.sortOrder) && p.sortOrder ? p.sortOrder : i + 1,
+          };
+        });
+        await saveProjects(out);
+        break;
+      }
+      case "services": {
+        const out: Service[] = items.map((raw) => {
+          const s = serviceSchema.parse(raw);
+          return { ...s, id: s.id || genId("svc"), slug: s.slug || slugify(s.name) };
+        });
+        await saveServices(out);
+        break;
+      }
+      case "testimonials": {
+        const out: Testimonial[] = items.map((raw) => {
+          const t = testimonialSchema.parse(raw);
+          return { ...t, id: t.id || genId("tst") };
+        });
+        await saveTestimonials(out);
+        break;
+      }
+      case "faqs": {
+        const out: Faq[] = items.map((raw) => {
+          const f = faqSchema.parse(raw);
+          return { ...f, id: f.id || genId("faq") };
+        });
+        await saveFaqs(out);
+        break;
+      }
+      case "leads": {
+        const allowed = ["new", "contacted", "qualified", "won", "lost"];
+        const out = (items as Lead[]).map((l) => ({
+          ...l,
+          status: allowed.includes(l.status) ? l.status : "new",
+        }));
+        await saveLeads(out as Lead[]);
+        break;
+      }
+      default:
+        return Response.json({ ok: false, error: "Unknown collection" }, { status: 404 });
+    }
+    return Response.json({ ok: true });
+  } catch (err) {
+    return Response.json(
+      { ok: false, error: err instanceof Error ? err.message : "Invalid data" },
+      { status: 400 },
+    );
+  }
+}

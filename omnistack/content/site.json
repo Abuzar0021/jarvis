@@ -1,0 +1,213 @@
+{
+  "brand": "OmniStack Digital",
+  "tagline": "Products that feel inevitable.",
+  "description": "OmniStack Digital is the senior team that owns brand, design, engineering, and AI — so ambitious teams ship products that feel inevitable. Based in Dublin and Jakarta.",
+  "founder": "Zar",
+  "about": {
+    "heading": "Great products deserve better than mediocre execution.",
+    "story": "OmniStack Digital exists because great products deserve better than mediocre execution. For years, our founder Zar watched ideas stall — designed by studios that couldn't build, built by shops with no taste, marketed by teams that couldn't ship.\n\nSo he assembled the team he always wished he could hire: senior designers, engineers, and AI specialists who own the entire stack and treat craft as non-negotiable. We take fewer projects and finish them properly. We explain our work in plain language.\n\nWe measure ourselves by what your product does after launch — not by what we promised before it. One accountable team, from the first sketch to the last deploy, working across Dublin and Jakarta."
+  },
+  "announcement": {
+    "enabled": true,
+    "text": "New: FitPlanCoach — a production-grade fitness web app, shipped end to end.",
+    "linkLabel": "See the work",
+    "linkHref": "/work/fitplancoach"
+  },
+  "hero": {
+    "eyebrow": "Brand · Product · AI — one senior team",
+    "headline": "Products that feel inevitable.",
+    "highlight": "inevitable",
+    "subhead": "We own brand, design, engineering, and AI under one senior team — so your product ships fast and feels like it was always meant to exist.",
+    "primaryCta": {
+      "label": "Book a Call",
+      "href": "/contact"
+    },
+    "secondaryCta": {
+      "label": "See our work",
+      "href": "/work"
+    }
+  },
+  "trustLabel": "Trusted by founders, agencies, and teams shipping at scale.",
+  "valuePillars": [
+    {
+      "title": "One team, end to end",
+      "body": "Brand to backend to growth — no hand-offs, no seams. The people who scope your project are the people who build it."
+    },
+    {
+      "title": "Senior-only",
+      "body": "No junior hand-offs. Every line of work is owned by someone who has shipped at scale before."
+    },
+    {
+      "title": "Built to perform",
+      "body": "90+ Lighthouse, WCAG 2.2 AA, and SEO from the first commit — speed and accessibility are features, not afterthoughts."
+    }
+  ],
+  "servicesIntro": "Everything you need to design, build, and grow a modern digital product — under one roof.",
+  "aiShowcase": {
+    "eyebrow": "AI-native by default",
+    "title": "AI that does the work — not demos.",
+    "body": "We design agents and automations that handle real operations, wired into your stack and monitored in production. Not a chatbot bolted on; systems that move the work forward.",
+    "points": [
+      "Qualify and route leads automatically",
+      "Generate and repurpose content on brand",
+      "Sync data between the tools you already use",
+      "Human-in-the-loop where it matters"
+    ]
+  },
+  "process": {
+    "intro": "A clear path, every time. You always know what's happening and what's next.",
+    "steps": [
+      {
+        "title": "Discover",
+        "body": "We map your goals, users, and constraints — then agree a clear scope, timeline, and fixed price."
+      },
+      {
+        "title": "Design",
+        "body": "We design the experience and the system together, so what looks right also builds right."
+      },
+      {
+        "title": "Build",
+        "body": "Senior engineers ship in tight iterations on a hardened, type-safe stack you can trust."
+      },
+      {
+        "title": "Launch",
+        "body": "We deploy on secure infrastructure with monitoring, backups, and performance baked in."
+      },
+      {
+        "title": "Grow",
+        "body": "We measure what your product does after launch — and improve it with SEO and iteration."
+      }
+    ]
+  },
+  "techStack": [
+    {
+      "group": "Frontend",
+      "items": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Tailwind CSS",
+        "Framer Motion"
+      ]
+    },
+    {
+      "group": "Backend",
+      "items": [
+        "Node.js",
+        "PostgreSQL",
+        "Drizzle",
+        "Auth.js",
+        "Redis"
+      ]
+    },
+    {
+      "group": "AI",
+      "items": [
+        "OpenAI",
+        "Anthropic",
+        "LangGraph",
+        "Vector DBs",
+        "Workflow agents"
+      ]
+    },
+    {
+      "group": "Infra",
+      "items": [
+        "Docker",
+        "Cloudflare",
+        "Caddy",
+        "GitHub Actions",
+        "Sentry"
+      ]
+    }
+  ],
+  "stats": [
+    {
+      "value": "20",
+      "suffix": "+",
+      "label": "Projects shipped"
+    },
+    {
+      "value": "98",
+      "suffix": "",
+      "label": "Avg. Lighthouse score"
+    },
+    {
+      "value": "100",
+      "suffix": "%",
+      "label": "Clients retained"
+    },
+    {
+      "value": "5",
+      "suffix": "+",
+      "label": "Years of craft"
+    }
+  ],
+  "industries": [
+    {
+      "name": "Restaurants & Hospitality",
+      "slug": "restaurants-hospitality"
+    },
+    {
+      "name": "Health & Fitness",
+      "slug": "health-fitness"
+    },
+    {
+      "name": "SaaS & Startups",
+      "slug": "saas-startups"
+    },
+    {
+      "name": "E-commerce & Retail",
+      "slug": "ecommerce-retail"
+    },
+    {
+      "name": "Professional Services",
+      "slug": "professional-services"
+    },
+    {
+      "name": "Real Estate",
+      "slug": "real-estate"
+    }
+  ],
+  "cta": {
+    "headline": "Let's build something inevitable.",
+    "body": "Tell us what you're building. We'll come back with a clear, fixed plan — scope, timeline, and price.",
+    "reassurance": "We reply within one business day.",
+    "button": {
+      "label": "Book a Call",
+      "href": "/contact"
+    }
+  },
+  "newsletter": {
+    "title": "Notes on shipping better products",
+    "body": "Occasional, practical writing on design, engineering, and AI. No spam, unsubscribe anytime."
+  },
+  "contact": {
+    "email": "abuzarelahi01@gmail.com",
+    "whatsapp": "353896050083",
+    "whatsappDisplay": "+353 89 605 0083",
+    "locations": [
+      {
+        "city": "Dublin",
+        "country": "Ireland"
+      },
+      {
+        "city": "Jakarta",
+        "country": "Indonesia"
+      }
+    ],
+    "hours": "Mon–Fri, 9:00–18:00",
+    "responseTime": "We reply within one business day."
+  },
+  "social": [
+    {
+      "label": "WhatsApp",
+      "href": "https://wa.me/353896050083"
+    },
+    {
+      "label": "Email",
+      "href": "mailto:abuzarelahi01@gmail.com"
+    }
+  ],
+  "footerTagline": "Brand, product, and AI, built by one senior team — from Dublin to Jakarta."
+}

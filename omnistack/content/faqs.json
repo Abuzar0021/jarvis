@@ -1,0 +1,38 @@
+[
+  {
+    "id": "faq_1",
+    "question": "How fast can you start?",
+    "answer": "Most projects kick off within one to two weeks of a scoping call. Book a call and we'll map a clear timeline for yours.",
+    "category": "Working together"
+  },
+  {
+    "id": "faq_2",
+    "question": "Do you only design, or also build?",
+    "answer": "Both. We own the full stack from brand to backend — design, frontend, backend, and AI — under one senior team.",
+    "category": "Working together"
+  },
+  {
+    "id": "faq_3",
+    "question": "What does it cost?",
+    "answer": "It depends on scope. Book a call and we'll give you a clear, fixed quote — no surprises, no hourly creep.",
+    "category": "Pricing"
+  },
+  {
+    "id": "faq_4",
+    "question": "Do you work with our existing team or codebase?",
+    "answer": "Yes. We integrate with your stack and your people, and we're happy to pick up and improve an existing codebase.",
+    "category": "Working together"
+  },
+  {
+    "id": "faq_5",
+    "question": "Will the site be fast and rank well?",
+    "answer": "Performance, accessibility, and SEO are built in by default — we target 90+ Lighthouse and strong Core Web Vitals on every build.",
+    "category": "Quality"
+  },
+  {
+    "id": "faq_6",
+    "question": "Where are you based?",
+    "answer": "We work from Dublin, Ireland and Jakarta, Indonesia, with clients worldwide. Send your requirements anytime and we'll reply within one business day.",
+    "category": "Working together"
+  }
+]
