@@ -28,6 +28,11 @@ export const projectSchema = z.object({
   year: z.string().trim().max(12).optional().default(""),
   summary: z.string().trim().max(600).optional().default(""),
   body: z.string().trim().max(8000).optional().default(""),
+  challenge: z.string().trim().max(4000).optional().default(""),
+  approach: z.string().trim().max(4000).optional().default(""),
+  outcome: z.string().trim().max(4000).optional().default(""),
+  gallery: z.array(z.string().trim().max(600)).optional().default([]),
+  testimonialId: z.string().trim().max(60).optional().default(""),
   cover: z.string().trim().max(600).optional().default(""),
   url: z.string().trim().max(400).optional().default(""),
   tags: z.array(z.string().trim().max(60)).optional().default([]),
@@ -43,6 +48,8 @@ export const projectSchema = z.object({
     .default([]),
   featured: z.boolean().optional().default(false),
   sortOrder: z.number().optional().default(0),
+  seoTitle: z.string().trim().max(160).optional().default(""),
+  seoDescription: z.string().trim().max(300).optional().default(""),
 });
 
 export const serviceSchema = z.object({

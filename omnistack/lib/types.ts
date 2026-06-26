@@ -52,6 +52,12 @@ export interface Project {
   year: string;
   summary: string;
   body: string;
+  // Structured case-study narrative (preferred). Falls back to `body` if empty.
+  challenge: string;
+  approach: string;
+  outcome: string;
+  gallery: string[]; // additional image URLs
+  testimonialId: string; // optional linked testimonial
   cover: string; // image URL (optional) — falls back to a branded gradient
   url: string; // live site link
   tags: string[];
@@ -59,6 +65,8 @@ export interface Project {
   results: { label: string; value: string }[];
   featured: boolean;
   sortOrder: number;
+  seoTitle: string;
+  seoDescription: string;
 }
 
 export interface Testimonial {
