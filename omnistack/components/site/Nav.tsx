@@ -116,7 +116,7 @@ export function Nav({
         </div>
 
         <div className="flex items-center gap-3">
-          <Button href="/contact" variant="primary" size="sm" className="hidden sm:inline-flex">
+          <Button href="/book" variant="primary" size="sm" className="hidden sm:inline-flex">
             {ctaLabel}
           </Button>
           {/* Mobile toggle */}
@@ -174,7 +174,7 @@ export function Nav({
                 )}
               </ul>
               <div className="mt-auto pt-8">
-                <Button href="/contact" variant="primary" size="lg" className="w-full" withArrow>
+                <Button href="/book" variant="primary" size="lg" className="w-full" withArrow>
                   {ctaLabel}
                 </Button>
               </div>

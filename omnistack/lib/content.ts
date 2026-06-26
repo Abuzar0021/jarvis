@@ -65,6 +65,7 @@ const FALLBACK_SITE: SiteContent = {
   },
   pricing: { intro: "", note: "", models: [] },
   newsletter: { title: "", body: "" },
+  booking: { enabled: false, calendarUrl: "", heading: "", intro: "", expectations: [] },
   contact: {
     email: "abuzarelahi01@gmail.com",
     whatsapp: "353896050083",

@@ -68,6 +68,8 @@ export function LeadsBoard({ initial }: { initial: Lead[] }) {
             {l.service ? <span>Service: <span className="text-fg/90">{l.service}</span></span> : null}
             {l.budget ? <span>Budget: <span className="text-fg/90">{l.budget}</span></span> : null}
             <span>Source: <span className="text-fg/90">{l.source}</span></span>
+            {l.page ? <span>Page: <span className="text-fg/90">{l.page}</span></span> : null}
+            {l.utm ? <span>UTM: <span className="text-fg/90">{l.utm}</span></span> : null}
           </div>
 
           {l.message ? (

@@ -41,7 +41,9 @@ export async function POST(req: NextRequest) {
       service: d.service || "",
       budget: d.budget || "",
       message: d.message,
-      source: "contact",
+      source: d.source || "contact",
+      page: d.page || "",
+      utm: d.utm || "",
       status: "new",
       createdAt: new Date().toISOString(),
     };

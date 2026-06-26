@@ -9,6 +9,9 @@ export const contactSchema = z.object({
   service: z.string().trim().max(120).optional().default(""),
   budget: z.string().trim().max(80).optional().default(""),
   message: z.string().trim().min(10, "Tell us a little more").max(5000),
+  source: z.string().trim().max(40).optional().default("contact"),
+  page: z.string().trim().max(200).optional().default(""),
+  utm: z.string().trim().max(400).optional().default(""),
   // Honeypot — must be empty.
   website: z.string().max(0).optional().default(""),
 });
@@ -169,6 +172,13 @@ export const siteSchema = z.object({
     ),
   }),
   newsletter: z.object({ title: z.string().max(120), body: z.string().max(300) }),
+  booking: z.object({
+    enabled: z.boolean(),
+    calendarUrl: z.string().max(400),
+    heading: z.string().max(160),
+    intro: z.string().max(400),
+    expectations: z.array(z.string().max(200)),
+  }),
   contact: z.object({
     email: z.string().regex(EMAIL).max(200),
     whatsapp: z.string().max(20),

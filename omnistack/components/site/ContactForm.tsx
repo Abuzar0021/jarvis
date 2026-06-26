@@ -8,7 +8,13 @@ const BUDGETS = ["Not sure yet", "Under €2k", "€2k–€5k", "€5k–€10k
 const inputCls =
   "h-12 w-full rounded-xl border border-hair bg-card px-4 text-sm text-fg placeholder:text-muted/60 transition-colors focus:border-gold/60 focus:outline-none";
 
-export function ContactForm({ services }: { services: string[] }) {
+export function ContactForm({
+  services,
+  source = "contact",
+}: {
+  services: string[];
+  source?: string;
+}) {
   const router = useRouter();
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -18,7 +24,21 @@ export function ContactForm({ services }: { services: string[] }) {
     setStatus("loading");
     setErrors({});
     const fd = new FormData(e.currentTarget);
-    const payload = Object.fromEntries(fd.entries());
+    const payload: Record<string, string> = Object.fromEntries(
+      Array.from(fd.entries()).map(([k, v]) => [k, String(v)]),
+    );
+    payload.source = source;
+    if (typeof window !== "undefined") {
+      payload.page = window.location.pathname;
+      const sp = new URLSearchParams(window.location.search);
+      payload.utm = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]
+        .map((k) => {
+          const val = sp.get(k);
+          return val ? `${k.replace("utm_", "")}=${val}` : null;
+        })
+        .filter(Boolean)
+        .join("&");
+    }
 
     try {
       const res = await fetch("/api/contact", {

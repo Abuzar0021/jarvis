@@ -20,7 +20,7 @@
     "subhead": "We own brand, design, engineering, and AI under one senior team — so your product ships fast and feels like it was always meant to exist.",
     "primaryCta": {
       "label": "Book a Call",
-      "href": "/contact"
+      "href": "/book"
     },
     "secondaryCta": {
       "label": "See our work",
@@ -149,7 +149,7 @@
     "reassurance": "We reply within one business day.",
     "button": {
       "label": "Book a Call",
-      "href": "/contact"
+      "href": "/book"
     }
   },
   "pricing": {
@@ -197,6 +197,17 @@
   "newsletter": {
     "title": "Notes on shipping better products",
     "body": "Occasional, practical writing on design, engineering, and AI. No spam, unsubscribe anytime."
+  },
+  "booking": {
+    "enabled": false,
+    "calendarUrl": "",
+    "heading": "Book a free scoping call",
+    "intro": "A short call to understand what you're building. You'll leave with a clear sense of scope, timeline, and next steps — no pressure, no jargon.",
+    "expectations": [
+      "Tell us about your goals, timeline, and constraints",
+      "We share how we'd approach it and what's possible",
+      "You get a clear, fixed quote within one business day"
+    ]
   },
   "contact": {
     "email": "abuzarelahi01@gmail.com",

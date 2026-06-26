@@ -30,6 +30,8 @@ export async function POST(req: NextRequest) {
       budget: "",
       message: "Subscribed to the newsletter.",
       source: "newsletter",
+      page: "",
+      utm: "",
       status: "new",
       createdAt: new Date().toISOString(),
     };

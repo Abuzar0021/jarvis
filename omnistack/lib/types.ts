@@ -107,6 +107,8 @@ export interface Lead {
   budget: string;
   message: string;
   source: string;
+  page: string; // path the form was submitted from
+  utm: string; // compact UTM string, e.g. "source=google&medium=cpc"
   status: "new" | "contacted" | "qualified" | "won" | "lost";
   createdAt: string;
 }
@@ -182,6 +184,14 @@ export interface SiteContent {
   newsletter: {
     title: string;
     body: string;
+  };
+
+  booking: {
+    enabled: boolean; // show the calendar embed
+    calendarUrl: string; // Cal.com / Calendly embed URL
+    heading: string;
+    intro: string;
+    expectations: string[];
   };
 
   contact: {

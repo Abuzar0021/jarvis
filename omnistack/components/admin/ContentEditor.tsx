@@ -137,6 +137,16 @@ export function ContentEditor({ initial }: { initial: SiteContent }) {
         </div>
       </Card>
 
+      <Card title="Booking / consultation">
+        <div className="space-y-4">
+          <Toggle label="Show calendar embed on /book" checked={site.booking.enabled} onChange={(v) => set({ booking: { ...site.booking, enabled: v } })} />
+          <Field label="Calendar embed URL (Cal.com / Calendly)" value={site.booking.calendarUrl} onChange={(v) => set({ booking: { ...site.booking, calendarUrl: v } })} hint="Leave blank to show the enquiry form instead." mono />
+          <Field label="Heading" value={site.booking.heading} onChange={(v) => set({ booking: { ...site.booking, heading: v } })} />
+          <TextArea label="Intro" value={site.booking.intro} onChange={(v) => set({ booking: { ...site.booking, intro: v } })} rows={2} />
+          <StringList label="What to expect" values={site.booking.expectations} onChange={(v) => set({ booking: { ...site.booking, expectations: v } })} />
+        </div>
+      </Card>
+
       <Card title="Contact details">
         <div className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
