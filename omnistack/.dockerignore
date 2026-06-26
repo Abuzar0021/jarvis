@@ -1,0 +1,15 @@
+node_modules
+.next
+.git
+.github
+npm-debug.log*
+.pnpm-debug.log*
+.env
+.env.*
+!.env.example
+Dockerfile
+docker-compose.yml
+Caddyfile
+README.md
+SETUP.md
+.DS_Store

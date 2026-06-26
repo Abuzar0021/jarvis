@@ -1,0 +1,9 @@
+# Caddy reverse proxy with automatic HTTPS.
+# Usage: set DOMAIN in your environment, then run via docker-compose
+# (uncomment the caddy service). The Next.js app sets its own security
+# headers (CSP, HSTS, etc.), so Caddy only proxies and compresses here.
+
+{$DOMAIN:localhost} {
+	encode gzip zstd
+	reverse_proxy web:3000
+}

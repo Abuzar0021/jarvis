@@ -36,9 +36,18 @@ Go to `/admin` and sign in. From the sidebar you can:
 | **Site content** | Edit the hero, about story, value pillars, process, stats, industries, AI section, final CTA, newsletter text, **contact email, WhatsApp number, locations**, social links, and the announcement bar. |
 | **Projects** | **Add / edit / reorder / delete** portfolio projects. Upload a cover image (or paste a URL), write the case study, set tags, results, and feature it on the homepage. |
 | **Services** | Add/edit/remove services and choose which appear on the homepage. |
+| **Industries** | Manage industry landing pages (pain points, tailored services, SEO). |
+| **Insights** | Write and manage blog articles. |
 | **Testimonials** | Manage client quotes (replace the samples with real ones before launch). |
 | **FAQs** | Manage the homepage FAQ. |
-| **Leads** | Every contact-form and newsletter submission lands here, with a status workflow (new → contacted → qualified → won/lost). |
+| **Leads** | Every contact/booking/newsletter submission lands here with source + UTM and a status workflow (new → contacted → qualified → won/lost). |
+| **Media** | Upload, browse, copy URLs, and delete images. |
+| **Redirects** | Manage URL redirects (applied on the next build). |
+| **Tools** | Download/restore a full content backup and view the activity log. |
+
+Public pages: home, work + case studies, **services + details**, **industries + details**, **pricing**, **insights + articles**, **about**, **contact**, **/book** (consultation), **/search**, plus legal pages. SEO: per-page metadata, JSON-LD (Organization, Service, CreativeWork, BlogPosting, FAQ, Breadcrumb), canonicals, sitemap, robots, RSS (`/feed.xml`), and a web manifest.
+
+> **Deployment:** see [`SETUP.md`](./SETUP.md) for Docker, VPS, env, and CI details.
 
 Click **Save changes** in any section and it goes live on the site instantly.
 
