@@ -64,6 +64,19 @@ export interface Faq {
   category: string;
 }
 
+export interface Post {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  body: string; // supports ## headings, - bullets, and blank-line paragraphs
+  cover: string;
+  category: string;
+  author: string;
+  publishedAt: string; // YYYY-MM-DD
+  featured: boolean;
+}
+
 export interface Lead {
   id: string;
   name: string;

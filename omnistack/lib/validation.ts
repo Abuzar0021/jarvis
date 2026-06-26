@@ -72,6 +72,19 @@ export const faqSchema = z.object({
   category: z.string().trim().max(80).optional().default("General"),
 });
 
+export const postSchema = z.object({
+  id: z.string().optional(),
+  title: z.string().trim().min(2).max(180),
+  slug: z.string().trim().max(120).optional().default(""),
+  excerpt: z.string().trim().max(400).optional().default(""),
+  body: z.string().trim().max(20000).optional().default(""),
+  cover: z.string().trim().max(600).optional().default(""),
+  category: z.string().trim().max(80).optional().default("Guides"),
+  author: z.string().trim().max(80).optional().default(""),
+  publishedAt: z.string().trim().max(40).optional().default(""),
+  featured: z.boolean().optional().default(false),
+});
+
 const cta = z.object({ label: z.string().max(60), href: z.string().max(200) });
 
 export const siteSchema = z.object({

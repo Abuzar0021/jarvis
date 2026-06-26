@@ -12,6 +12,7 @@ type Grouped = { group: string; items: ServiceLink[] }[];
 
 const NAV_LINKS = [
   { label: "Work", href: "/work" },
+  { label: "Insights", href: "/insights" },
   { label: "About", href: "/about" },
   { label: "Process", href: "/#process" },
 ];

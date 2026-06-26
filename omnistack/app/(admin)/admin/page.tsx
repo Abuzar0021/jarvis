@@ -6,6 +6,7 @@ import { PageTitle } from "@/components/admin/fields";
 import {
   getFaqs,
   getLeads,
+  getPosts,
   getProjects,
   getServices,
   getTestimonials,
@@ -16,12 +17,13 @@ export const dynamic = "force-dynamic";
 export default async function DashboardPage() {
   if (!(await isAuthenticated())) redirect("/admin/login");
 
-  const [projects, services, testimonials, faqs, leads] = await Promise.all([
+  const [projects, services, testimonials, faqs, leads, posts] = await Promise.all([
     getProjects(),
     getServices(),
     getTestimonials(),
     getFaqs(),
     getLeads(),
+    getPosts(),
   ]);
 
   const newLeads = leads.filter((l) => l.status === "new").length;
@@ -29,6 +31,7 @@ export default async function DashboardPage() {
   const cards = [
     { label: "Projects", value: projects.length, href: "/admin/projects" },
     { label: "Services", value: services.length, href: "/admin/services" },
+    { label: "Articles", value: posts.length, href: "/admin/insights" },
     { label: "Testimonials", value: testimonials.length, href: "/admin/testimonials" },
     { label: "FAQs", value: faqs.length, href: "/admin/faqs" },
     { label: "New enquiries", value: newLeads, href: "/admin/leads" },
@@ -38,7 +41,7 @@ export default async function DashboardPage() {
     <AdminShell>
       <PageTitle title="Dashboard" description="Manage every part of your website — no code required." />
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         {cards.map((c) => (
           <Link
             key={c.label}

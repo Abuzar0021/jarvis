@@ -3,6 +3,7 @@ import path from "node:path";
 import type {
   Faq,
   Lead,
+  Post,
   Project,
   Service,
   SiteContent,
@@ -141,6 +142,25 @@ export async function getFaqs(): Promise<Faq[]> {
 
 export async function saveFaqs(items: Faq[]): Promise<void> {
   await writeJson("faqs.json", items);
+}
+
+/* --------------------------------------------------------------- Posts --- */
+
+export async function getPosts(): Promise<Post[]> {
+  const list = await readJson<Post[]>("posts.json", []);
+  return [...list].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+}
+
+export async function getPost(slug: string): Promise<Post | undefined> {
+  return (await getPosts()).find((p) => p.slug === slug);
+}
+
+export async function getFeaturedPosts(limit = 3): Promise<Post[]> {
+  return (await getPosts()).slice(0, limit);
+}
+
+export async function savePosts(items: Post[]): Promise<void> {
+  await writeJson("posts.json", items);
 }
 
 /* --------------------------------------------------------------- Leads --- */

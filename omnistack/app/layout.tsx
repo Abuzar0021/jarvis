@@ -48,16 +48,46 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const site = await getSite();
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: site.brand,
+      url: siteUrl,
+      description: site.description,
+      email: site.contact.email,
+      address: site.contact.locations.map((l) => ({
+        "@type": "PostalAddress",
+        addressLocality: l.city,
+        addressCountry: l.country,
+      })),
+      sameAs: site.social.map((s) => s.href),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: site.brand,
+      url: siteUrl,
+    },
+  ];
+
   return (
     <html
       lang="en"
       className={`${GeistSans.variable} ${GeistMono.variable} h-full`}
       suppressHydrationWarning
     >
-      <body className="min-h-full bg-base text-fg antialiased">{children}</body>
+      <body className="min-h-full bg-base text-fg antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

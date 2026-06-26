@@ -42,6 +42,12 @@ export function formatDate(iso: string): string {
   }
 }
 
+/** Estimated reading time in minutes from body text. */
+export function readingTime(body: string): number {
+  const words = body.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 200));
+}
+
 /** Deterministic gold-tinted gradient for project covers without an image. */
 export function coverGradient(seed: string): string {
   let h = 0;

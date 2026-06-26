@@ -60,6 +60,7 @@ export function Footer({
             <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Company</h3>
             <ul className="mt-4 space-y-2.5 text-sm">
               <li><Link href="/work" className="text-muted transition-colors hover:text-fg">Work</Link></li>
+              <li><Link href="/insights" className="text-muted transition-colors hover:text-fg">Insights</Link></li>
               <li><Link href="/about" className="text-muted transition-colors hover:text-fg">About</Link></li>
               <li><Link href="/#process" className="text-muted transition-colors hover:text-fg">Process</Link></li>
               <li><Link href="/contact" className="text-muted transition-colors hover:text-fg">Contact</Link></li>

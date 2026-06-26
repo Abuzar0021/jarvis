@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
 import {
   faqSchema,
+  postSchema,
   projectSchema,
   serviceSchema,
   testimonialSchema,
@@ -9,12 +10,13 @@ import {
 import {
   saveFaqs,
   saveLeads,
+  savePosts,
   saveProjects,
   saveServices,
   saveTestimonials,
 } from "@/lib/content";
 import { genId, slugify } from "@/lib/utils";
-import type { Faq, Lead, Project, Service, Testimonial } from "@/lib/types";
+import type { Faq, Lead, Post, Project, Service, Testimonial } from "@/lib/types";
 
 export const runtime = "nodejs";
 
@@ -67,6 +69,20 @@ export async function PUT(
           return { ...f, id: f.id || genId("faq") };
         });
         await saveFaqs(out);
+        break;
+      }
+      case "posts": {
+        const today = new Date().toISOString().slice(0, 10);
+        const out: Post[] = items.map((raw) => {
+          const p = postSchema.parse(raw);
+          return {
+            ...p,
+            id: p.id || genId("post"),
+            slug: p.slug || slugify(p.title),
+            publishedAt: p.publishedAt || today,
+          };
+        });
+        await savePosts(out);
         break;
       }
       case "leads": {

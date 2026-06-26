@@ -1,5 +1,6 @@
 import {
   getFaqs,
+  getFeaturedPosts,
   getFeaturedProjects,
   getServices,
   getSite,
@@ -16,6 +17,7 @@ import { TechStack } from "@/components/sections/TechStack";
 import { Stats } from "@/components/sections/Stats";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { Industries } from "@/components/sections/Industries";
+import { InsightsPreview } from "@/components/sections/InsightsPreview";
 import { FAQ } from "@/components/sections/FAQ";
 import { CTABand } from "@/components/sections/CTABand";
 import { Newsletter } from "@/components/sections/Newsletter";
@@ -23,12 +25,13 @@ import { Newsletter } from "@/components/sections/Newsletter";
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [site, projects, services, testimonials, faqs] = await Promise.all([
+  const [site, projects, services, testimonials, faqs, posts] = await Promise.all([
     getSite(),
     getFeaturedProjects(4),
     getServices(),
     getTestimonials(),
     getFaqs(),
+    getFeaturedPosts(3),
   ]);
 
   const featuredServices = services.filter((s) => s.featured).slice(0, 6);
@@ -52,6 +55,7 @@ export default async function HomePage() {
       <Stats stats={site.stats} />
       <Testimonials items={testimonials} />
       <Industries industries={site.industries} />
+      <InsightsPreview posts={posts} />
       <FAQ faqs={faqs} />
       <CTABand site={site} />
       <Newsletter title={site.newsletter.title} body={site.newsletter.body} />
