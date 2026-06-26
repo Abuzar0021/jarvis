@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/Button";
@@ -30,6 +31,9 @@ export function Nav({
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
+  const pathname = usePathname();
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href.split("#")[0]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -62,7 +66,11 @@ export function Nav({
           <div className="group/services relative">
             <Link
               href="/services"
-              className="flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm text-muted transition-colors hover:text-fg"
+              aria-current={isActive("/services") ? "page" : undefined}
+              className={cn(
+                "flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm transition-colors hover:text-fg",
+                isActive("/services") ? "text-fg" : "text-muted",
+              )}
             >
               Services
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden className="mt-0.5 transition-transform group-hover/services:rotate-180">
@@ -108,7 +116,11 @@ export function Nav({
             <Link
               key={l.href}
               href={l.href}
-              className="rounded-full px-3.5 py-2 text-sm text-muted transition-colors hover:text-fg"
+              aria-current={isActive(l.href) ? "page" : undefined}
+              className={cn(
+                "rounded-full px-3.5 py-2 text-sm transition-colors hover:text-fg",
+                isActive(l.href) ? "text-fg" : "text-muted",
+              )}
             >
               {l.label}
             </Link>
@@ -134,6 +146,7 @@ export function Nav({
             type="button"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
+            aria-controls="mobile-menu"
             onClick={() => setOpen((v) => !v)}
             className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border border-hair text-fg lg:hidden"
           >
@@ -152,6 +165,7 @@ export function Nav({
         {open ? (
           <motion.div
             key="overlay"
+            id="mobile-menu"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -175,7 +189,11 @@ export function Nav({
                     >
                       <Link
                         href={l.href}
-                        className="block border-b border-hair py-4 text-2xl font-medium tracking-tight text-fg"
+                        aria-current={isActive(l.href) ? "page" : undefined}
+                        className={cn(
+                          "block border-b border-hair py-4 text-2xl font-medium tracking-tight",
+                          isActive(l.href) ? "text-gold" : "text-fg",
+                        )}
                       >
                         {l.label}
                       </Link>

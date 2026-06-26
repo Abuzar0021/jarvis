@@ -24,6 +24,12 @@ export default async function SiteLayout({
   return (
     <>
       <span id="top" aria-hidden />
+      <a
+        href="#main"
+        className="sr-only rounded-lg focus-visible:not-sr-only focus-visible:fixed focus-visible:left-4 focus-visible:top-4 focus-visible:z-[100] focus-visible:border focus-visible:border-gold focus-visible:bg-surface focus-visible:px-4 focus-visible:py-2 focus-visible:text-sm focus-visible:text-fg"
+      >
+        Skip to content
+      </a>
       <AnnouncementBar
         enabled={site.announcement.enabled}
         text={site.announcement.text}
@@ -31,7 +37,7 @@ export default async function SiteLayout({
         linkHref={site.announcement.linkHref}
       />
       <Nav brand={site.brand} grouped={grouped} ctaLabel={site.hero.primaryCta.label} />
-      <main className="flex-1">{children}</main>
+      <main id="main" className="flex-1">{children}</main>
       <Footer site={site} services={services} />
       <WhatsAppButton whatsapp={site.contact.whatsapp} brand={site.brand} />
     </>
