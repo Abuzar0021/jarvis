@@ -148,6 +148,18 @@ export interface SiteContent {
     button: CTA;
   };
 
+  pricing: {
+    intro: string;
+    note: string;
+    models: {
+      name: string;
+      tagline: string;
+      priceLabel: string;
+      features: string[];
+      highlighted: boolean;
+    }[];
+  };
+
   newsletter: {
     title: string;
     body: string;

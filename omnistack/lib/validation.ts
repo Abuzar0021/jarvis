@@ -134,6 +134,19 @@ export const siteSchema = z.object({
     reassurance: z.string().max(160),
     button: cta,
   }),
+  pricing: z.object({
+    intro: z.string().max(400),
+    note: z.string().max(300),
+    models: z.array(
+      z.object({
+        name: z.string().max(60),
+        tagline: z.string().max(160),
+        priceLabel: z.string().max(60),
+        features: z.array(z.string().max(160)),
+        highlighted: z.boolean(),
+      }),
+    ),
+  }),
   newsletter: z.object({ title: z.string().max(120), body: z.string().max(300) }),
   contact: z.object({
     email: z.string().regex(EMAIL).max(200),

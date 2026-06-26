@@ -63,6 +63,7 @@ const FALLBACK_SITE: SiteContent = {
     reassurance: "We reply within one business day.",
     button: { label: "Book a Call", href: "/contact" },
   },
+  pricing: { intro: "", note: "", models: [] },
   newsletter: { title: "", body: "" },
   contact: {
     email: "abuzarelahi01@gmail.com",

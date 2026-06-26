@@ -123,6 +123,17 @@ export function ContentEditor({ initial }: { initial: SiteContent }) {
         </div>
       </Card>
 
+      <Card title="Pricing">
+        <div className="space-y-4">
+          <TextArea label="Intro" value={site.pricing.intro} onChange={(v) => set({ pricing: { ...site.pricing, intro: v } })} rows={2} />
+          <Field label="Note" value={site.pricing.note} onChange={(v) => set({ pricing: { ...site.pricing, note: v } })} />
+          <div>
+            <span className="mb-2 block text-sm font-medium text-fg/90">Engagement models</span>
+            <PricingModels models={site.pricing.models} onChange={(models) => set({ pricing: { ...site.pricing, models } })} />
+          </div>
+        </div>
+      </Card>
+
       <Card title="Newsletter">
         <div className="space-y-4">
           <Field label="Title" value={site.newsletter.title} onChange={(v) => set({ newsletter: { ...site.newsletter, title: v } })} />
@@ -311,6 +322,44 @@ function TechStackEditor({
       ))}
       <button type="button" onClick={() => onChange([...groups, { group: "", items: [] }])} className="text-sm text-gold hover:underline">
         + Add group
+      </button>
+    </div>
+  );
+}
+
+type PricingModel = {
+  name: string;
+  tagline: string;
+  priceLabel: string;
+  features: string[];
+  highlighted: boolean;
+};
+
+function PricingModels({
+  models,
+  onChange,
+}: {
+  models: PricingModel[];
+  onChange: (m: PricingModel[]) => void;
+}) {
+  const patch = (i: number, p: Partial<PricingModel>) =>
+    onChange(models.map((x, idx) => (idx === i ? { ...x, ...p } : x)));
+  return (
+    <div className="space-y-3">
+      {models.map((m, i) => (
+        <div key={i} className="space-y-2 rounded-lg border border-hair bg-card/50 p-3">
+          <div className="flex gap-2">
+            <input value={m.name} onChange={(e) => patch(i, { name: e.target.value })} placeholder="Name" className={ipt} />
+            <input value={m.priceLabel} onChange={(e) => patch(i, { priceLabel: e.target.value })} placeholder="Price label" className={ipt} />
+            {rowBtn(() => onChange(models.filter((_, idx) => idx !== i)), "Remove")}
+          </div>
+          <input value={m.tagline} onChange={(e) => patch(i, { tagline: e.target.value })} placeholder="Tagline" className={ipt} />
+          <StringList label="Features" values={m.features} onChange={(features) => patch(i, { features })} placeholder="e.g. Fixed quote" />
+          <Toggle label="Highlight as most popular" checked={m.highlighted} onChange={(highlighted) => patch(i, { highlighted })} />
+        </div>
+      ))}
+      <button type="button" onClick={() => onChange([...models, { name: "", tagline: "", priceLabel: "", features: [], highlighted: false }])} className="text-sm text-gold hover:underline">
+        + Add model
       </button>
     </div>
   );

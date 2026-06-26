@@ -178,6 +178,48 @@
       "href": "/contact"
     }
   },
+  "pricing": {
+    "intro": "Clear scope, clear timeline, clear price. Pick the way of working that fits — we give you a fixed quote before anything starts.",
+    "note": "Every engagement starts with a free scoping call. No hourly billing, no surprises.",
+    "models": [
+      {
+        "name": "Project",
+        "tagline": "Fixed-scope builds, delivered end to end.",
+        "priceLabel": "Fixed quote",
+        "features": [
+          "Defined scope, timeline, and price",
+          "Design + build by one senior team",
+          "Performance, accessibility, and SEO built in",
+          "Editable CMS handover"
+        ],
+        "highlighted": true
+      },
+      {
+        "name": "Sprint",
+        "tagline": "An embedded senior team, by the week.",
+        "priceLabel": "Weekly",
+        "features": [
+          "Fast, focused iterations",
+          "Ideal for evolving scope",
+          "Weekly demos and priorities",
+          "Pause or stop anytime"
+        ],
+        "highlighted": false
+      },
+      {
+        "name": "Partner",
+        "tagline": "Ongoing design, build, and growth.",
+        "priceLabel": "Monthly retainer",
+        "features": [
+          "A long-term product team",
+          "Roadmap, build, and iterate",
+          "SEO and performance care",
+          "Priority support"
+        ],
+        "highlighted": false
+      }
+    ]
+  },
   "newsletter": {
     "title": "Notes on shipping better products",
     "body": "Occasional, practical writing on design, engineering, and AI. No spam, unsubscribe anytime."
