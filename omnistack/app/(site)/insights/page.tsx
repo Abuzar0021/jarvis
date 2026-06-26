@@ -12,6 +12,10 @@ export const metadata: Metadata = {
   title: "Insights",
   description:
     "Practical writing on design, engineering, and AI — from the team that builds and ships.",
+  alternates: {
+    canonical: "/insights",
+    types: { "application/rss+xml": "/feed.xml" },
+  },
 };
 
 export default async function InsightsPage() {

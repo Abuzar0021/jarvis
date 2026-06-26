@@ -25,6 +25,8 @@ import { Newsletter } from "@/components/sections/Newsletter";
 
 export const dynamic = "force-dynamic";
 
+export const metadata = { alternates: { canonical: "/" } };
+
 export default async function HomePage() {
   const [site, projects, services, testimonials, faqs, posts, industries] =
     await Promise.all([

@@ -7,6 +7,7 @@ import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/motion/Reveal";
 import { Eyebrow } from "@/components/ui/Section";
+import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { CTABand } from "@/components/sections/CTABand";
 
 export const dynamic = "force-dynamic";
@@ -22,6 +23,7 @@ export async function generateMetadata({
   return {
     title: `${service.name} Agency`,
     description: service.summary,
+    alternates: { canonical: `/services/${service.slug}` },
     openGraph: { title: service.name, description: service.summary },
   };
 }
@@ -62,9 +64,13 @@ export default async function ServicePage({
         <div className="gold-glow pointer-events-none absolute inset-x-0 top-0 -z-10 h-full opacity-70" aria-hidden />
         <Container className="pb-12 pt-14 sm:pt-16">
           <Reveal>
-            <Link href="/services" className="text-sm text-muted transition-colors hover:text-fg">
-              ← All services
-            </Link>
+            <Breadcrumbs
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Services", href: "/services" },
+                { label: service.name, href: `/services/${service.slug}` },
+              ]}
+            />
           </Reveal>
           <Reveal delay={0.05}>
             <div className="mt-6">

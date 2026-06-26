@@ -10,6 +10,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Work",
+  alternates: { canonical: "/work" },
   description:
     "Selected products we've designed and engineered end to end — websites, web apps, and AI.",
 };

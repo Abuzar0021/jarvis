@@ -4,8 +4,22 @@ import type { Faq } from "@/lib/types";
 
 export function FAQ({ faqs }: { faqs: Faq[] }) {
   if (!faqs.length) return null;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.question,
+      acceptedAnswer: { "@type": "Answer", text: f.answer },
+    })),
+  };
   return (
-    <Section id="faq" className="border-t border-hair">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Section id="faq" className="border-t border-hair">
       <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-4">
           <SectionHeading eyebrow="FAQ" title={<>Questions, answered.</>} />
@@ -38,6 +52,7 @@ export function FAQ({ faqs }: { faqs: Faq[] }) {
           </div>
         </div>
       </div>
-    </Section>
+      </Section>
+    </>
   );
 }

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPost, getPosts, getSite } from "@/lib/content";
 import { Container } from "@/components/ui/Container";
@@ -7,6 +6,7 @@ import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/motion/Reveal";
 import { Eyebrow } from "@/components/ui/Section";
 import { Prose } from "@/components/ui/Prose";
+import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { CTABand } from "@/components/sections/CTABand";
 import { PostCard } from "@/components/sections/PostCard";
 import { coverGradient, formatDate, readingTime } from "@/lib/utils";
@@ -26,6 +26,7 @@ export async function generateMetadata({
   return {
     title: post.title,
     description: post.excerpt,
+    alternates: { canonical: `/insights/${post.slug}` },
     openGraph: { type: "article", title: post.title, description: post.excerpt },
   };
 }
@@ -61,9 +62,13 @@ export default async function PostPage({
         <div className="gold-glow pointer-events-none absolute inset-x-0 top-0 -z-10 h-full opacity-70" aria-hidden />
         <Container className="pb-12 pt-14 sm:pt-16">
           <Reveal>
-            <Link href="/insights" className="text-sm text-muted transition-colors hover:text-fg">
-              ← All insights
-            </Link>
+            <Breadcrumbs
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Insights", href: "/insights" },
+                { label: post.title, href: `/insights/${post.slug}` },
+              ]}
+            />
           </Reveal>
           <Reveal delay={0.05}>
             <div className="mt-6">

@@ -11,6 +11,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "About",
+  alternates: { canonical: "/about" },
   description:
     "One accountable team that owns brand, design, engineering, and AI — based in Dublin and Jakarta.",
 };

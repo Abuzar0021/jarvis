@@ -12,6 +12,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Pricing",
+  alternates: { canonical: "/pricing" },
   description:
     "Clear scope, clear timeline, clear price. Choose the engagement model that fits — and get a fixed quote.",
 };

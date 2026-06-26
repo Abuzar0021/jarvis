@@ -10,6 +10,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Industries",
+  alternates: { canonical: "/industries" },
   description:
     "Senior design and engineering tailored to your sector — restaurants, fitness, SaaS, e-commerce, professional services, and real estate.",
 };

@@ -11,6 +11,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Services",
+  alternates: { canonical: "/services" },
   description:
     "Full-stack capability under one senior team — Build, AI, Design, and Grow. Everything you need to ship a modern digital product.",
 };
