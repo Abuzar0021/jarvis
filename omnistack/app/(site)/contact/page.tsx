@@ -6,7 +6,7 @@ import { ContactForm } from "@/components/site/ContactForm";
 import { Reveal } from "@/components/motion/Reveal";
 import { whatsappLink } from "@/lib/utils";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Contact",

@@ -6,7 +6,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { ProjectCard } from "@/components/sections/ProjectCard";
 import { CTABand } from "@/components/sections/CTABand";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Work",

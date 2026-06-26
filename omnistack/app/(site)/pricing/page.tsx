@@ -8,7 +8,7 @@ import { FAQ } from "@/components/sections/FAQ";
 import { CTABand } from "@/components/sections/CTABand";
 import { cn } from "@/lib/utils";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Pricing",

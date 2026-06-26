@@ -7,7 +7,7 @@ import { ValuePillars } from "@/components/sections/ValuePillars";
 import { Stats } from "@/components/sections/Stats";
 import { CTABand } from "@/components/sections/CTABand";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "About",

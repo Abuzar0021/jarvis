@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/site/PageHeader";
 import { Container } from "@/components/ui/Container";
 import { SearchClient } from "@/components/search/SearchClient";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Search",

@@ -7,7 +7,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { CTABand } from "@/components/sections/CTABand";
 import type { ServiceGroup } from "@/lib/types";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Services",

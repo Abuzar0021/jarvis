@@ -23,7 +23,7 @@ import { FAQ } from "@/components/sections/FAQ";
 import { CTABand } from "@/components/sections/CTABand";
 import { Newsletter } from "@/components/sections/Newsletter";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export const metadata = { alternates: { canonical: "/" } };
 

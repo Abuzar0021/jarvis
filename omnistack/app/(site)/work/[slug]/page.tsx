@@ -11,7 +11,7 @@ import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { CTABand } from "@/components/sections/CTABand";
 import { coverGradient } from "@/lib/utils";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 

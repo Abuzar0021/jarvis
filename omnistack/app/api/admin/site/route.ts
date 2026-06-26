@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 import { isAuthenticated } from "@/lib/auth";
 import { siteSchema } from "@/lib/validation";
 import { saveSite } from "@/lib/content";
@@ -23,5 +24,6 @@ export async function PUT(req: NextRequest) {
     );
   }
   await saveSite(parsed.data as SiteContent);
+  revalidatePath("/", "layout");
   return Response.json({ ok: true });
 }

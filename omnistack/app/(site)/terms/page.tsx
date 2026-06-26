@@ -3,7 +3,7 @@ import { getSite } from "@/lib/content";
 import { PageHeader } from "@/components/site/PageHeader";
 import { Section } from "@/components/ui/Section";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Terms of Service",

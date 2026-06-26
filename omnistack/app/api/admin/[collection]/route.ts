@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 import { isAuthenticated } from "@/lib/auth";
 import {
   faqSchema,
@@ -120,6 +121,7 @@ export async function PUT(
       default:
         return Response.json({ ok: false, error: "Unknown collection" }, { status: 404 });
     }
+    revalidatePath("/", "layout");
     return Response.json({ ok: true });
   } catch (err) {
     return Response.json(

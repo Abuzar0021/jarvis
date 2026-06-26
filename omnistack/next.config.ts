@@ -1,7 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Self-contained server output for Docker / VPS deploys.
+  output: "standalone",
+  reactStrictMode: true,
+  poweredByHeader: false,
+  compress: true,
 };
 
 export default nextConfig;
