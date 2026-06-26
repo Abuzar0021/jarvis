@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { getSite } from "@/lib/content";
-import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/motion/Reveal";
 import { PageHeader } from "@/components/site/PageHeader";

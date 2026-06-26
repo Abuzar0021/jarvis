@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/Button";
@@ -28,7 +27,6 @@ export function Nav({
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
   const reduce = useReducedMotion();
 
   useEffect(() => {
@@ -37,10 +35,6 @@ export function Nav({
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -152,7 +146,12 @@ export function Nav({
             transition={{ duration: 0.25 }}
             className="fixed inset-0 top-[68px] z-40 bg-base/98 backdrop-blur-xl lg:hidden"
           >
-            <div className="flex h-[calc(100dvh-68px)] flex-col overflow-y-auto px-5 py-8 sm:px-8">
+            <div
+              className="flex h-[calc(100dvh-68px)] flex-col overflow-y-auto px-5 py-8 sm:px-8"
+              onClick={(e) => {
+                if ((e.target as HTMLElement).closest("a")) setOpen(false);
+              }}
+            >
               <ul className="space-y-1">
                 {[{ label: "Services", href: "/services" }, ...NAV_LINKS, { label: "Contact", href: "/contact" }].map(
                   (l, i) => (

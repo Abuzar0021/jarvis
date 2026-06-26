@@ -7,7 +7,6 @@ import {
   Field,
   ImageField,
   SaveBar,
-  SelectField,
   StringList,
   TextArea,
   Toggle,

@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
+
+const subscribe = () => () => {};
 
 export function AnnouncementBar({
   enabled,
@@ -15,14 +17,15 @@ export function AnnouncementBar({
   linkHref: string;
 }) {
   const storageKey = `os-ann-dismissed:${text}`.slice(0, 80);
-  const [show, setShow] = useState(false);
+  // Read the dismissed flag from sessionStorage without setState-in-effect.
+  const storedDismissed = useSyncExternalStore(
+    subscribe,
+    () => sessionStorage.getItem(storageKey) === "1",
+    () => false,
+  );
+  const [dismissed, setDismissed] = useState(false);
 
-  useEffect(() => {
-    if (!enabled || !text) return;
-    setShow(sessionStorage.getItem(storageKey) !== "1");
-  }, [enabled, text, storageKey]);
-
-  if (!enabled || !text || !show) return null;
+  if (!enabled || !text || storedDismissed || dismissed) return null;
 
   return (
     <div className="relative z-50 border-b border-hair bg-base">
@@ -40,7 +43,7 @@ export function AnnouncementBar({
           aria-label="Dismiss announcement"
           onClick={() => {
             sessionStorage.setItem(storageKey, "1");
-            setShow(false);
+            setDismissed(true);
           }}
           className="absolute right-4 flex h-6 w-6 items-center justify-center rounded-full text-muted transition-colors hover:bg-white/5 hover:text-fg"
         >

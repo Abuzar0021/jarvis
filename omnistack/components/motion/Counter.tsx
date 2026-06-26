@@ -15,15 +15,12 @@ export function Counter({
   const target = parseFloat(value);
   const isNumeric = !Number.isNaN(target);
   const reduce = useReducedMotion();
-  const [display, setDisplay] = useState(isNumeric && !reduce ? 0 : target);
+  const [display, setDisplay] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
   const started = useRef(false);
 
   useEffect(() => {
-    if (!isNumeric || reduce) {
-      setDisplay(target);
-      return;
-    }
+    if (!isNumeric || reduce) return;
     const node = ref.current;
     if (!node) return;
     const io = new IntersectionObserver(
@@ -46,7 +43,8 @@ export function Counter({
     return () => io.disconnect();
   }, [isNumeric, reduce, target, durationMs]);
 
-  if (!isNumeric) {
+  // Reduced motion or non-numeric values render the final value with no animation.
+  if (!isNumeric || reduce) {
     return (
       <span>
         {value}
