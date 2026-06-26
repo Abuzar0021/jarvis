@@ -4,6 +4,7 @@ import { addLead, getSite } from "@/lib/content";
 import { sendLeadEmail } from "@/lib/email";
 import { rateLimit, clientIp } from "@/lib/ratelimit";
 import { genId } from "@/lib/utils";
+import { logger } from "@/lib/logger";
 import type { Lead } from "@/lib/types";
 
 export async function POST(req: NextRequest) {
@@ -54,8 +55,10 @@ export async function POST(req: NextRequest) {
     // Best-effort email notification — never fails the request.
     await sendLeadEmail(lead, site).catch(() => undefined);
 
+    logger.info("lead.received", { source: lead.source, page: lead.page });
     return Response.json({ ok: true });
-  } catch {
+  } catch (err) {
+    logger.error("contact.failed", { error: err instanceof Error ? err.message : "unknown" });
     return Response.json({ ok: false, error: "Server error" }, { status: 500 });
   }
 }
