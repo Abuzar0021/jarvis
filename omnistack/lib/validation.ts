@@ -85,6 +85,21 @@ export const postSchema = z.object({
   featured: z.boolean().optional().default(false),
 });
 
+export const industrySchema = z.object({
+  id: z.string().optional(),
+  name: z.string().trim().min(2).max(120),
+  slug: z.string().trim().max(120).optional().default(""),
+  summary: z.string().trim().max(400).optional().default(""),
+  painPoints: z.array(z.string().trim().max(200)).optional().default([]),
+  services: z.array(z.string().trim().max(120)).optional().default([]),
+  body: z.string().trim().max(8000).optional().default(""),
+  cover: z.string().trim().max(600).optional().default(""),
+  featured: z.boolean().optional().default(false),
+  sortOrder: z.number().optional().default(0),
+  seoTitle: z.string().trim().max(160).optional().default(""),
+  seoDescription: z.string().trim().max(300).optional().default(""),
+});
+
 const cta = z.object({ label: z.string().max(60), href: z.string().max(200) });
 
 export const siteSchema = z.object({
@@ -127,7 +142,6 @@ export const siteSchema = z.object({
   stats: z.array(
     z.object({ value: z.string().max(20), suffix: z.string().max(10), label: z.string().max(80) }),
   ),
-  industries: z.array(z.object({ name: z.string().max(80), slug: z.string().max(80) })),
   cta: z.object({
     headline: z.string().max(160),
     body: z.string().max(400),

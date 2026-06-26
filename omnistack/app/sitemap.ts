@@ -1,14 +1,15 @@
 import type { MetadataRoute } from "next";
-import { getPosts, getProjects, getServices } from "@/lib/content";
+import { getIndustries, getPosts, getProjects, getServices } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-  const [projects, services, posts] = await Promise.all([
+  const [projects, services, posts, industries] = await Promise.all([
     getProjects(),
     getServices(),
     getPosts(),
+    getIndustries(),
   ]);
   const now = new Date();
 
@@ -16,6 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "",
     "/work",
     "/services",
+    "/industries",
     "/pricing",
     "/insights",
     "/about",
@@ -39,5 +41,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date(p.publishedAt || now),
   }));
 
-  return [...staticRoutes, ...projectRoutes, ...serviceRoutes, ...postRoutes];
+  const industryRoutes = industries.map((i) => ({
+    url: `${base}/industries/${i.slug}`,
+    lastModified: now,
+  }));
+
+  return [
+    ...staticRoutes,
+    ...projectRoutes,
+    ...serviceRoutes,
+    ...postRoutes,
+    ...industryRoutes,
+  ];
 }

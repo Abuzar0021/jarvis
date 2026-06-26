@@ -143,32 +143,6 @@
       "label": "Years of craft"
     }
   ],
-  "industries": [
-    {
-      "name": "Restaurants & Hospitality",
-      "slug": "restaurants-hospitality"
-    },
-    {
-      "name": "Health & Fitness",
-      "slug": "health-fitness"
-    },
-    {
-      "name": "SaaS & Startups",
-      "slug": "saas-startups"
-    },
-    {
-      "name": "E-commerce & Retail",
-      "slug": "ecommerce-retail"
-    },
-    {
-      "name": "Professional Services",
-      "slug": "professional-services"
-    },
-    {
-      "name": "Real Estate",
-      "slug": "real-estate"
-    }
-  ],
   "cta": {
     "headline": "Let's build something inevitable.",
     "body": "Tell us what you're building. We'll come back with a clear, fixed plan — scope, timeline, and price.",

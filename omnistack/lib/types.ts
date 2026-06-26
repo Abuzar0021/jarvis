@@ -11,7 +11,20 @@ export type Stat = { value: string; suffix: string; label: string };
 
 export type TechGroup = { group: string; items: string[] };
 
-export type Industry = { name: string; slug: string };
+export interface Industry {
+  id: string;
+  name: string;
+  slug: string;
+  summary: string;
+  painPoints: string[];
+  services: string[]; // service slugs to feature
+  body: string;
+  cover: string;
+  featured: boolean;
+  sortOrder: number;
+  seoTitle: string;
+  seoDescription: string;
+}
 
 export type SocialLink = { label: string; href: string };
 
@@ -138,8 +151,6 @@ export interface SiteContent {
   techStack: TechGroup[];
 
   stats: Stat[];
-
-  industries: Industry[];
 
   cta: {
     headline: string;

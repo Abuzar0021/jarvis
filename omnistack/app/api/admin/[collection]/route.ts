@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
 import {
   faqSchema,
+  industrySchema,
   postSchema,
   projectSchema,
   serviceSchema,
@@ -9,6 +10,7 @@ import {
 } from "@/lib/validation";
 import {
   saveFaqs,
+  saveIndustries,
   saveLeads,
   savePosts,
   saveProjects,
@@ -16,7 +18,15 @@ import {
   saveTestimonials,
 } from "@/lib/content";
 import { genId, slugify } from "@/lib/utils";
-import type { Faq, Lead, Post, Project, Service, Testimonial } from "@/lib/types";
+import type {
+  Faq,
+  Industry,
+  Lead,
+  Post,
+  Project,
+  Service,
+  Testimonial,
+} from "@/lib/types";
 
 export const runtime = "nodejs";
 
@@ -83,6 +93,19 @@ export async function PUT(
           };
         });
         await savePosts(out);
+        break;
+      }
+      case "industries": {
+        const out: Industry[] = items.map((raw, i) => {
+          const v = industrySchema.parse(raw);
+          return {
+            ...v,
+            id: v.id || genId("ind"),
+            slug: v.slug || slugify(v.name),
+            sortOrder: Number.isFinite(v.sortOrder) && v.sortOrder ? v.sortOrder : i + 1,
+          };
+        });
+        await saveIndustries(out);
         break;
       }
       case "leads": {

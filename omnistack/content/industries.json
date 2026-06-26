@@ -1,0 +1,146 @@
+[
+  {
+    "id": "ind_restaurants",
+    "name": "Restaurants & Hospitality",
+    "slug": "restaurants-hospitality",
+    "summary": "Brand-forward, fast websites that turn hungry browsers into booked tables.",
+    "painPoints": [
+      "Diners decide on a phone — slow, clunky sites lose them",
+      "Menus and hours change, but updates need a developer",
+      "Hard to rank for local searches that bring covers in",
+      "Booking and ordering live on someone else's platform"
+    ],
+    "services": [
+      "website-development",
+      "ui-ux-design",
+      "seo",
+      "branding"
+    ],
+    "body": "Hospitality is decided in seconds, usually on a phone. We build mobile-first sites that load instantly, look as considered as the room, and put the menu, story, and booking a tap apart.\n\nEverything is editable without a developer — menus, hours, and specials — and structured so you rank for the local searches that actually fill tables. We can integrate the booking and ordering tools you already use, or build something cleaner.\n\nThe result is a site that does more than look good: it brings people through the door.",
+    "cover": "",
+    "featured": true,
+    "sortOrder": 1,
+    "seoTitle": "Web Design for Restaurants & Hospitality",
+    "seoDescription": "Fast, brand-forward restaurant websites with menus, local SEO, and frictionless booking — built and editable without code."
+  },
+  {
+    "id": "ind_fitness",
+    "name": "Health & Fitness",
+    "slug": "health-fitness",
+    "summary": "Web apps and sites that turn coaching and care into a guided client experience.",
+    "painPoints": [
+      "Coaching doesn't scale past the hours in a day",
+      "Clients lose momentum between sessions",
+      "Spreadsheets and DMs instead of one clear product",
+      "Generic tools that don't fit your method"
+    ],
+    "services": [
+      "web-applications",
+      "ui-ux-design",
+      "custom-software",
+      "seo"
+    ],
+    "body": "Great coaching is personal — but it shouldn't be trapped in spreadsheets and DMs. We design and build products that turn your method into a clear, guided experience clients actually stick with.\n\nFrom plans and progress to day-to-day actions, we build on a modern, type-safe stack that works on the gym floor and scales as you grow. The interface stays out of the way so the training does the talking.\n\nWhether it's a marketing site or a full web app, it's delivered end to end by one senior team.",
+    "cover": "",
+    "featured": true,
+    "sortOrder": 2,
+    "seoTitle": "Web Apps for Health & Fitness Businesses",
+    "seoDescription": "Production-grade fitness web apps and sites that scale coaching, boost retention, and feel effortless for clients."
+  },
+  {
+    "id": "ind_saas",
+    "name": "SaaS & Startups",
+    "slug": "saas-startups",
+    "summary": "Senior product teams that help startups ship and scale without the rewrite.",
+    "painPoints": [
+      "Speed to market matters, but quality can't slip",
+      "Early shortcuts become expensive technical debt",
+      "Onboarding and activation leak users",
+      "Hiring a senior team takes months"
+    ],
+    "services": [
+      "saas-platforms",
+      "web-applications",
+      "ai-agents",
+      "seo"
+    ],
+    "body": "Startups live and die on momentum. We embed as a senior product team — designing, building, and shipping in tight iterations — so you move fast without mortgaging the future.\n\nWe architect for scale from day one: clean data models, real auth and roles, and the AI and automation that give small teams outsized leverage. When you raise or grow, the foundation holds.\n\nOne accountable team, from the first sketch to the last deploy.",
+    "cover": "",
+    "featured": false,
+    "sortOrder": 3,
+    "seoTitle": "SaaS & Startup Development Agency",
+    "seoDescription": "Senior-only product team for SaaS and startups — ship fast, scale cleanly, and build AI-native from day one."
+  },
+  {
+    "id": "ind_ecommerce",
+    "name": "E-commerce & Retail",
+    "slug": "ecommerce-retail",
+    "summary": "Storefronts engineered for speed, trust, and conversion.",
+    "painPoints": [
+      "Every 100ms of load time costs sales",
+      "Traffic arrives but carts get abandoned",
+      "Catalog updates are slow and painful",
+      "SEO and performance fight each other"
+    ],
+    "services": [
+      "website-development",
+      "performance-optimization",
+      "seo",
+      "ai-automations"
+    ],
+    "body": "In retail, speed is revenue. We build storefronts that load instantly, earn trust, and guide shoppers to checkout without friction.\n\nPerformance, accessibility, and SEO are built in — not bolted on — so you rank and convert at the same time. We automate the repetitive work behind the scenes, from catalog syncs to post-purchase flows.\n\nThe outcome is a store that feels fast and sells more.",
+    "cover": "",
+    "featured": false,
+    "sortOrder": 4,
+    "seoTitle": "E-commerce Web Development Agency",
+    "seoDescription": "Fast, high-converting storefronts with performance, SEO, and automation built in for retail and e-commerce brands."
+  },
+  {
+    "id": "ind_professional",
+    "name": "Professional Services",
+    "slug": "professional-services",
+    "summary": "Credible sites and automations that win and qualify better clients.",
+    "painPoints": [
+      "The site doesn't reflect the quality of the work",
+      "Leads arrive unqualified and slow to follow up",
+      "Manual admin eats billable hours",
+      "Hard to stand out from look-alike competitors"
+    ],
+    "services": [
+      "website-development",
+      "branding",
+      "seo",
+      "ai-automations"
+    ],
+    "body": "For firms that sell expertise, the website is the first impression — and often the deciding one. We build credible, distinctive sites that reflect the quality of your work and turn visitors into qualified enquiries.\n\nBehind the scenes, we automate the busywork: qualifying leads, routing enquiries, and following up — so your team spends time on clients, not admin.\n\nBrand, build, and growth, handled by one senior team.",
+    "cover": "",
+    "featured": false,
+    "sortOrder": 5,
+    "seoTitle": "Web Design for Professional Services",
+    "seoDescription": "Credible, distinctive websites and automations that help professional services firms win and qualify better clients."
+  },
+  {
+    "id": "ind_realestate",
+    "name": "Real Estate",
+    "slug": "real-estate",
+    "summary": "Listings and lead engines that are fast to browse and faster to convert.",
+    "painPoints": [
+      "Listing search is slow and clunky on mobile",
+      "Leads aren't routed or followed up fast enough",
+      "Sites buckle under large, changing inventories",
+      "Generic templates that look like everyone else"
+    ],
+    "services": [
+      "website-development",
+      "web-applications",
+      "seo",
+      "ai-integrations"
+    ],
+    "body": "Property is browsed on the move and decided fast. We build listing experiences that are quick to search, beautiful on mobile, and built to handle large, changing inventories.\n\nWe wire in fast lead capture and routing — and the integrations that connect your CRM and portals — so no enquiry slips through. Performance and SEO bring the right buyers in.\n\nA site and system built to convert, not just display.",
+    "cover": "",
+    "featured": false,
+    "sortOrder": 6,
+    "seoTitle": "Web Development for Real Estate",
+    "seoDescription": "Fast, mobile-first real estate websites and lead engines with search, CRM integration, and SEO built in."
+  }
+]

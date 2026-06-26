@@ -2,6 +2,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import type {
   Faq,
+  Industry,
   Lead,
   Post,
   Project,
@@ -56,7 +57,6 @@ const FALLBACK_SITE: SiteContent = {
   process: { intro: "", steps: [] },
   techStack: [],
   stats: [],
-  industries: [],
   cta: {
     headline: "Let's build something inevitable.",
     body: "",
@@ -162,6 +162,23 @@ export async function getFeaturedPosts(limit = 3): Promise<Post[]> {
 
 export async function savePosts(items: Post[]): Promise<void> {
   await writeJson("posts.json", items);
+}
+
+/* ---------------------------------------------------------- Industries --- */
+
+export async function getIndustries(): Promise<Industry[]> {
+  const list = await readJson<Industry[]>("industries.json", []);
+  return [...list].sort(
+    (a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name),
+  );
+}
+
+export async function getIndustry(slug: string): Promise<Industry | undefined> {
+  return (await getIndustries()).find((i) => i.slug === slug);
+}
+
+export async function saveIndustries(items: Industry[]): Promise<void> {
+  await writeJson("industries.json", items);
 }
 
 /* --------------------------------------------------------------- Leads --- */

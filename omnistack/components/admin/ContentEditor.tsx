@@ -107,10 +107,6 @@ export function ContentEditor({ initial }: { initial: SiteContent }) {
         <StatsEditor stats={site.stats} onChange={(stats) => set({ stats })} />
       </Card>
 
-      <Card title="Industries">
-        <NameSlugEditor items={site.industries} onChange={(industries) => set({ industries })} addLabel="+ Add industry" />
-      </Card>
-
       <Card title="Final CTA">
         <div className="space-y-4">
           <Field label="Headline" value={site.cta.headline} onChange={(v) => set({ cta: { ...site.cta, headline: v } })} />
@@ -224,31 +220,6 @@ function StatsEditor({
       ))}
       <button type="button" onClick={() => onChange([...stats, { value: "", suffix: "", label: "" }])} className="text-sm text-gold hover:underline">
         + Add stat
-      </button>
-    </div>
-  );
-}
-
-function NameSlugEditor({
-  items,
-  onChange,
-  addLabel,
-}: {
-  items: { name: string; slug: string }[];
-  onChange: (i: { name: string; slug: string }[]) => void;
-  addLabel: string;
-}) {
-  return (
-    <div className="space-y-2">
-      {items.map((it, i) => (
-        <div key={i} className="flex gap-2">
-          <input value={it.name} onChange={(e) => onChange(items.map((x, idx) => (idx === i ? { ...x, name: e.target.value } : x)))} placeholder="Name" className={ipt} />
-          <input value={it.slug} onChange={(e) => onChange(items.map((x, idx) => (idx === i ? { ...x, slug: e.target.value } : x)))} placeholder="slug" className={`${ipt} font-mono`} />
-          {rowBtn(() => onChange(items.filter((_, idx) => idx !== i)), "Remove")}
-        </div>
-      ))}
-      <button type="button" onClick={() => onChange([...items, { name: "", slug: "" }])} className="text-sm text-gold hover:underline">
-        {addLabel}
       </button>
     </div>
   );
