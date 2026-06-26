@@ -1,11 +1,13 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import type {
+  ActivityEntry,
   Faq,
   Industry,
   Lead,
   Post,
   Project,
+  Redirect,
   Service,
   SiteContent,
   Testimonial,
@@ -197,4 +199,77 @@ export async function addLead(lead: Lead): Promise<void> {
 
 export async function saveLeads(items: Lead[]): Promise<void> {
   await writeJson("leads.json", items);
+}
+
+/* ----------------------------------------------------------- Redirects --- */
+
+export async function getRedirects(): Promise<Redirect[]> {
+  return readJson<Redirect[]>("redirects.json", []);
+}
+
+export async function saveRedirects(items: Redirect[]): Promise<void> {
+  await writeJson("redirects.json", items);
+}
+
+/* ------------------------------------------------------------ Activity --- */
+
+export async function getActivity(): Promise<ActivityEntry[]> {
+  const list = await readJson<ActivityEntry[]>("activity.json", []);
+  return [...list].sort((a, b) => b.at.localeCompare(a.at));
+}
+
+export async function addActivity(action: string, detail: string): Promise<void> {
+  const list = await readJson<ActivityEntry[]>("activity.json", []);
+  list.push({
+    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    action,
+    detail,
+    at: new Date().toISOString(),
+  });
+  // Keep the most recent 200 entries.
+  await writeJson("activity.json", list.slice(-200));
+}
+
+/* -------------------------------------------------------------- Backup --- */
+
+export async function getContentBundle() {
+  const [site, projects, services, testimonials, faqs, posts, industries, redirects, leads] =
+    await Promise.all([
+      getSite(),
+      getProjects(),
+      getServices(),
+      getTestimonials(),
+      getFaqs(),
+      getPosts(),
+      getIndustries(),
+      getRedirects(),
+      getLeads(),
+    ]);
+  return {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    site,
+    projects,
+    services,
+    testimonials,
+    faqs,
+    posts,
+    industries,
+    redirects,
+    leads,
+  };
+}
+
+type Bundle = Awaited<ReturnType<typeof getContentBundle>>;
+
+export async function restoreContentBundle(bundle: Partial<Bundle>): Promise<void> {
+  if (bundle.site) await saveSite(bundle.site);
+  if (Array.isArray(bundle.projects)) await saveProjects(bundle.projects);
+  if (Array.isArray(bundle.services)) await saveServices(bundle.services);
+  if (Array.isArray(bundle.testimonials)) await saveTestimonials(bundle.testimonials);
+  if (Array.isArray(bundle.faqs)) await saveFaqs(bundle.faqs);
+  if (Array.isArray(bundle.posts)) await savePosts(bundle.posts);
+  if (Array.isArray(bundle.industries)) await saveIndustries(bundle.industries);
+  if (Array.isArray(bundle.redirects)) await saveRedirects(bundle.redirects);
+  if (Array.isArray(bundle.leads)) await saveLeads(bundle.leads);
 }

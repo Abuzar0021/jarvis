@@ -15,6 +15,9 @@ const NAV = [
   { label: "Insights", href: "/admin/insights" },
   { label: "FAQs", href: "/admin/faqs" },
   { label: "Leads", href: "/admin/leads" },
+  { label: "Media", href: "/admin/media" },
+  { label: "Redirects", href: "/admin/redirects" },
+  { label: "Tools", href: "/admin/tools" },
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {

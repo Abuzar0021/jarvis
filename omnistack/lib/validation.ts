@@ -110,6 +110,13 @@ export const industrySchema = z.object({
   seoDescription: z.string().trim().max(300).optional().default(""),
 });
 
+export const redirectSchema = z.object({
+  id: z.string().optional(),
+  from: z.string().trim().min(1).max(300),
+  to: z.string().trim().min(1).max(400),
+  permanent: z.boolean().optional().default(true),
+});
+
 const cta = z.object({ label: z.string().max(60), href: z.string().max(200) });
 
 export const siteSchema = z.object({

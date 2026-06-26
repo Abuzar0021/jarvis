@@ -98,6 +98,20 @@ export interface Post {
   featured: boolean;
 }
 
+export interface Redirect {
+  id: string;
+  from: string; // path, e.g. /old-page
+  to: string; // path or URL
+  permanent: boolean;
+}
+
+export interface ActivityEntry {
+  id: string;
+  action: string; // e.g. "save"
+  detail: string; // e.g. "projects (3)"
+  at: string; // ISO timestamp
+}
+
 export interface Lead {
   id: string;
   name: string;

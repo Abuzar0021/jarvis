@@ -6,15 +6,18 @@ import {
   industrySchema,
   postSchema,
   projectSchema,
+  redirectSchema,
   serviceSchema,
   testimonialSchema,
 } from "@/lib/validation";
 import {
+  addActivity,
   saveFaqs,
   saveIndustries,
   saveLeads,
   savePosts,
   saveProjects,
+  saveRedirects,
   saveServices,
   saveTestimonials,
 } from "@/lib/content";
@@ -25,6 +28,7 @@ import type {
   Lead,
   Post,
   Project,
+  Redirect,
   Service,
   Testimonial,
 } from "@/lib/types";
@@ -118,9 +122,18 @@ export async function PUT(
         await saveLeads(out as Lead[]);
         break;
       }
+      case "redirects": {
+        const out: Redirect[] = items.map((raw) => {
+          const r = redirectSchema.parse(raw);
+          return { ...r, id: r.id || genId("rdr") };
+        });
+        await saveRedirects(out);
+        break;
+      }
       default:
         return Response.json({ ok: false, error: "Unknown collection" }, { status: 404 });
     }
+    await addActivity("save", `${collection} (${items.length})`);
     revalidatePath("/", "layout");
     return Response.json({ ok: true });
   } catch (err) {
