@@ -116,6 +116,16 @@ export function Nav({
         </div>
 
         <div className="flex items-center gap-3">
+          <Link
+            href="/search"
+            aria-label="Search"
+            className="hidden h-10 w-10 items-center justify-center rounded-full border border-hair text-muted transition-colors hover:border-gold/50 hover:text-fg lg:flex"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.6" />
+              <path d="M21 21l-4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+          </Link>
           <Button href="/book" variant="primary" size="sm" className="hidden sm:inline-flex">
             {ctaLabel}
           </Button>
@@ -155,7 +165,7 @@ export function Nav({
               }}
             >
               <ul className="space-y-1">
-                {[{ label: "Services", href: "/services" }, ...NAV_LINKS, { label: "Contact", href: "/contact" }].map(
+                {[{ label: "Services", href: "/services" }, ...NAV_LINKS, { label: "Contact", href: "/contact" }, { label: "Search", href: "/search" }].map(
                   (l, i) => (
                     <motion.li
                       key={l.href}
