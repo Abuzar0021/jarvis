@@ -2,10 +2,11 @@ import type { NextRequest } from "next/server";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { isAuthenticated } from "@/lib/auth";
+import { UPLOADS_DIR } from "@/lib/uploads";
 
 export const runtime = "nodejs";
 
-const DIR = path.join(process.cwd(), "public", "uploads");
+const DIR = UPLOADS_DIR;
 
 export async function GET() {
   if (!(await isAuthenticated())) {

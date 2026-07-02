@@ -3,6 +3,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { randomBytes } from "node:crypto";
 import { isAuthenticated } from "@/lib/auth";
+import { UPLOADS_DIR } from "@/lib/uploads";
 
 export const runtime = "nodejs";
 
@@ -27,10 +28,9 @@ export async function POST(req: NextRequest) {
     (file.name.split(".").pop() || "png").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 5) ||
     "png";
   const name = `${randomBytes(8).toString("hex")}.${ext}`;
-  const dir = path.join(process.cwd(), "public", "uploads");
-  await fs.mkdir(dir, { recursive: true });
+  await fs.mkdir(UPLOADS_DIR, { recursive: true });
   const buffer = Buffer.from(await file.arrayBuffer());
-  await fs.writeFile(path.join(dir, name), buffer);
+  await fs.writeFile(path.join(UPLOADS_DIR, name), buffer);
 
   return Response.json({ ok: true, url: `/uploads/${name}` });
 }
