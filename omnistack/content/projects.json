@@ -1,0 +1,68 @@
+[
+  {
+    "id": "prj_clovey",
+    "title": "Clovey Restaurant",
+    "slug": "clovey-restaurant",
+    "client": "Clovey",
+    "category": "Restaurant Website",
+    "year": "2025",
+    "summary": "A warm, fast, mobile-first website for a modern restaurant — menu, story, and reservations in one effortless experience.",
+    "body": "Clovey needed a website that felt as considered as the food. We designed and built a brand-forward, mobile-first site that puts the menu, the story, and the booking flow within a tap of each other.\n\nThe build is fast by default — optimised images, clean semantic markup, and search-friendly structure so the restaurant ranks for the searches that matter locally. Reservations and contact are friction-free on a phone, where most diners actually decide.\n\nThe result is a site that loads quickly, reads beautifully, and turns a casual visit into a booking.",
+    "challenge": "Clovey needed a website as considered as the food — and one that worked where diners actually decide: on a phone. The brand deserved better than a slow, generic template that was painful to update.",
+    "approach": "We designed a brand-forward, mobile-first experience that puts the menu, the story, and the booking flow a tap apart. The build is fast by default — optimised images, clean semantic markup, and a search-friendly structure — and fully editable without a developer.",
+    "outcome": "A site that loads quickly, reads beautifully, and turns a casual visit into a booking. Menus and hours update in seconds, and the structure is built to rank for the local searches that fill tables.",
+    "gallery": [],
+    "testimonialId": "tst_2",
+    "cover": "",
+    "url": "https://www.cloveyrestaurant.com/",
+    "tags": [
+      "Restaurant",
+      "Web Design",
+      "Branding",
+      "SEO"
+    ],
+    "services": [
+      "Website Development",
+      "UI/UX Design",
+      "SEO"
+    ],
+    "results": [],
+    "featured": true,
+    "sortOrder": 1,
+    "seoTitle": "Clovey Restaurant — Restaurant Website Case Study",
+    "seoDescription": "How we designed and built a fast, brand-forward, mobile-first website for Clovey Restaurant — menu, story, and bookings."
+  },
+  {
+    "id": "prj_fitplancoach",
+    "title": "FitPlanCoach",
+    "slug": "fitplancoach",
+    "client": "FitPlanCoach",
+    "category": "Fitness Web App",
+    "year": "2025",
+    "summary": "A production-grade fitness web app that turns coaching plans into a clean, guided experience for clients.",
+    "body": "FitPlanCoach is a web application built to make coaching scalable. We designed and engineered a clear, guided product where plans, progress, and day-to-day actions live in one place.\n\nUnder the hood it's a modern, type-safe stack built to grow — fast page loads, a responsive interface that works on the gym floor, and an architecture ready for new features without a rewrite. The interface stays out of the way so the training does the talking.\n\nFrom UI to backend, it was delivered end to end by one senior team.",
+    "challenge": "FitPlanCoach needed to make coaching scalable — turning plans, progress, and daily actions into one clear product instead of spreadsheets and scattered messages.",
+    "approach": "We designed and engineered a guided web app on a modern, type-safe stack: fast page loads, a responsive interface that works on the gym floor, and an architecture ready for new features without a rewrite.",
+    "outcome": "A production-grade product that feels effortless for clients and was delivered end to end by one senior team — from UI to backend — and ready to grow.",
+    "gallery": [],
+    "testimonialId": "tst_3",
+    "cover": "",
+    "url": "https://www.fitplancoach.com",
+    "tags": [
+      "Web App",
+      "Fitness",
+      "SaaS",
+      "Dashboard"
+    ],
+    "services": [
+      "Web Applications",
+      "UI/UX Design",
+      "Custom Software"
+    ],
+    "results": [],
+    "featured": true,
+    "sortOrder": 2,
+    "seoTitle": "FitPlanCoach — Fitness Web App Case Study",
+    "seoDescription": "How we designed and built FitPlanCoach, a production-grade fitness web app, end to end on a modern stack."
+  }
+]

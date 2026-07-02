@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+/*
+  OmniStack Digital — design tokens (Blueprint Phase 1 + 7)
+  Matte black + rich gold. Premium, minimal, fast.
+*/
+@theme {
+  /* Color tokens */
+  --color-base: #050505; /* page background */
+  --color-surface: #0a0a0a; /* primary matte black surfaces */
+  --color-card: #121212; /* cards, panels */
+  --color-hair: #1f1f1f; /* hairline borders */
+  --color-fg: #ffffff; /* primary text */
+  --color-muted: #a3a3a3; /* secondary text */
+  --color-gold: #d4af37; /* accent only */
+  --color-gold-soft: rgba(212, 175, 55, 0.12); /* gold glows, hover washes */
+
+  /* Typography */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo,
+    monospace;
+
+  /* Motion (Blueprint Phase 7) */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-ui: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Animations */
+  --animate-marquee: marquee 40s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-base);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Gold selection */
+  ::selection {
+    background: rgba(212, 175, 55, 0.28);
+    color: #fff;
+  }
+
+  /* Accessible focus ring — 2px gold outline + offset (Blueprint Phase 11) */
+  :where(a, button, input, textarea, select, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Thin, dark scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #2a2a2a var(--color-base);
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-track {
+    background: var(--color-base);
+  }
+  *::-webkit-scrollbar-thumb {
+    background: #242424;
+    border-radius: 999px;
+    border: 2px solid var(--color-base);
+  }
+}
+
+@layer utilities {
+  /* Subtle film grain over dark sections (2–4% opacity) */
+  .grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Gold radial glow (hero only) */
+  .gold-glow {
+    background: radial-gradient(
+      60% 60% at 50% 0%,
+      rgba(212, 175, 55, 0.16) 0%,
+      rgba(212, 175, 55, 0.04) 35%,
+      transparent 70%
+    );
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-marquee {
+    animation: var(--animate-marquee);
+  }
+
+  /* Hide content visually but keep it for screen readers */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+/* Respect reduced motion everywhere (Blueprint Phase 11) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

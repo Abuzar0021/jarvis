@@ -1,0 +1,38 @@
+[
+  {
+    "id": "post_website-cost",
+    "title": "How much should a website cost in 2026?",
+    "slug": "how-much-should-a-website-cost",
+    "excerpt": "A plain-language breakdown of what drives the price of a modern website — and how to avoid paying for the wrong things.",
+    "body": "The honest answer is: it depends on scope. But \"it depends\" is useless when you're trying to budget, so here's how we think about it.\n\n## What you're actually paying for\n\nMost of the cost of a good website isn't the pages you can see — it's the decisions underneath them. Strategy, structure, performance, and the system that lets you edit it later.\n\n- A simple, fast marketing site: a few weeks of focused work.\n- A site with a custom design system and a CMS: more, because it's built to grow.\n- A web app or platform: priced on complexity, not page count.\n\n## Where budgets get wasted\n\n- Paying for pages you'll never update instead of a system you can edit yourself.\n- Rebuilding in six months because performance and SEO were bolted on at the end.\n- Hiring three vendors who each blame the other two.\n\n## How we quote\n\nWe scope the work, agree a fixed price, and tell you exactly what's included before anything starts. No hourly creep, no surprises. If the scope changes, we tell you what that costs before we do it.\n\nThe cheapest website is the one you don't have to rebuild. Spend on the foundation, keep the rest editable, and you'll get years out of it.",
+    "cover": "",
+    "category": "Guides",
+    "author": "Zar",
+    "publishedAt": "2026-05-12",
+    "featured": true
+  },
+  {
+    "id": "post_what-is-an-ai-agent",
+    "title": "What is an AI agent — and where does it actually help?",
+    "slug": "what-is-an-ai-agent",
+    "excerpt": "Agents are everywhere in the headlines. Here's what they really are, and the handful of places they earn their keep in a business.",
+    "body": "An AI agent is software that can take a goal, decide on steps, use tools, and act — not just answer a question. The difference between a chatbot and an agent is the difference between advice and work.\n\n## A useful mental model\n\nThink of an agent as a junior teammate with a narrow job, a few tools, and a supervisor. It reads the situation, picks an action, does it, and checks the result. The supervisor — a human, or a rule — keeps it on the rails.\n\n## Where agents actually help\n\n- Qualifying and routing inbound leads while you sleep.\n- Turning long-form content into posts, summaries, and emails.\n- Keeping data in sync between tools that don't talk to each other.\n- First-line support that escalates the hard cases to a person.\n\n## Where they don't (yet)\n\n- Anything where a wrong action is expensive and hard to reverse, without a human in the loop.\n- Vague goals with no way to measure success.\n\n## The rule we follow\n\nAutomate the boring, reversible, high-volume work first. Keep a human on the decisions that matter. Measure everything. Done right, an agent isn't a demo — it's quiet leverage that compounds.",
+    "cover": "",
+    "category": "AI",
+    "author": "Zar",
+    "publishedAt": "2026-04-03",
+    "featured": false
+  },
+  {
+    "id": "post_lighthouse-95",
+    "title": "Five ways we hit 95+ Lighthouse on every build",
+    "slug": "five-ways-to-hit-95-lighthouse",
+    "excerpt": "Performance isn't luck. These are the habits that keep our sites fast, accessible, and ranking — by default.",
+    "body": "Speed isn't a feature you add at the end. It's a series of small defaults that, taken together, keep a site fast for years. Here are five we never skip.\n\n## 1. Render on the server\n\nWe ship server-rendered HTML so the first paint is content, not a loading spinner. The browser gets something useful immediately.\n\n## 2. Treat images as a budget\n\nEvery image has explicit dimensions, modern formats, and the right size for the screen. No layout shift, no megabyte hero photos.\n\n## 3. Self-host fonts\n\nFonts load from our own domain with no extra network round-trips, so text appears instantly and never blocks the page.\n\n## 4. Ship less JavaScript\n\nMost of a page should be static. We only send interactive code where it's actually needed, and we lazy-load the heavy parts below the fold.\n\n## 5. Measure in CI\n\nPerformance budgets run on every change, so a regression is caught before it ships — not after a customer complains.\n\nNone of this is exotic. It's discipline. And it's why accessibility, SEO, and Core Web Vitals come for free instead of as an expensive afterthought.",
+    "cover": "",
+    "category": "Performance",
+    "author": "Zar",
+    "publishedAt": "2026-02-18",
+    "featured": false
+  }
+]

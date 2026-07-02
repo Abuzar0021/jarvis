@@ -1,0 +1,182 @@
+[
+  {
+    "id": "svc_web-development",
+    "name": "Website Development",
+    "slug": "website-development",
+    "group": "Build",
+    "summary": "Fast, beautiful, SEO-first sites that convert.",
+    "body": "Marketing sites and landing pages engineered for speed, accessibility, and search from the first commit. Built on Next.js so they load instantly and rank well.",
+    "deliverables": ["Design system & responsive build", "Headless CMS so you can edit everything", "90+ Lighthouse & Core Web Vitals", "On-page SEO & schema"],
+    "featured": true
+  },
+  {
+    "id": "svc_web-apps",
+    "name": "Web Applications",
+    "slug": "web-applications",
+    "group": "Build",
+    "summary": "Production-grade products built to scale from day one.",
+    "body": "Dashboards, portals, and platforms with real authentication, data, and roles. Type-safe end to end and architected so new features don't mean a rewrite.",
+    "deliverables": ["Auth, roles & permissions", "Database design & APIs", "Reusable component library", "Testing & CI/CD"],
+    "featured": true
+  },
+  {
+    "id": "svc_mobile-apps",
+    "name": "Mobile Applications",
+    "slug": "mobile-applications",
+    "group": "Build",
+    "summary": "Native-feeling apps from one shared codebase.",
+    "body": "Cross-platform mobile apps that share logic with your web product, so you ship faster and maintain less.",
+    "deliverables": ["iOS & Android builds", "Offline & push notifications", "App store submission", "Analytics & crash reporting"],
+    "featured": false
+  },
+  {
+    "id": "svc_custom-software",
+    "name": "Custom Software",
+    "slug": "custom-software",
+    "group": "Build",
+    "summary": "Bespoke systems for problems off-the-shelf can't solve.",
+    "body": "Internal tools, integrations, and engines tailored to how your business actually runs.",
+    "deliverables": ["Discovery & technical spec", "Scalable architecture", "Documentation & handover", "Ongoing support"],
+    "featured": false
+  },
+  {
+    "id": "svc_saas",
+    "name": "SaaS Platforms",
+    "slug": "saas-platforms",
+    "group": "Build",
+    "summary": "Platforms engineered for reliability and growth.",
+    "body": "Multi-tenant SaaS with billing, onboarding, and admin — built to onboard your hundredth customer as smoothly as your first.",
+    "deliverables": ["Multi-tenant architecture", "Subscriptions & billing", "Admin & analytics", "Scalable infrastructure"],
+    "featured": false
+  },
+  {
+    "id": "svc_api",
+    "name": "API Integrations",
+    "slug": "api-integrations",
+    "group": "Build",
+    "summary": "Connect the tools you already use.",
+    "body": "Reliable integrations between your product and the services it depends on — payments, CRMs, data, and more.",
+    "deliverables": ["Secure API design", "Third-party integrations", "Webhooks & sync", "Monitoring & retries"],
+    "featured": false
+  },
+  {
+    "id": "svc_ai-solutions",
+    "name": "AI Solutions",
+    "slug": "ai-solutions",
+    "group": "AI",
+    "summary": "AI features that earn their place in the product.",
+    "body": "We identify where AI genuinely helps, then build it into your product with the right model, guardrails, and evaluation.",
+    "deliverables": ["Use-case discovery", "Model selection & prompts", "Guardrails & evaluation", "Production monitoring"],
+    "featured": false
+  },
+  {
+    "id": "svc_ai-agents",
+    "name": "AI Agents",
+    "slug": "ai-agents",
+    "group": "AI",
+    "summary": "Agents that do real work, not demos.",
+    "body": "Autonomous and human-in-the-loop agents that handle real operations — research, outreach, support, and more — wired into your stack.",
+    "deliverables": ["Agent design & tooling", "Human-in-the-loop controls", "Integration with your systems", "Observability & cost control"],
+    "featured": true
+  },
+  {
+    "id": "svc_ai-automations",
+    "name": "AI Automations",
+    "slug": "ai-automations",
+    "group": "AI",
+    "summary": "Automate the busywork end to end.",
+    "body": "Automations that qualify leads, generate content, and sync systems while you sleep — monitored and reliable.",
+    "deliverables": ["Workflow mapping", "Automated pipelines", "Notifications & logging", "Failure handling"],
+    "featured": true
+  },
+  {
+    "id": "svc_ai-integrations",
+    "name": "AI Integrations",
+    "slug": "ai-integrations",
+    "group": "AI",
+    "summary": "Bring AI into the tools you already run.",
+    "body": "Add intelligence to your existing CRM, helpdesk, or internal tools without replacing them.",
+    "deliverables": ["Integration architecture", "Secure data handling", "Custom AI endpoints", "Rollout & training"],
+    "featured": false
+  },
+  {
+    "id": "svc_workflow-automation",
+    "name": "Workflow Automation",
+    "slug": "workflow-automation",
+    "group": "AI",
+    "summary": "Remove the manual steps between your tools.",
+    "body": "We connect your apps and processes so data flows and tasks trigger themselves — fewer errors, more time back.",
+    "deliverables": ["Process audit", "Automation build", "Integrations", "Documentation"],
+    "featured": false
+  },
+  {
+    "id": "svc_uiux",
+    "name": "UI/UX Design",
+    "slug": "ui-ux-design",
+    "group": "Design",
+    "summary": "Interfaces with restraint and intent.",
+    "body": "Research-led product and web design that's beautiful and usable — and built to translate cleanly into code.",
+    "deliverables": ["UX research & flows", "High-fidelity UI", "Design system", "Prototypes"],
+    "featured": true
+  },
+  {
+    "id": "svc_branding",
+    "name": "Branding",
+    "slug": "branding",
+    "group": "Design",
+    "summary": "Identity that feels premium and human.",
+    "body": "Logo, type, color, and voice — a complete identity system your whole product can be built on.",
+    "deliverables": ["Logo & marks", "Type & color system", "Brand guidelines", "Assets & templates"],
+    "featured": false
+  },
+  {
+    "id": "svc_performance",
+    "name": "Performance Optimization",
+    "slug": "performance-optimization",
+    "group": "Design",
+    "summary": "Make what you have fast.",
+    "body": "Audits and fixes that lift Core Web Vitals, Lighthouse scores, and conversion — measurably.",
+    "deliverables": ["Performance audit", "Core Web Vitals fixes", "Image & font optimization", "Before/after report"],
+    "featured": false
+  },
+  {
+    "id": "svc_seo",
+    "name": "SEO",
+    "slug": "seo",
+    "group": "Grow",
+    "summary": "Traffic, rankings, and conversions that compound.",
+    "body": "Technical and content SEO built into the product, not bolted on — so you rank for the searches that bring customers.",
+    "deliverables": ["Technical SEO", "Keyword & content strategy", "Schema & internal linking", "Reporting"],
+    "featured": true
+  },
+  {
+    "id": "svc_digital-marketing",
+    "name": "Digital Marketing",
+    "slug": "digital-marketing",
+    "group": "Grow",
+    "summary": "Campaigns that drive the right traffic.",
+    "body": "Paid and organic growth aligned to your funnel, measured against revenue — not vanity metrics.",
+    "deliverables": ["Channel strategy", "Campaign setup", "Landing pages", "Analytics & reporting"],
+    "featured": false
+  },
+  {
+    "id": "svc_ugc",
+    "name": "UGC Advertising",
+    "slug": "ugc-advertising",
+    "group": "Grow",
+    "summary": "Creative that performs on social.",
+    "body": "User-generated-style ad creative built to stop the scroll and convert across paid social.",
+    "deliverables": ["Creative concepts", "Scripting", "Edited ad creative", "Performance iteration"],
+    "featured": false
+  },
+  {
+    "id": "svc_maintenance",
+    "name": "Maintenance & Support",
+    "slug": "maintenance-support",
+    "group": "Grow",
+    "summary": "Stay fast, secure, and up to date.",
+    "body": "Ongoing care for your product — updates, monitoring, fixes, and small improvements, handled.",
+    "deliverables": ["Updates & security patches", "Uptime monitoring", "Bug fixes", "Monthly improvements"],
+    "featured": false
+  }
+]
