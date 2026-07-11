@@ -1,13 +1,15 @@
 import Link from "next/link";
 import type { Post } from "@/lib/types";
 import { coverGradient, formatDate, readingTime } from "@/lib/utils";
+import { Spotlight } from "@/components/motion/Spotlight";
 
 export function PostCard({ post }: { post: Post }) {
   return (
     <Link
       href={`/insights/${post.slug}`}
-      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-hair bg-card transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-[0_24px_60px_-30px_rgba(212,175,55,0.4)]"
+      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-hair bg-card transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-[0_24px_60px_-30px_rgba(212,175,55,0.4)]"
     >
+      <Spotlight />
       <div
         className="relative aspect-[16/9] overflow-hidden"
         style={{ background: coverGradient(post.slug) }}

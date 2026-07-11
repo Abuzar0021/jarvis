@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/motion/Reveal";
+import { Spotlight } from "@/components/motion/Spotlight";
 import type { Industry } from "@/lib/types";
 
 export function Industries({ industries }: { industries: Industry[] }) {
@@ -25,8 +26,9 @@ export function Industries({ industries }: { industries: Industry[] }) {
           <Reveal key={ind.id} delay={(i % 3) * 0.05}>
             <Link
               href={`/industries/${ind.slug}`}
-              className="group flex h-full flex-col rounded-xl border border-hair bg-card px-5 py-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/30"
+              className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-hair bg-card px-5 py-5 transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-[0_24px_60px_-30px_rgba(212,175,55,0.4)]"
             >
+              <Spotlight />
               <span className="font-medium tracking-tight">{ind.name}</span>
               <span className="mt-1.5 line-clamp-2 flex-1 text-sm leading-relaxed text-muted">{ind.summary}</span>
               <span className="mt-4 inline-flex items-center gap-1.5 text-sm text-muted transition-all group-hover:gap-2.5 group-hover:text-gold">

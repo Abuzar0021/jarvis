@@ -9,6 +9,7 @@ import {
   getTestimonials,
 } from "@/lib/content";
 import { CaseStudyReveal } from "@/components/sections/CaseStudyReveal";
+import { CursorGlow } from "@/components/motion/CursorGlow";
 import { Hero } from "@/components/sections/Hero";
 import { TrustStrip } from "@/components/sections/TrustStrip";
 import { ValuePillars } from "@/components/sections/ValuePillars";
@@ -52,6 +53,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <CursorGlow />
       {flagshipProject ? <CaseStudyReveal project={flagshipProject} /> : null}
       <Hero site={site} />
       <TrustStrip label={site.trustLabel} items={trustItems} />

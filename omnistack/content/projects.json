@@ -13,7 +13,7 @@
     "outcome": "A site that loads quickly, reads beautifully, and turns a casual visit into a booking. Menus and hours update in seconds, and the structure is built to rank for the local searches that fill tables.",
     "gallery": [],
     "testimonialId": "tst_2",
-    "cover": "",
+    "cover": "/media/work-clovey.jpg",
     "url": "https://www.cloveyrestaurant.com/",
     "tags": [
       "Restaurant",
@@ -44,9 +44,9 @@
     "challenge": "FitPlanCoach needed to make coaching scalable — turning plans, progress, and daily actions into one clear product instead of spreadsheets and scattered messages.",
     "approach": "We designed and engineered a guided web app on a modern, type-safe stack: fast page loads, a responsive interface that works on the gym floor, and an architecture ready for new features without a rewrite.",
     "outcome": "A production-grade product that feels effortless for clients and was delivered end to end by one senior team — from UI to backend — and ready to grow.",
-    "gallery": [],
+    "gallery": ["/media/work-fitplancoach-detail.jpg", "/media/work-fitplancoach-mobile.jpg"],
     "testimonialId": "tst_3",
-    "cover": "",
+    "cover": "/media/work-fitplancoach-cover.jpg",
     "url": "https://www.fitplancoach.com",
     "tags": [
       "Web App",

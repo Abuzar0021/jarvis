@@ -173,8 +173,8 @@ export function ScrollExpandMedia({
     );
   }
 
-  const mediaWidth = 300 + scrollProgress * (isMobileState ? 650 : 1250);
-  const mediaHeight = 400 + scrollProgress * (isMobileState ? 200 : 400);
+  const mediaWidth = 340 + scrollProgress * (isMobileState ? 650 : 1250);
+  const mediaHeight = 430 + scrollProgress * (isMobileState ? 200 : 400);
   const textTranslateX = scrollProgress * (isMobileState ? 180 : 150);
 
   return (
@@ -201,7 +201,10 @@ export function ScrollExpandMedia({
                 <div className="absolute inset-0 bg-base/30" />
               </>
             ) : (
-              <div className="gold-glow grain absolute inset-0 h-full w-full bg-base" aria-hidden />
+              <div
+                className="gold-glow grain animate-breathe absolute inset-0 h-full w-full bg-base"
+                aria-hidden
+              />
             )}
           </motion.div>
 
@@ -269,10 +272,26 @@ export function ScrollExpandMedia({
                   ) : null}
                   {scrollToExpand ? (
                     <p
-                      className="mt-2 text-sm text-muted"
+                      className="mt-2 flex items-center gap-1.5 text-sm text-muted"
                       style={{ transform: `translateX(${textTranslateX}vw)` }}
                     >
                       {scrollToExpand}
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        aria-hidden
+                        className="animate-bounce text-gold"
+                      >
+                        <path
+                          d="M3 6l5 5 5-5"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
                     </p>
                   ) : null}
                 </div>

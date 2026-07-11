@@ -1,5 +1,6 @@
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { Reveal } from "@/components/motion/Reveal";
+import { Spotlight } from "@/components/motion/Spotlight";
 import type { Testimonial } from "@/lib/types";
 
 function attribution(t: Testimonial): string {
@@ -17,7 +18,8 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
       <SectionHeading eyebrow="In their words" title={<>Teams that trusted us with the whole thing.</>} />
 
       <Reveal>
-        <figure className="mt-12 rounded-3xl border border-hair bg-card p-8 sm:p-12">
+        <figure className="group relative mt-12 overflow-hidden rounded-3xl border border-hair bg-card p-8 transition-colors duration-300 hover:border-gold/30 sm:p-12">
+          <Spotlight />
           <span className="font-serif text-5xl leading-none text-gold" aria-hidden>“</span>
           <blockquote className="mt-2 text-balance text-2xl font-medium leading-snug tracking-tight sm:text-3xl">
             {featured.quote}
@@ -30,7 +32,10 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           {rest.map((t, i) => (
             <Reveal key={t.id} delay={(i % 2) * 0.08}>
-              <figure className="h-full rounded-2xl border border-hair bg-card p-7">
+              <figure
+                className="group relative h-full overflow-hidden rounded-2xl border border-hair bg-card p-7 transition-colors duration-300 hover:border-gold/30"
+              >
+                <Spotlight />
                 <blockquote className="text-[15px] leading-relaxed text-fg/90">{t.quote}</blockquote>
                 <figcaption className="mt-5 text-sm text-muted">{attribution(t)}</figcaption>
               </figure>

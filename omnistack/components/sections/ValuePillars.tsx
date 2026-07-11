@@ -1,5 +1,6 @@
 import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/motion/Reveal";
+import { Spotlight } from "@/components/motion/Spotlight";
 import type { ValuePillar } from "@/lib/types";
 
 const ICONS = [
@@ -18,7 +19,10 @@ export function ValuePillars({ pillars }: { pillars: ValuePillar[] }) {
       <div className="grid gap-10 md:grid-cols-3 md:gap-8">
         {pillars.map((p, i) => (
           <Reveal key={p.title} delay={i * 0.08}>
-            <div className="flex flex-col">
+            <div
+              className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-hair bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-[0_24px_60px_-30px_rgba(212,175,55,0.4)]"
+            >
+              <Spotlight />
               <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-gold/30 bg-gold-soft text-gold">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
                   {ICONS[i % ICONS.length]}

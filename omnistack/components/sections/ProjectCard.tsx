@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Project } from "@/lib/types";
 import { coverGradient } from "@/lib/utils";
+import { Spotlight } from "@/components/motion/Spotlight";
 
 export function ProjectCard({
   project,
@@ -12,8 +13,9 @@ export function ProjectCard({
   return (
     <Link
       href={`/work/${project.slug}`}
-      className="group block overflow-hidden rounded-2xl border border-hair bg-card transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-[0_24px_60px_-30px_rgba(212,175,55,0.4)]"
+      className="group relative block overflow-hidden rounded-2xl border border-hair bg-card transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-[0_24px_60px_-30px_rgba(212,175,55,0.4)]"
     >
+      <Spotlight />
       <div
         className={`relative overflow-hidden ${large ? "aspect-[16/10]" : "aspect-[16/11]"}`}
         style={{ background: coverGradient(project.slug) }}

@@ -115,21 +115,19 @@ export default async function ProjectPage({
         </Container>
       </section>
 
-      {/* Cover */}
+      {/* Cover — deliberately always the branded gradient here, never project.cover:
+          that field is a listing-page preview thumbnail, and this page already
+          shows its own real header above, so reusing the same screenshot as a
+          "cover" directly below it would just repeat the page back at itself. */}
       <Container className="py-10 sm:py-14">
         <Reveal>
           <div
             className="relative aspect-[16/9] overflow-hidden rounded-3xl border border-hair"
             style={{ background: coverGradient(project.slug) }}
           >
-            {project.cover ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={project.cover} alt={`${project.title} — ${project.category}`} className="absolute inset-0 h-full w-full object-cover" />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-3xl font-semibold tracking-tight text-fg/70 sm:text-5xl">{project.title}</span>
-              </div>
-            )}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-3xl font-semibold tracking-tight text-fg/70 sm:text-5xl">{project.title}</span>
+            </div>
           </div>
         </Reveal>
       </Container>
