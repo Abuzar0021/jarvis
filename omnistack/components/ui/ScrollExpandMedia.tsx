@@ -10,6 +10,8 @@ interface ScrollExpandMediaProps {
   posterSrc?: string;
   /** Omit to use the site's native gold-glow + grain ambient background. */
   bgImageSrc?: string;
+  /** Rendered as styled text, not a heading tag - this always sits before the
+   * page's real h1, so it must not compete with the document outline. */
   title?: string;
   date?: string;
   scrollToExpand?: string;
@@ -152,9 +154,9 @@ export function ScrollExpandMedia({
             <p className="font-mono text-xs uppercase tracking-[0.16em] text-gold">{date}</p>
           ) : null}
           {title ? (
-            <h2 className="max-w-3xl text-4xl font-semibold tracking-tight text-fg sm:text-5xl">
+            <p className="max-w-3xl text-4xl font-semibold tracking-tight text-fg sm:text-5xl">
               {title}
-            </h2>
+            </p>
           ) : null}
           <div
             className="relative aspect-video w-full max-w-3xl overflow-hidden rounded-2xl border border-hair"
@@ -298,18 +300,18 @@ export function ScrollExpandMedia({
               </div>
 
               <div className="flex items-center justify-center text-center gap-4 w-full relative z-10 transition-none flex-col">
-                <motion.h2
+                <motion.p
                   className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-fg transition-none"
                   style={{ transform: `translateX(-${textTranslateX}vw)` }}
                 >
                   {firstWord}
-                </motion.h2>
-                <motion.h2
+                </motion.p>
+                <motion.p
                   className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-center text-fg transition-none"
                   style={{ transform: `translateX(${textTranslateX}vw)` }}
                 >
                   {restOfTitle}
-                </motion.h2>
+                </motion.p>
               </div>
             </div>
 

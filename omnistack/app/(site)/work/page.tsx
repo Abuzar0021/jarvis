@@ -8,22 +8,36 @@ import { CTABand } from "@/components/sections/CTABand";
 
 export const revalidate = 3600;
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
 export const metadata: Metadata = {
   title: "Work",
   alternates: { canonical: "/work" },
   description:
-    "Selected products we've designed and engineered end to end — websites, web apps, and AI.",
+    "Selected products we've designed and engineered end to end - websites, web apps, and AI.",
 };
 
 export default async function WorkPage() {
   const [projects, site] = await Promise.all([getProjects(), getSite()]);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: projects.map((p, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `${SITE_URL}/work/${p.slug}`,
+      name: p.title,
+    })),
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <PageHeader
         eyebrow="Selected work"
         title={<>Products we&rsquo;re proud to put our name on.</>}
-        intro="Every project here was designed, built, and shipped by one senior team — from the first sketch to the last deploy."
+        intro="Every project here was designed, built, and shipped by one senior team - from the first sketch to the last deploy."
       />
 
       <Section>

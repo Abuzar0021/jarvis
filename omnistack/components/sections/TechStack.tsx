@@ -9,7 +9,7 @@ export function TechStack({ groups }: { groups: TechGroup[] }) {
       <SectionHeading
         eyebrow="Engineering depth"
         title={<>Built on a modern, proven stack.</>}
-        intro="We choose tools for reliability and speed — and we keep the bundle lean."
+        intro="We choose tools for reliability and speed - and we keep the bundle lean."
       />
       <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {groups.map((g, i) => (

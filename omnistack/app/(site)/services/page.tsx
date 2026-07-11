@@ -9,11 +9,13 @@ import type { ServiceGroup } from "@/lib/types";
 
 export const revalidate = 3600;
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
 export const metadata: Metadata = {
   title: "Services",
   alternates: { canonical: "/services" },
   description:
-    "Full-stack capability under one senior team — Build, AI, Design, and Grow. Everything you need to ship a modern digital product.",
+    "Full-stack capability under one senior team - Build, AI, Design, and Grow. Everything you need to ship a modern digital product.",
 };
 
 const GROUP_ORDER: ServiceGroup[] = ["Build", "AI", "Design", "Grow"];
@@ -27,8 +29,20 @@ const GROUP_BLURB: Record<ServiceGroup, string> = {
 export default async function ServicesPage() {
   const [services, site] = await Promise.all([getServices(), getSite()]);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: services.map((s, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `${SITE_URL}/services/${s.slug}`,
+      name: s.name,
+    })),
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <PageHeader
         eyebrow="Services"
         title={<>One team for brand, product, and growth.</>}

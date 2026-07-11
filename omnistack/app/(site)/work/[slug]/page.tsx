@@ -24,7 +24,7 @@ export async function generateMetadata({
   const project = await getProject(slug);
   if (!project) return { title: "Case study" };
   return {
-    title: project.seoTitle || `${project.title} — ${project.category}`,
+    title: project.seoTitle || `${project.title} - ${project.category}`,
     description: project.seoDescription || project.summary,
     alternates: { canonical: `/work/${project.slug}` },
     openGraph: {
@@ -208,13 +208,13 @@ export default async function ProjectPage({
               <div className="grid grid-cols-2 gap-4">
                 {project.client ? (
                   <div>
-                    <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Client</h2>
+                    <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Client</p>
                     <p className="mt-1 text-sm text-fg/90">{project.client}</p>
                   </div>
                 ) : null}
                 {project.year ? (
                   <div>
-                    <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Year</h2>
+                    <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Year</p>
                     <p className="mt-1 text-sm text-fg/90">{project.year}</p>
                   </div>
                 ) : null}
@@ -222,7 +222,7 @@ export default async function ProjectPage({
 
               {project.services.length > 0 ? (
                 <div>
-                  <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">What we did</h2>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">What we did</p>
                   <ul className="mt-4 space-y-2 text-sm text-muted">
                     {project.services.map((s) => (
                       <li key={s} className="flex items-center gap-2">
@@ -236,7 +236,7 @@ export default async function ProjectPage({
 
               {project.tags.length > 0 ? (
                 <div>
-                  <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Stack & focus</h2>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Stack & focus</p>
                   <ul className="mt-4 flex flex-wrap gap-2">
                     {project.tags.map((t) => (
                       <li key={t} className="rounded-full border border-hair bg-base px-3 py-1 text-xs text-muted">{t}</li>

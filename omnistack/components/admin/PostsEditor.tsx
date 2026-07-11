@@ -15,6 +15,8 @@ const blank = (): Post => ({
   author: "",
   publishedAt: new Date().toISOString().slice(0, 10),
   featured: false,
+  seoTitle: "",
+  seoDescription: "",
 });
 
 export function PostsEditor({ initial }: { initial: Post[] }) {
@@ -62,6 +64,10 @@ export function PostsEditor({ initial }: { initial: Post[] }) {
               rows={12}
               hint="Use ## for headings, - for bullet points, and a blank line between paragraphs."
             />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field label="SEO title" value={p.seoTitle} onChange={(v) => patch(i, { seoTitle: v })} hint="Optional — falls back to Title." />
+              <Field label="SEO description" value={p.seoDescription} onChange={(v) => patch(i, { seoDescription: v })} hint="Optional — falls back to Excerpt." />
+            </div>
             <div className="flex flex-wrap items-center justify-between gap-4 border-t border-hair pt-4">
               <Toggle label="Feature on homepage" checked={p.featured} onChange={(v) => patch(i, { featured: v })} />
               <button

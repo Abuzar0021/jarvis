@@ -1,23 +1,23 @@
 {
   "brand": "OmniStack Digital",
   "tagline": "Products that feel inevitable.",
-  "description": "OmniStack Digital is the senior team that owns brand, design, engineering, and AI — so ambitious teams ship products that feel inevitable. Based in Dublin and Jakarta.",
+  "description": "OmniStack Digital is the senior team that owns brand, design, engineering, and AI - so ambitious teams ship products that feel inevitable. Based in Dublin and Jakarta.",
   "founder": "Zar",
   "about": {
     "heading": "Great products deserve better than mediocre execution.",
-    "story": "OmniStack Digital exists because great products deserve better than mediocre execution. For years, our founder Zar watched ideas stall — designed by studios that couldn't build, built by shops with no taste, marketed by teams that couldn't ship.\n\nSo he assembled the team he always wished he could hire: senior designers, engineers, and AI specialists who own the entire stack and treat craft as non-negotiable. We take fewer projects and finish them properly. We explain our work in plain language.\n\nWe measure ourselves by what your product does after launch — not by what we promised before it. One accountable team, from the first sketch to the last deploy, working across Dublin and Jakarta."
+    "story": "OmniStack Digital exists because great products deserve better than mediocre execution. For years, our founder Zar watched ideas stall - designed by studios that couldn't build, built by shops with no taste, marketed by teams that couldn't ship.\n\nSo he assembled the team he always wished he could hire: senior designers, engineers, and AI specialists who own the entire stack and treat craft as non-negotiable. We take fewer projects and finish them properly. We explain our work in plain language.\n\nWe measure ourselves by what your product does after launch - not by what we promised before it. One accountable team, from the first sketch to the last deploy, working across Dublin and Jakarta."
   },
   "announcement": {
     "enabled": true,
-    "text": "New: FitPlanCoach — a production-grade fitness web app, shipped end to end.",
+    "text": "New: FitPlanCoach - a production-grade fitness web app, shipped end to end.",
     "linkLabel": "See the work",
     "linkHref": "/work/fitplancoach"
   },
   "hero": {
-    "eyebrow": "Brand · Product · AI — one senior team",
+    "eyebrow": "Brand · Product · AI - one senior team",
     "headline": "Products that feel inevitable.",
     "highlight": "inevitable",
-    "subhead": "We own brand, design, engineering, and AI under one senior team — so your product ships fast and feels like it was always meant to exist.",
+    "subhead": "We own brand, design, engineering, and AI under one senior team - so your product ships fast and feels like it was always meant to exist.",
     "primaryCta": {
       "label": "Book a Call",
       "href": "/book"
@@ -31,7 +31,7 @@
   "valuePillars": [
     {
       "title": "One team, end to end",
-      "body": "Brand to backend to growth — no hand-offs, no seams. The people who scope your project are the people who build it."
+      "body": "Brand to backend to growth - no hand-offs, no seams. The people who scope your project are the people who build it."
     },
     {
       "title": "Senior-only",
@@ -39,13 +39,13 @@
     },
     {
       "title": "Built to perform",
-      "body": "90+ Lighthouse, WCAG 2.2 AA, and SEO from the first commit — speed and accessibility are features, not afterthoughts."
+      "body": "90+ Lighthouse, WCAG 2.2 AA, and SEO from the first commit - speed and accessibility are features, not afterthoughts."
     }
   ],
-  "servicesIntro": "Everything you need to design, build, and grow a modern digital product — under one roof.",
+  "servicesIntro": "Everything you need to design, build, and grow a modern digital product - under one roof.",
   "aiShowcase": {
     "eyebrow": "AI-native by default",
-    "title": "AI that does the work — not demos.",
+    "title": "AI that does the work - not demos.",
     "body": "We design agents and automations that handle real operations, wired into your stack and monitored in production. Not a chatbot bolted on; systems that move the work forward.",
     "points": [
       "Qualify and route leads automatically",
@@ -59,7 +59,7 @@
     "steps": [
       {
         "title": "Discover",
-        "body": "We map your goals, users, and constraints — then agree a clear scope, timeline, and fixed price."
+        "body": "We map your goals, users, and constraints - then agree a clear scope, timeline, and fixed price."
       },
       {
         "title": "Design",
@@ -75,7 +75,7 @@
       },
       {
         "title": "Grow",
-        "body": "We measure what your product does after launch — and improve it with SEO and iteration."
+        "body": "We measure what your product does after launch - and improve it with SEO and iteration."
       }
     ]
   },
@@ -145,7 +145,7 @@
   ],
   "cta": {
     "headline": "Let's build something inevitable.",
-    "body": "Tell us what you're building. We'll come back with a clear, fixed plan — scope, timeline, and price.",
+    "body": "Tell us what you're building. We'll come back with a clear, fixed plan - scope, timeline, and price.",
     "reassurance": "We reply within one business day.",
     "button": {
       "label": "Book a Call",
@@ -153,7 +153,7 @@
     }
   },
   "pricing": {
-    "intro": "Clear scope, clear timeline, clear price. Pick the way of working that fits — we give you a fixed quote before anything starts.",
+    "intro": "Clear scope, clear timeline, clear price. Pick the way of working that fits - we give you a fixed quote before anything starts.",
     "note": "Every engagement starts with a free scoping call. No hourly billing, no surprises.",
     "models": [
       {
@@ -202,7 +202,7 @@
     "enabled": false,
     "calendarUrl": "",
     "heading": "Book a free scoping call",
-    "intro": "A short call to understand what you're building. You'll leave with a clear sense of scope, timeline, and next steps — no pressure, no jargon.",
+    "intro": "A short call to understand what you're building. You'll leave with a clear sense of scope, timeline, and next steps - no pressure, no jargon.",
     "expectations": [
       "Tell us about your goals, timeline, and constraints",
       "We share how we'd approach it and what's possible",
@@ -236,5 +236,5 @@
       "href": "mailto:abuzarelahi01@gmail.com"
     }
   ],
-  "footerTagline": "Brand, product, and AI, built by one senior team — from Dublin to Jakarta."
+  "footerTagline": "Brand, product, and AI, built by one senior team - from Dublin to Jakarta."
 }

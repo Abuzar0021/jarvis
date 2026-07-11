@@ -31,7 +31,7 @@ export function Logo({
         "group inline-flex items-center gap-2.5 text-fg",
         className,
       )}
-      aria-label={`${brand} — home`}
+      aria-label={`${brand} - home`}
     >
       <LogoMark className="transition-transform duration-300 group-hover:rotate-3" />
       <span className="text-[15px] font-semibold tracking-tight">

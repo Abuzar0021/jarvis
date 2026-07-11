@@ -97,6 +97,8 @@ export interface Post {
   author: string;
   publishedAt: string; // YYYY-MM-DD
   featured: boolean;
+  seoTitle: string;
+  seoDescription: string;
 }
 
 export interface Redirect {

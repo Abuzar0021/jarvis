@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: "Pricing",
   alternates: { canonical: "/pricing" },
   description:
-    "Clear scope, clear timeline, clear price. Choose the engagement model that fits — and get a fixed quote.",
+    "Clear scope, clear timeline, clear price. Choose the engagement model that fits - and get a fixed quote.",
 };
 
 export default async function PricingPage() {

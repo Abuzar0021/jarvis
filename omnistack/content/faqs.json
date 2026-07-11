@@ -8,13 +8,13 @@
   {
     "id": "faq_2",
     "question": "Do you only design, or also build?",
-    "answer": "Both. We own the full stack from brand to backend — design, frontend, backend, and AI — under one senior team.",
+    "answer": "Both. We own the full stack from brand to backend - design, frontend, backend, and AI - under one senior team.",
     "category": "Working together"
   },
   {
     "id": "faq_3",
     "question": "What does it cost?",
-    "answer": "It depends on scope. Book a call and we'll give you a clear, fixed quote — no surprises, no hourly creep.",
+    "answer": "It depends on scope. Book a call and we'll give you a clear, fixed quote - no surprises, no hourly creep.",
     "category": "Pricing"
   },
   {
@@ -26,7 +26,7 @@
   {
     "id": "faq_5",
     "question": "Will the site be fast and rank well?",
-    "answer": "Performance, accessibility, and SEO are built in by default — we target 90+ Lighthouse and strong Core Web Vitals on every build.",
+    "answer": "Performance, accessibility, and SEO are built in by default - we target 90+ Lighthouse and strong Core Web Vitals on every build.",
     "category": "Quality"
   },
   {

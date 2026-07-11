@@ -7,6 +7,8 @@ export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
+  description: "How OmniStack Digital collects, uses, and protects your data.",
+  alternates: { canonical: "/privacy" },
   robots: { index: true, follow: true },
 };
 

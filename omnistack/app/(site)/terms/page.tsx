@@ -7,6 +7,8 @@ export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Terms of Service",
+  description: "The terms that apply when you work with OmniStack Digital.",
+  alternates: { canonical: "/terms" },
   robots: { index: true, follow: true },
 };
 

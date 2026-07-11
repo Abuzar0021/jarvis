@@ -8,10 +8,12 @@ import { CTABand } from "@/components/sections/CTABand";
 
 export const revalidate = 3600;
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
 export const metadata: Metadata = {
   title: "Insights",
   description:
-    "Practical writing on design, engineering, and AI — from the team that builds and ships.",
+    "Practical writing on design, engineering, and AI - from the team that builds and ships.",
   alternates: {
     canonical: "/insights",
     types: { "application/rss+xml": "/feed.xml" },
@@ -21,12 +23,24 @@ export const metadata: Metadata = {
 export default async function InsightsPage() {
   const [posts, site] = await Promise.all([getPosts(), getSite()]);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: posts.map((p, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `${SITE_URL}/insights/${p.slug}`,
+      name: p.title,
+    })),
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <PageHeader
         eyebrow="Insights"
         title={<>Notes on shipping better products.</>}
-        intro="Clear, practical writing on design, engineering, and AI — no fluff."
+        intro="Clear, practical writing on design, engineering, and AI - no fluff."
       />
 
       <Section>

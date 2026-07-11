@@ -13,7 +13,7 @@ export function Industries({ industries }: { industries: Industry[] }) {
         <SectionHeading
           eyebrow="Industries"
           title={<>Depth across the verticals we serve.</>}
-          intro="We bring patterns that work — adapted to the specifics of your space."
+          intro="We bring patterns that work - adapted to the specifics of your space."
         />
         <Reveal>
           <Button href="/industries" variant="secondary" withArrow>

@@ -12,8 +12,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL(siteUrl),
     title: {
-      default: `${site.brand} — ${site.tagline}`,
-      template: `%s — ${site.brand}`,
+      default: `${site.brand} - ${site.tagline}`,
+      template: `%s - ${site.brand}`,
     },
     description: site.description,
     applicationName: site.brand,
@@ -55,16 +55,26 @@ export default async function RootLayout({
   const jsonLd = [
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
+      "@type": "ProfessionalService",
       name: site.brand,
       url: siteUrl,
       description: site.description,
       email: site.contact.email,
+      telephone: `+${site.contact.whatsapp}`,
+      image: `${siteUrl}/opengraph-image`,
       address: site.contact.locations.map((l) => ({
         "@type": "PostalAddress",
         addressLocality: l.city,
         addressCountry: l.country,
       })),
+      areaServed: site.contact.locations.map((l) => ({
+        "@type": "City",
+        name: l.city,
+      })),
+      // schema.org needs strict day-code format, so this is written by hand
+      // from site.hours ("Mon-Fri, 9:00-18:00") rather than parsed from it -
+      // update both together if the hours ever change.
+      openingHours: "Mo-Fr 09:00-18:00",
       sameAs: site.social.map((s) => s.href),
     },
     {

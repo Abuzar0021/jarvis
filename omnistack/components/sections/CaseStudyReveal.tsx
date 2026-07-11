@@ -12,7 +12,7 @@ export function CaseStudyReveal({ project }: { project: Project }) {
   return (
     <ScrollExpandMedia
       mediaType="image"
-      mediaSrc="/media/fitplancoach-real.png"
+      mediaSrc="/media/fitplancoach-real.webp"
       title="Coaching, made scalable."
       date={`${project.category} · ${project.year}`}
       scrollToExpand="Scroll to see the work"

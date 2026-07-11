@@ -54,7 +54,7 @@ export default async function OpengraphImage() {
             {site.tagline}
           </div>
           <div style={{ fontSize: "32px", color: "#A3A3A3", marginTop: "24px", maxWidth: "920px" }}>
-            Brand, design, engineering, and AI — one senior team.
+            Brand, design, engineering, and AI - one senior team.
           </div>
         </div>
 

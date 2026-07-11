@@ -94,6 +94,8 @@ export const postSchema = z.object({
   author: z.string().trim().max(80).optional().default(""),
   publishedAt: z.string().trim().max(40).optional().default(""),
   featured: z.boolean().optional().default(false),
+  seoTitle: z.string().trim().max(160).optional().default(""),
+  seoDescription: z.string().trim().max(300).optional().default(""),
 });
 
 export const industrySchema = z.object({

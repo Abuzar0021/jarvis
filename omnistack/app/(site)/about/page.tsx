@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "About",
   alternates: { canonical: "/about" },
   description:
-    "One accountable team that owns brand, design, engineering, and AI — based in Dublin and Jakarta.",
+    "One accountable team that owns brand, design, engineering, and AI - based in Dublin and Jakarta.",
 };
 
 export default async function AboutPage() {
@@ -42,7 +42,7 @@ export default async function AboutPage() {
           <aside className="lg:col-span-5">
             <Reveal>
               <div className="rounded-2xl border border-hair bg-card p-7">
-                <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Founder</h2>
+                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Founder</p>
                 <p className="mt-4 text-xl font-semibold tracking-tight">{site.founder}</p>
                 <p className="mt-2 text-[15px] leading-relaxed text-muted">
                   Still reviews every project that ships. The person who scopes your work is the

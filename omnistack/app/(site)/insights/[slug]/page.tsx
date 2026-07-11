@@ -24,10 +24,14 @@ export async function generateMetadata({
   const post = await getPost(slug);
   if (!post) return { title: "Article" };
   return {
-    title: post.title,
-    description: post.excerpt,
+    title: post.seoTitle || post.title,
+    description: post.seoDescription || post.excerpt,
     alternates: { canonical: `/insights/${post.slug}` },
-    openGraph: { type: "article", title: post.title, description: post.excerpt },
+    openGraph: {
+      type: "article",
+      title: post.seoTitle || post.title,
+      description: post.seoDescription || post.excerpt,
+    },
   };
 }
 

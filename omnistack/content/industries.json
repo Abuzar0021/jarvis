@@ -5,7 +5,7 @@
     "slug": "restaurants-hospitality",
     "summary": "Brand-forward, fast websites that turn hungry browsers into booked tables.",
     "painPoints": [
-      "Diners decide on a phone — slow, clunky sites lose them",
+      "Diners decide on a phone - slow, clunky sites lose them",
       "Menus and hours change, but updates need a developer",
       "Hard to rank for local searches that bring covers in",
       "Booking and ordering live on someone else's platform"
@@ -16,12 +16,12 @@
       "seo",
       "branding"
     ],
-    "body": "Hospitality is decided in seconds, usually on a phone. We build mobile-first sites that load instantly, look as considered as the room, and put the menu, story, and booking a tap apart.\n\nEverything is editable without a developer — menus, hours, and specials — and structured so you rank for the local searches that actually fill tables. We can integrate the booking and ordering tools you already use, or build something cleaner.\n\nThe result is a site that does more than look good: it brings people through the door.",
+    "body": "Hospitality is decided in seconds, usually on a phone. We build mobile-first sites that load instantly, look as considered as the room, and put the menu, story, and booking a tap apart.\n\nEverything is editable without a developer - menus, hours, and specials - and structured so you rank for the local searches that actually fill tables. We can integrate the booking and ordering tools you already use, or build something cleaner.\n\nThe result is a site that does more than look good: it brings people through the door.",
     "cover": "",
     "featured": true,
     "sortOrder": 1,
     "seoTitle": "Web Design for Restaurants & Hospitality",
-    "seoDescription": "Fast, brand-forward restaurant websites with menus, local SEO, and frictionless booking — built and editable without code."
+    "seoDescription": "Fast, brand-forward restaurant websites with menus, local SEO, and frictionless booking - built and editable without code."
   },
   {
     "id": "ind_fitness",
@@ -40,7 +40,7 @@
       "custom-software",
       "seo"
     ],
-    "body": "Great coaching is personal — but it shouldn't be trapped in spreadsheets and DMs. We design and build products that turn your method into a clear, guided experience clients actually stick with.\n\nFrom plans and progress to day-to-day actions, we build on a modern, type-safe stack that works on the gym floor and scales as you grow. The interface stays out of the way so the training does the talking.\n\nWhether it's a marketing site or a full web app, it's delivered end to end by one senior team.",
+    "body": "Great coaching is personal - but it shouldn't be trapped in spreadsheets and DMs. We design and build products that turn your method into a clear, guided experience clients actually stick with.\n\nFrom plans and progress to day-to-day actions, we build on a modern, type-safe stack that works on the gym floor and scales as you grow. The interface stays out of the way so the training does the talking.\n\nWhether it's a marketing site or a full web app, it's delivered end to end by one senior team.",
     "cover": "",
     "featured": true,
     "sortOrder": 2,
@@ -64,12 +64,12 @@
       "ai-agents",
       "seo"
     ],
-    "body": "Startups live and die on momentum. We embed as a senior product team — designing, building, and shipping in tight iterations — so you move fast without mortgaging the future.\n\nWe architect for scale from day one: clean data models, real auth and roles, and the AI and automation that give small teams outsized leverage. When you raise or grow, the foundation holds.\n\nOne accountable team, from the first sketch to the last deploy.",
+    "body": "Startups live and die on momentum. We embed as a senior product team - designing, building, and shipping in tight iterations - so you move fast without mortgaging the future.\n\nWe architect for scale from day one: clean data models, real auth and roles, and the AI and automation that give small teams outsized leverage. When you raise or grow, the foundation holds.\n\nOne accountable team, from the first sketch to the last deploy.",
     "cover": "",
     "featured": false,
     "sortOrder": 3,
     "seoTitle": "SaaS & Startup Development Agency",
-    "seoDescription": "Senior-only product team for SaaS and startups — ship fast, scale cleanly, and build AI-native from day one."
+    "seoDescription": "Senior-only product team for SaaS and startups - ship fast, scale cleanly, and build AI-native from day one."
   },
   {
     "id": "ind_ecommerce",
@@ -88,7 +88,7 @@
       "seo",
       "ai-automations"
     ],
-    "body": "In retail, speed is revenue. We build storefronts that load instantly, earn trust, and guide shoppers to checkout without friction.\n\nPerformance, accessibility, and SEO are built in — not bolted on — so you rank and convert at the same time. We automate the repetitive work behind the scenes, from catalog syncs to post-purchase flows.\n\nThe outcome is a store that feels fast and sells more.",
+    "body": "In retail, speed is revenue. We build storefronts that load instantly, earn trust, and guide shoppers to checkout without friction.\n\nPerformance, accessibility, and SEO are built in - not bolted on - so you rank and convert at the same time. We automate the repetitive work behind the scenes, from catalog syncs to post-purchase flows.\n\nThe outcome is a store that feels fast and sells more.",
     "cover": "",
     "featured": false,
     "sortOrder": 4,
@@ -112,7 +112,7 @@
       "seo",
       "ai-automations"
     ],
-    "body": "For firms that sell expertise, the website is the first impression — and often the deciding one. We build credible, distinctive sites that reflect the quality of your work and turn visitors into qualified enquiries.\n\nBehind the scenes, we automate the busywork: qualifying leads, routing enquiries, and following up — so your team spends time on clients, not admin.\n\nBrand, build, and growth, handled by one senior team.",
+    "body": "For firms that sell expertise, the website is the first impression - and often the deciding one. We build credible, distinctive sites that reflect the quality of your work and turn visitors into qualified enquiries.\n\nBehind the scenes, we automate the busywork: qualifying leads, routing enquiries, and following up - so your team spends time on clients, not admin.\n\nBrand, build, and growth, handled by one senior team.",
     "cover": "",
     "featured": false,
     "sortOrder": 5,
@@ -136,7 +136,7 @@
       "seo",
       "ai-integrations"
     ],
-    "body": "Property is browsed on the move and decided fast. We build listing experiences that are quick to search, beautiful on mobile, and built to handle large, changing inventories.\n\nWe wire in fast lead capture and routing — and the integrations that connect your CRM and portals — so no enquiry slips through. Performance and SEO bring the right buyers in.\n\nA site and system built to convert, not just display.",
+    "body": "Property is browsed on the move and decided fast. We build listing experiences that are quick to search, beautiful on mobile, and built to handle large, changing inventories.\n\nWe wire in fast lead capture and routing - and the integrations that connect your CRM and portals - so no enquiry slips through. Performance and SEO bring the right buyers in.\n\nA site and system built to convert, not just display.",
     "cover": "",
     "featured": false,
     "sortOrder": 6,

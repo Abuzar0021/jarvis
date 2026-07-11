@@ -45,7 +45,7 @@
     "slug": "saas-platforms",
     "group": "Build",
     "summary": "Platforms engineered for reliability and growth.",
-    "body": "Multi-tenant SaaS with billing, onboarding, and admin — built to onboard your hundredth customer as smoothly as your first.",
+    "body": "Multi-tenant SaaS with billing, onboarding, and admin - built to onboard your hundredth customer as smoothly as your first.",
     "deliverables": ["Multi-tenant architecture", "Subscriptions & billing", "Admin & analytics", "Scalable infrastructure"],
     "featured": false
   },
@@ -55,7 +55,7 @@
     "slug": "api-integrations",
     "group": "Build",
     "summary": "Connect the tools you already use.",
-    "body": "Reliable integrations between your product and the services it depends on — payments, CRMs, data, and more.",
+    "body": "Reliable integrations between your product and the services it depends on - payments, CRMs, data, and more.",
     "deliverables": ["Secure API design", "Third-party integrations", "Webhooks & sync", "Monitoring & retries"],
     "featured": false
   },
@@ -75,7 +75,7 @@
     "slug": "ai-agents",
     "group": "AI",
     "summary": "Agents that do real work, not demos.",
-    "body": "Autonomous and human-in-the-loop agents that handle real operations — research, outreach, support, and more — wired into your stack.",
+    "body": "Autonomous and human-in-the-loop agents that handle real operations - research, outreach, support, and more - wired into your stack.",
     "deliverables": ["Agent design & tooling", "Human-in-the-loop controls", "Integration with your systems", "Observability & cost control"],
     "featured": true
   },
@@ -85,7 +85,7 @@
     "slug": "ai-automations",
     "group": "AI",
     "summary": "Automate the busywork end to end.",
-    "body": "Automations that qualify leads, generate content, and sync systems while you sleep — monitored and reliable.",
+    "body": "Automations that qualify leads, generate content, and sync systems while you sleep - monitored and reliable.",
     "deliverables": ["Workflow mapping", "Automated pipelines", "Notifications & logging", "Failure handling"],
     "featured": true
   },
@@ -105,7 +105,7 @@
     "slug": "workflow-automation",
     "group": "AI",
     "summary": "Remove the manual steps between your tools.",
-    "body": "We connect your apps and processes so data flows and tasks trigger themselves — fewer errors, more time back.",
+    "body": "We connect your apps and processes so data flows and tasks trigger themselves - fewer errors, more time back.",
     "deliverables": ["Process audit", "Automation build", "Integrations", "Documentation"],
     "featured": false
   },
@@ -115,7 +115,7 @@
     "slug": "ui-ux-design",
     "group": "Design",
     "summary": "Interfaces with restraint and intent.",
-    "body": "Research-led product and web design that's beautiful and usable — and built to translate cleanly into code.",
+    "body": "Research-led product and web design that's beautiful and usable - and built to translate cleanly into code.",
     "deliverables": ["UX research & flows", "High-fidelity UI", "Design system", "Prototypes"],
     "featured": true
   },
@@ -125,7 +125,7 @@
     "slug": "branding",
     "group": "Design",
     "summary": "Identity that feels premium and human.",
-    "body": "Logo, type, color, and voice — a complete identity system your whole product can be built on.",
+    "body": "Logo, type, color, and voice - a complete identity system your whole product can be built on.",
     "deliverables": ["Logo & marks", "Type & color system", "Brand guidelines", "Assets & templates"],
     "featured": false
   },
@@ -135,7 +135,7 @@
     "slug": "performance-optimization",
     "group": "Design",
     "summary": "Make what you have fast.",
-    "body": "Audits and fixes that lift Core Web Vitals, Lighthouse scores, and conversion — measurably.",
+    "body": "Audits and fixes that lift Core Web Vitals, Lighthouse scores, and conversion - measurably.",
     "deliverables": ["Performance audit", "Core Web Vitals fixes", "Image & font optimization", "Before/after report"],
     "featured": false
   },
@@ -145,7 +145,7 @@
     "slug": "seo",
     "group": "Grow",
     "summary": "Traffic, rankings, and conversions that compound.",
-    "body": "Technical and content SEO built into the product, not bolted on — so you rank for the searches that bring customers.",
+    "body": "Technical and content SEO built into the product, not bolted on - so you rank for the searches that bring customers.",
     "deliverables": ["Technical SEO", "Keyword & content strategy", "Schema & internal linking", "Reporting"],
     "featured": true
   },
@@ -155,7 +155,7 @@
     "slug": "digital-marketing",
     "group": "Grow",
     "summary": "Campaigns that drive the right traffic.",
-    "body": "Paid and organic growth aligned to your funnel, measured against revenue — not vanity metrics.",
+    "body": "Paid and organic growth aligned to your funnel, measured against revenue - not vanity metrics.",
     "deliverables": ["Channel strategy", "Campaign setup", "Landing pages", "Analytics & reporting"],
     "featured": false
   },
@@ -175,7 +175,7 @@
     "slug": "maintenance-support",
     "group": "Grow",
     "summary": "Stay fast, secure, and up to date.",
-    "body": "Ongoing care for your product — updates, monitoring, fixes, and small improvements, handled.",
+    "body": "Ongoing care for your product - updates, monitoring, fixes, and small improvements, handled.",
     "deliverables": ["Updates & security patches", "Uptime monitoring", "Bug fixes", "Monthly improvements"],
     "featured": false
   }

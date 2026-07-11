@@ -1,4 +1,4 @@
-import { Section } from "@/components/ui/Section";
+import { Section, SectionHeading } from "@/components/ui/Section";
 import { Reveal } from "@/components/motion/Reveal";
 import { Spotlight } from "@/components/motion/Spotlight";
 import type { ValuePillar } from "@/lib/types";
@@ -16,7 +16,8 @@ export function ValuePillars({ pillars }: { pillars: ValuePillar[] }) {
   if (!pillars.length) return null;
   return (
     <Section className="border-b border-hair py-16 sm:py-20">
-      <div className="grid gap-10 md:grid-cols-3 md:gap-8">
+      <SectionHeading eyebrow="Why us" title={<>What you&rsquo;re actually getting.</>} />
+      <div className="mt-12 grid gap-10 md:grid-cols-3 md:gap-8">
         {pillars.map((p, i) => (
           <Reveal key={p.title} delay={i * 0.08}>
             <div
