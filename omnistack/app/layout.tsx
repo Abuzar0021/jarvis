@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import "@fontsource-variable/plus-jakarta-sans";
 import "./globals.css";
 import { getSite } from "@/lib/content";
 import { Analytics } from "@/components/site/Analytics";
@@ -78,7 +78,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${GeistSans.variable} ${GeistMono.variable} h-full`}
+      className={`${GeistMono.variable} h-full`}
       suppressHydrationWarning
     >
       <body className="min-h-full bg-base text-fg antialiased">
