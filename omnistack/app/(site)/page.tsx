@@ -3,10 +3,12 @@ import {
   getFeaturedPosts,
   getFeaturedProjects,
   getIndustries,
+  getProject,
   getServices,
   getSite,
   getTestimonials,
 } from "@/lib/content";
+import { CaseStudyReveal } from "@/components/sections/CaseStudyReveal";
 import { Hero } from "@/components/sections/Hero";
 import { TrustStrip } from "@/components/sections/TrustStrip";
 import { ValuePillars } from "@/components/sections/ValuePillars";
@@ -28,7 +30,7 @@ export const revalidate = 3600;
 export const metadata = { alternates: { canonical: "/" } };
 
 export default async function HomePage() {
-  const [site, projects, services, testimonials, faqs, posts, industries] =
+  const [site, projects, services, testimonials, faqs, posts, industries, flagshipProject] =
     await Promise.all([
       getSite(),
       getFeaturedProjects(4),
@@ -37,6 +39,7 @@ export default async function HomePage() {
       getFaqs(),
       getFeaturedPosts(3),
       getIndustries(),
+      getProject("fitplancoach"),
     ]);
 
   const featuredServices = services.filter((s) => s.featured).slice(0, 6);
@@ -49,6 +52,7 @@ export default async function HomePage() {
 
   return (
     <>
+      {flagshipProject ? <CaseStudyReveal project={flagshipProject} /> : null}
       <Hero site={site} />
       <TrustStrip label={site.trustLabel} items={trustItems} />
       <ValuePillars pillars={site.valuePillars} />
