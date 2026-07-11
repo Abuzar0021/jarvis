@@ -13,7 +13,8 @@
     "outcome": "A site that loads quickly, reads beautifully, and turns a casual visit into a booking. Menus and hours update in seconds, and the structure is built to rank for the local searches that fill tables.",
     "gallery": [],
     "testimonialId": "tst_2",
-    "cover": "/media/work-clovey.jpg",
+    "cover": "/media/clovey-kitchen-real.webp",
+    "logo": "/logos/clovey-kitchen.jpg",
     "url": "https://www.cloveyrestaurant.com/",
     "tags": [
       "Restaurant",
@@ -46,7 +47,8 @@
     "outcome": "A production-grade product that feels effortless for clients and was delivered end to end by one senior team — from UI to backend — and ready to grow.",
     "gallery": ["/media/work-fitplancoach-detail.jpg", "/media/work-fitplancoach-mobile.jpg"],
     "testimonialId": "tst_3",
-    "cover": "/media/work-fitplancoach-cover.jpg",
+    "cover": "/media/fitplancoach-real.png",
+    "logo": "/logos/fitplancoach.png",
     "url": "https://www.fitplancoach.com",
     "tags": [
       "Web App",

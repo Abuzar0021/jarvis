@@ -43,6 +43,12 @@ export function ProjectCard({
             {project.results[0].value} {project.results[0].label}
           </div>
         ) : null}
+        {project.logo ? (
+          <div className="absolute left-4 top-4 flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl border border-hair bg-fg/95 p-1.5 shadow-lg">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={project.logo} alt={`${project.client || project.title} logo`} className="h-full w-full object-contain" />
+          </div>
+        ) : null}
       </div>
 
       <div className="flex items-start justify-between gap-4 p-5">

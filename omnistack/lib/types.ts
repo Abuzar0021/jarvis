@@ -59,6 +59,7 @@ export interface Project {
   gallery: string[]; // additional image URLs
   testimonialId: string; // optional linked testimonial
   cover: string; // image URL (optional) — falls back to a branded gradient
+  logo: string; // client logo mark URL (optional)
   url: string; // live site link
   tags: string[];
   services: string[];

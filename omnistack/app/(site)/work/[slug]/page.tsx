@@ -199,6 +199,12 @@ export default async function ProjectPage({
 
           <aside className="lg:col-span-5">
             <div className="sticky top-24 space-y-8 rounded-2xl border border-hair bg-card p-7">
+              {project.logo ? (
+                <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl border border-hair bg-fg/95 p-2">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={project.logo} alt={`${project.client || project.title} logo`} className="h-full w-full object-contain" />
+                </div>
+              ) : null}
               <div className="grid grid-cols-2 gap-4">
                 {project.client ? (
                   <div>

@@ -37,6 +37,7 @@ export const projectSchema = z.object({
   gallery: z.array(z.string().trim().max(600)).optional().default([]),
   testimonialId: z.string().trim().max(60).optional().default(""),
   cover: z.string().trim().max(600).optional().default(""),
+  logo: z.string().trim().max(600).optional().default(""),
   url: z.string().trim().max(400).optional().default(""),
   tags: z.array(z.string().trim().max(60)).optional().default([]),
   services: z.array(z.string().trim().max(80)).optional().default([]),
