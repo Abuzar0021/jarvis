@@ -3,14 +3,12 @@ import {
   getFeaturedPosts,
   getFeaturedProjects,
   getIndustries,
-  getProject,
   getServices,
   getSite,
   getTestimonials,
 } from "@/lib/content";
-import { CaseStudyReveal } from "@/components/sections/CaseStudyReveal";
 import { CursorGlow } from "@/components/motion/CursorGlow";
-import { Hero } from "@/components/sections/Hero";
+import { Hero3D } from "@/components/hero/Hero3D";
 import { TrustStrip } from "@/components/sections/TrustStrip";
 import { ValuePillars } from "@/components/sections/ValuePillars";
 import { ServicesGrid } from "@/components/sections/ServicesGrid";
@@ -31,7 +29,7 @@ export const revalidate = 3600;
 export const metadata = { alternates: { canonical: "/" } };
 
 export default async function HomePage() {
-  const [site, projects, services, testimonials, faqs, posts, industries, flagshipProject] =
+  const [site, projects, services, testimonials, faqs, posts, industries] =
     await Promise.all([
       getSite(),
       getFeaturedProjects(4),
@@ -40,7 +38,6 @@ export default async function HomePage() {
       getFaqs(),
       getFeaturedPosts(3),
       getIndustries(),
-      getProject("fitplancoach"),
     ]);
 
   const featuredServices = services.filter((s) => s.featured).slice(0, 6);
@@ -54,8 +51,7 @@ export default async function HomePage() {
   return (
     <>
       <CursorGlow />
-      {flagshipProject ? <CaseStudyReveal project={flagshipProject} /> : null}
-      <Hero site={site} />
+      <Hero3D site={site} />
       <TrustStrip label={site.trustLabel} items={trustItems} />
       <ValuePillars pillars={site.valuePillars} />
       <ServicesGrid services={featuredServices} intro={site.servicesIntro} />
