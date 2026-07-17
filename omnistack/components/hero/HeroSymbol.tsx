@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
+import { audioEngine } from "@/lib/audio";
 
 type Panel = {
   mesh: THREE.Mesh;
@@ -93,6 +94,7 @@ export function HeroSymbol({ className }: { className?: string }) {
       screenY: -9999,
       holding: false,
       holdTime: 0,
+      blasted: false,
       clickBurst: 0,
       scrollProg: 0,
       introAmt: 1, // starts assembled-from-explosion
@@ -177,10 +179,16 @@ export function HeroSymbol({ className }: { className?: string }) {
       // Hold-to-blast: 0.5s charge, then ramp clickBurst 0 -> 1.
       if (st.holding) {
         st.holdTime += dt;
-        st.clickBurst =
-          st.holdTime < 0.5 ? 0 : Math.min(1, st.clickBurst + dt * 2.2);
+        if (st.holdTime >= 0.5) {
+          if (!st.blasted) {
+            audioEngine.blast();
+            st.blasted = true;
+          }
+          st.clickBurst = Math.min(1, st.clickBurst + dt * 2.2);
+        }
       } else {
         st.clickBurst = Math.max(0, st.clickBurst - dt * 1.6);
+        st.blasted = false;
       }
 
       const explodeAmt = Math.max(st.scrollProg, st.clickBurst, st.introAmt);
@@ -200,6 +208,7 @@ export function HeroSymbol({ className }: { className?: string }) {
         );
         if (hits.length) nowHit = hits[0].object as THREE.Mesh;
       }
+      if (nowHit && nowHit !== st.hovered) audioEngine.hover();
       st.hovered = nowHit;
 
       panels.forEach((p) => {
