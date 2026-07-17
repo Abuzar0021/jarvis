@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Container } from "./Container";
 import { Reveal } from "@/components/motion/Reveal";
+import { BlurTextReveal } from "@/components/motion/BlurTextReveal";
 
 export function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
@@ -37,11 +38,14 @@ export function SectionHeading({
           <Eyebrow>{eyebrow}</Eyebrow>
         </Reveal>
       ) : null}
-      <Reveal delay={0.05}>
-        <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight sm:text-4xl md:text-[2.75rem] md:leading-[1.05]">
-          {title}
-        </h2>
-      </Reveal>
+      <BlurTextReveal
+        as="h2"
+        splitBy="words"
+        stagger={0.05}
+        className="mt-4 text-balance text-3xl font-semibold tracking-tight sm:text-4xl md:text-[2.75rem] md:leading-[1.05]"
+      >
+        {title}
+      </BlurTextReveal>
       {intro ? (
         <Reveal delay={0.1}>
           <p

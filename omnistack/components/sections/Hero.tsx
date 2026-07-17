@@ -1,6 +1,7 @@
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/motion/Reveal";
+import { BlurTextReveal } from "@/components/motion/BlurTextReveal";
 import type { SiteContent } from "@/lib/types";
 
 function Headline({ text, highlight }: { text: string; highlight: string }) {
@@ -34,17 +35,27 @@ export function Hero({ site }: { site: SiteContent }) {
             </span>
           </Reveal>
 
-          <Reveal delay={0.06}>
-            <h1 className="mt-6 text-balance text-[clamp(2.75rem,6.4vw,4.75rem)] font-semibold leading-[1.02] tracking-[-0.02em]">
-              <Headline text={site.hero.headline} highlight={site.hero.highlight} />
-            </h1>
-          </Reveal>
+          <BlurTextReveal
+            as="h1"
+            splitBy="words"
+            immediate
+            delay={0.15}
+            stagger={0.08}
+            className="mt-6 text-balance text-[clamp(2.75rem,6.4vw,4.75rem)] font-semibold leading-[1.02] tracking-[-0.02em]"
+          >
+            <Headline text={site.hero.headline} highlight={site.hero.highlight} />
+          </BlurTextReveal>
 
-          <Reveal delay={0.12}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl">
-              {site.hero.subhead}
-            </p>
-          </Reveal>
+          <BlurTextReveal
+            as="p"
+            splitBy="words"
+            immediate
+            delay={0.5}
+            stagger={0.012}
+            className="mt-6 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl"
+          >
+            {site.hero.subhead}
+          </BlurTextReveal>
 
           <Reveal delay={0.18}>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">

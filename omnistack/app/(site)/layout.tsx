@@ -2,6 +2,7 @@ import { AnnouncementBar } from "@/components/site/AnnouncementBar";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
 import { WhatsAppButton } from "@/components/site/WhatsAppButton";
+import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { getServices, getSite } from "@/lib/content";
 import type { ServiceGroup } from "@/lib/types";
 
@@ -23,6 +24,7 @@ export default async function SiteLayout({
 
   return (
     <>
+      <SmoothScroll />
       <span id="top" aria-hidden />
       <a
         href="#main"

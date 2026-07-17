@@ -135,6 +135,17 @@ export function ScrollExpandMedia({
     return () => window.removeEventListener("resize", checkIfMobile);
   }, []);
 
+  // This section owns the wheel while collapsed, so pause Lenis smooth scroll
+  // until it fully expands - otherwise the two fight over the scroll position.
+  useEffect(() => {
+    if (reduceMotion) return;
+    const lenis = window.__lenis;
+    if (!lenis) return;
+    if (mediaFullyExpanded) lenis.start();
+    else lenis.stop();
+    return () => lenis.start();
+  }, [mediaFullyExpanded, reduceMotion]);
+
   const firstWord = title ? title.split(" ")[0] : "";
   const restOfTitle = title ? title.split(" ").slice(1).join(" ") : "";
 
