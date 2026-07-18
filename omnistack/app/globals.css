@@ -31,6 +31,9 @@
   /* Animations */
   --animate-marquee: marquee 40s linear infinite;
   --animate-breathe: breathe 6s ease-in-out infinite;
+  --animate-shift-glow: shiftGlow 26s ease-in-out infinite;
+  --animate-shift-glow-alt: shiftGlowAlt 32s ease-in-out infinite;
+  --animate-bob: bob 7s ease-in-out infinite;
 }
 
 @keyframes marquee {
@@ -54,9 +57,58 @@
   }
 }
 
+/* Drifting duotone glow over the hero painting. Two layers run on separate
+   paths/speeds so the light never looks like a static sticker. */
+@keyframes shiftGlow {
+  0% {
+    transform: translate3d(-8%, -6%, 0) scale(1.1);
+  }
+  33% {
+    transform: translate3d(6%, 4%, 0) scale(1.22);
+  }
+  66% {
+    transform: translate3d(2%, 9%, 0) scale(1.12);
+  }
+  100% {
+    transform: translate3d(-8%, -6%, 0) scale(1.1);
+  }
+}
+
+@keyframes shiftGlowAlt {
+  0% {
+    transform: translate3d(7%, 5%, 0) scale(1.15);
+  }
+  33% {
+    transform: translate3d(-5%, -3%, 0) scale(1.08);
+  }
+  66% {
+    transform: translate3d(-3%, -8%, 0) scale(1.24);
+  }
+  100% {
+    transform: translate3d(7%, 5%, 0) scale(1.15);
+  }
+}
+
+/* Gentle 3D bob for the floating glass widgets. */
+@keyframes bob {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, -12px, 0) rotate(-1.2deg);
+  }
+}
+
 @layer base {
   :root {
     color-scheme: light;
+
+    /* Hero canvas accent glow (Renaissance edition). Kept out of the palette
+       tokens on purpose, so no bg-/text- utilities are generated; these feed
+       the drifting duotone light inside the hero art plate. */
+    --neon-cyan: #2fe0ee;
+    --neon-magenta: #ff2fa0;
   }
 
   html {
