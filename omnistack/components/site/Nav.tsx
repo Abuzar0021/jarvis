@@ -36,11 +36,22 @@ export function Nav({
     href === "/" ? pathname === "/" : pathname.startsWith(href.split("#")[0]);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    // Pages with a full-bleed hero mark it [data-nav-hero]: the nav stays
+    // transparent over it and gains its blur/tint once you scroll past.
+    // Pages without one get the shift almost immediately.
+    const hero = document.querySelector<HTMLElement>("[data-nav-hero]");
+    const onScroll = () => {
+      const threshold = hero ? Math.max(hero.offsetHeight - 76, 8) : 8;
+      setScrolled(window.scrollY > threshold);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -90,7 +101,7 @@ export function Nav({
                         <li key={s.slug}>
                           <Link
                             href={`/services/${s.slug}`}
-                            className="block rounded-md px-2 py-1.5 text-sm text-muted transition-colors hover:bg-white/5 hover:text-fg"
+                            className="block rounded-md px-2 py-1.5 text-sm text-muted transition-colors hover:bg-fg/5 hover:text-fg"
                           >
                             {s.name}
                           </Link>

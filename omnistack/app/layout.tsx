@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { GeistMono } from "geist/font/mono";
-import "@fontsource-variable/plus-jakarta-sans";
+import "@fontsource-variable/archivo";
+import "@fontsource/instrument-serif/400.css";
+import "@fontsource/instrument-serif/400-italic.css";
 import "./globals.css";
 import { getSite } from "@/lib/content";
 import { Analytics } from "@/components/site/Analytics";
@@ -44,8 +46,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#050505",
-  colorScheme: "dark",
+  themeColor: "#f2efe6",
+  colorScheme: "light",
 };
 
 export default async function RootLayout({

@@ -26,7 +26,7 @@ export function Industries({ industries }: { industries: Industry[] }) {
           <Reveal key={ind.id} delay={(i % 3) * 0.05}>
             <Link
               href={`/industries/${ind.slug}`}
-              className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-hair bg-card px-5 py-5 transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-[0_24px_60px_-30px_rgba(212,175,55,0.4)]"
+              className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-hair bg-card px-5 py-5 transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-[0_24px_60px_-30px_rgba(27,22,14,0.14)]"
             >
               <Spotlight />
               <span className="font-medium tracking-tight">{ind.name}</span>

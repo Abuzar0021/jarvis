@@ -7,8 +7,7 @@ import {
   getSite,
   getTestimonials,
 } from "@/lib/content";
-import { CursorGlow } from "@/components/motion/CursorGlow";
-import { Hero3D } from "@/components/hero/Hero3D";
+import { Hero } from "@/components/sections/Hero";
 import { TrustStrip } from "@/components/sections/TrustStrip";
 import { ValuePillars } from "@/components/sections/ValuePillars";
 import { ServicesGrid } from "@/components/sections/ServicesGrid";
@@ -50,8 +49,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <CursorGlow />
-      <Hero3D site={site} />
+      <Hero site={site} />
       <TrustStrip label={site.trustLabel} items={trustItems} />
       <ValuePillars pillars={site.valuePillars} />
       <ServicesGrid services={featuredServices} intro={site.servicesIntro} />

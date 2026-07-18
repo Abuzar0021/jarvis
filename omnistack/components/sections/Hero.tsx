@@ -15,7 +15,7 @@ function Headline({ text, highlight }: { text: string; highlight: string }) {
   return (
     <>
       {before}
-      <span className="text-gold">{match}</span>
+      <span className="serif-accent text-gold">{match}</span>
       {after}
     </>
   );
@@ -23,7 +23,7 @@ function Headline({ text, highlight }: { text: string; highlight: string }) {
 
 export function Hero({ site }: { site: SiteContent }) {
   return (
-    <section className="relative isolate overflow-hidden">
+    <section data-nav-hero className="relative isolate overflow-hidden">
       <div className="gold-glow pointer-events-none absolute inset-x-0 top-0 -z-10 h-[70vh]" aria-hidden />
       <div className="grain absolute inset-0 -z-10" aria-hidden />
       <Container className="relative pb-20 pt-20 sm:pb-28 sm:pt-28 md:pb-36 md:pt-32">
@@ -41,7 +41,7 @@ export function Hero({ site }: { site: SiteContent }) {
             immediate
             delay={0.15}
             stagger={0.08}
-            className="mt-6 text-balance text-[clamp(2.75rem,6.4vw,4.75rem)] font-semibold leading-[1.02] tracking-[-0.02em]"
+            className="display mt-8 text-balance text-[clamp(3.25rem,9.5vw,8.5rem)]"
           >
             <Headline text={site.hero.headline} highlight={site.hero.highlight} />
           </BlurTextReveal>

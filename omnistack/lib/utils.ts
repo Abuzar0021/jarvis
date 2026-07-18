@@ -54,5 +54,6 @@ export function coverGradient(seed: string): string {
   for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) % 360;
   const a = h;
   const b = (h + 40) % 360;
-  return `linear-gradient(135deg, hsl(${a} 14% 9%) 0%, hsl(${b} 18% 6%) 60%, #050505 100%)`;
+  // Muted warm-light wash so fallback covers sit naturally on parchment.
+  return `linear-gradient(135deg, hsl(${a} 22% 88%) 0%, hsl(${b} 26% 80%) 60%, #ddd5c2 100%)`;
 }

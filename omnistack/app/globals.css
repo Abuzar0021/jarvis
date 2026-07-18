@@ -1,23 +1,26 @@
 @import "tailwindcss";
 
 /*
-  OmniStack Digital — design tokens (Blueprint Phase 1 + 7)
-  Matte black + rich gold. Premium, minimal, fast.
+  OmniStack Digital - design tokens (Renaissance redesign, Phase 1)
+  Parchment, ink, and bronze. Gallery-calm surfaces, grotesk display type,
+  serif italic accents. Token NAMES are unchanged so every existing
+  component restyles itself; only the values moved.
 */
 @theme {
   /* Color tokens */
-  --color-base: #050505; /* page background */
-  --color-surface: #0a0a0a; /* primary matte black surfaces */
-  --color-card: #121212; /* cards, panels */
-  --color-hair: #1f1f1f; /* hairline borders */
-  --color-fg: #ffffff; /* primary text */
-  --color-muted: #a3a3a3; /* secondary text */
-  --color-gold: #d4af37; /* accent only */
-  --color-gold-soft: rgba(212, 175, 55, 0.12); /* gold glows, hover washes */
+  --color-base: #f2efe6; /* page background: warm parchment */
+  --color-surface: #eae6d9; /* deeper cream surfaces (nav blur, footer) */
+  --color-card: #faf8f2; /* cards, panels: near-white warm */
+  --color-hair: #d9d3c2; /* hairline borders */
+  --color-fg: #1b160e; /* primary text: warm ink */
+  --color-muted: #6f6553; /* secondary text: olive-umber */
+  --color-gold: #8f5f28; /* accent: antique bronze ink */
+  --color-gold-soft: rgba(143, 95, 40, 0.1); /* bronze washes */
 
   /* Typography */
-  --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui,
-    -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: "Archivo Variable", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
   --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo,
     monospace;
 
@@ -53,7 +56,7 @@
 
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   html {
@@ -69,23 +72,23 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* Gold selection */
+  /* Bronze selection */
   ::selection {
-    background: rgba(212, 175, 55, 0.28);
-    color: #fff;
+    background: rgba(143, 95, 40, 0.25);
+    color: var(--color-fg);
   }
 
-  /* Accessible focus ring — 2px gold outline + offset (Blueprint Phase 11) */
+  /* Accessible focus ring - 2px bronze outline + offset */
   :where(a, button, input, textarea, select, [tabindex]):focus-visible {
     outline: 2px solid var(--color-gold);
     outline-offset: 2px;
     border-radius: 2px;
   }
 
-  /* Thin, dark scrollbar */
+  /* Thin, warm scrollbar */
   * {
     scrollbar-width: thin;
-    scrollbar-color: #2a2a2a var(--color-base);
+    scrollbar-color: #c9c2af var(--color-base);
   }
   *::-webkit-scrollbar {
     width: 10px;
@@ -95,14 +98,30 @@
     background: var(--color-base);
   }
   *::-webkit-scrollbar-thumb {
-    background: #242424;
+    background: #c9c2af;
     border-radius: 999px;
     border: 2px solid var(--color-base);
   }
 }
 
 @layer utilities {
-  /* Subtle film grain over dark sections (2–4% opacity) */
+  /* Display headline treatment: bold grotesk, tight tracking, 0.9 leading.
+     Size is set per use, e.g. text-[clamp(3.5rem,9.6vw,8.75rem)]. */
+  .display {
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+  }
+
+  /* Serif italic accent for key words inside display/subhead copy */
+  .serif-accent {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+  }
+
+  /* Subtle paper grain over sections (2-4% opacity) */
   .grain::before {
     content: "";
     position: absolute;
@@ -113,12 +132,12 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  /* Gold radial glow (hero only) */
+  /* Warm ochre radial wash (hero only) */
   .gold-glow {
     background: radial-gradient(
       60% 60% at 50% 0%,
-      rgba(212, 175, 55, 0.16) 0%,
-      rgba(212, 175, 55, 0.04) 35%,
+      rgba(143, 95, 40, 0.1) 0%,
+      rgba(143, 95, 40, 0.03) 35%,
       transparent 70%
     );
   }

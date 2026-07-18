@@ -8,7 +8,10 @@ importers:
 
   .:
     dependencies:
-      '@fontsource-variable/plus-jakarta-sans':
+      '@fontsource-variable/archivo':
+        specifier: ^5.2.8
+        version: 5.2.8
+      '@fontsource/instrument-serif':
         specifier: ^5.2.8
         version: 5.2.8
       '@gsap/react':
@@ -202,8 +205,11 @@ packages:
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@fontsource-variable/plus-jakarta-sans@5.2.8':
-    resolution: {integrity: sha512-iQecBizIdZxezODNHzOn4SvvRMrZL/S8k4MEXGDynCmUrImVW0VmX+tIAMqnADwH4haXlHSXqMgU6+kcfBQJdw==}
+  '@fontsource-variable/archivo@5.2.8':
+    resolution: {integrity: sha512-R8EotpKHEsKv7d7oiUyjyPENRi2gtAlwdTlzDCOs5BfX/LJP7jvUYJ4fF/qyd3rnbgk3r1xp33g1P57bYJfhzQ==}
+
+  '@fontsource/instrument-serif@5.2.8':
+    resolution: {integrity: sha512-s+bkz+syj2rO00Rmq9g0P+PwuLig33DR1xDR8pTWmovH1pUjwnncrFk++q9mmOex8fUQ7oW80gPpPDaw7V1MMw==}
 
   '@gsap/react@2.1.2':
     resolution: {integrity: sha512-JqliybO1837UcgH2hVOM4VO+38APk3ECNrsuSM4MuXp+rbf+/2IG2K1YJiqfTcXQHH7XlA0m3ykniFYstfq0Iw==}
@@ -2288,7 +2294,9 @@ snapshots:
       '@eslint/core': 0.17.0
       levn: 0.4.1
 
-  '@fontsource-variable/plus-jakarta-sans@5.2.8': {}
+  '@fontsource-variable/archivo@5.2.8': {}
+
+  '@fontsource/instrument-serif@5.2.8': {}
 
   '@gsap/react@2.1.2(gsap@3.15.0)(react@19.2.4)':
     dependencies:

@@ -21,7 +21,7 @@ export function ValuePillars({ pillars }: { pillars: ValuePillar[] }) {
         {pillars.map((p, i) => (
           <Reveal key={p.title} delay={i * 0.08}>
             <div
-              className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-hair bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-[0_24px_60px_-30px_rgba(212,175,55,0.4)]"
+              className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-hair bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-[0_24px_60px_-30px_rgba(27,22,14,0.14)]"
             >
               <Spotlight />
               <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-gold/30 bg-gold-soft text-gold">

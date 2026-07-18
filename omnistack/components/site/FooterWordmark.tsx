@@ -81,9 +81,9 @@ export function FooterWordmark() {
       >
         <defs>
           <linearGradient id="fw-gold" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stopColor="#8a6d1f" />
-            <stop offset="0.5" stopColor="#e6c14e" />
-            <stop offset="1" stopColor="#8a6d1f" />
+            <stop offset="0" stopColor="#8f5f28" />
+            <stop offset="0.5" stopColor="#b98a4a" />
+            <stop offset="1" stopColor="#8f5f28" />
           </linearGradient>
         </defs>
         {STRINGS.map((s, i) => (
