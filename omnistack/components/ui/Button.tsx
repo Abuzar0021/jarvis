@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "secondary" | "ghost" | "solid";
+type Variant = "primary" | "secondary" | "ghost" | "solid" | "light" | "lightOutline";
 type Size = "sm" | "md" | "lg";
 
 const base =
@@ -15,6 +15,11 @@ const variants: Record<Variant, string> = {
   secondary:
     "border border-hair bg-transparent text-fg hover:border-fg/40 hover:bg-fg/5",
   ghost: "text-fg hover:text-gold",
+  // Light-on-dark variants for the full-bleed painting acts.
+  light:
+    "bg-[#f4f1ea] text-[#141019] hover:bg-white hover:-translate-y-0.5 shadow-[0_14px_44px_-14px_rgba(0,0,0,0.6)]",
+  lightOutline:
+    "border border-white/35 bg-white/5 text-[#f4f1ea] backdrop-blur-sm hover:border-white/70 hover:bg-white/12",
 };
 
 const sizes: Record<Size, string> = {

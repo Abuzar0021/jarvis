@@ -29,6 +29,7 @@ export function Nav({
   ctaLabel: string;
 }) {
   const [scrolled, setScrolled] = useState(false);
+  const [heroDark, setHeroDark] = useState(false);
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
   const pathname = usePathname();
@@ -37,11 +38,17 @@ export function Nav({
 
   useEffect(() => {
     // Pages with a full-bleed hero mark it [data-nav-hero]: the nav stays
-    // transparent over it and gains its blur/tint once you scroll past.
-    // Pages without one get the shift almost immediately.
+    // transparent over it and gains its blur/tint once you scroll past. When
+    // that hero is a dark canvas ([data-nav-tone="dark"]) the transparent nav
+    // switches to light text so it reads over the paintings.
     const hero = document.querySelector<HTMLElement>("[data-nav-hero]");
     const onScroll = () => {
-      const threshold = hero ? Math.max(hero.offsetHeight - 76, 8) : 8;
+      setHeroDark(hero?.getAttribute("data-nav-tone") === "dark");
+      // Stay transparent over the whole hero (a pinned full-screen stage can be
+      // many viewports tall); flip to the blur bar once it has scrolled past.
+      const threshold = hero
+        ? Math.max(hero.offsetHeight - window.innerHeight, 8)
+        : 8;
       setScrolled(window.scrollY > threshold);
     };
     onScroll();
@@ -60,6 +67,21 @@ export function Nav({
     };
   }, [open]);
 
+  // Light-on-dark treatment while transparent over a dark canvas hero.
+  const light = heroDark && !scrolled && !open;
+
+  const linkClass = (active: boolean) =>
+    cn(
+      "rounded-full px-3.5 py-2 text-sm transition-colors",
+      light
+        ? active
+          ? "text-white"
+          : "text-white/70 hover:text-white"
+        : active
+          ? "text-fg"
+          : "text-muted hover:text-fg",
+    );
+
   return (
     <header
       className={cn(
@@ -70,7 +92,7 @@ export function Nav({
       )}
     >
       <nav className="mx-auto flex h-[68px] max-w-[1240px] items-center justify-between px-5 sm:px-8">
-        <Logo brand={brand} />
+        <Logo brand={brand} tone={light ? "light" : "dark"} />
 
         {/* Desktop links */}
         <div className="hidden items-center gap-1 lg:flex">
@@ -79,8 +101,8 @@ export function Nav({
               href="/services"
               aria-current={isActive("/services") ? "page" : undefined}
               className={cn(
-                "flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm transition-colors hover:text-fg",
-                isActive("/services") ? "text-fg" : "text-muted",
+                "flex items-center gap-1.5",
+                linkClass(isActive("/services")),
               )}
             >
               Services
@@ -116,7 +138,7 @@ export function Nav({
                     className="inline-flex items-center gap-2 text-sm font-medium text-gold hover:underline"
                   >
                     Explore all services
-                    <span aria-hidden>→</span>
+                    <span aria-hidden>&rarr;</span>
                   </Link>
                 </div>
               </div>
@@ -128,10 +150,7 @@ export function Nav({
               key={l.href}
               href={l.href}
               aria-current={isActive(l.href) ? "page" : undefined}
-              className={cn(
-                "rounded-full px-3.5 py-2 text-sm transition-colors hover:text-fg",
-                isActive(l.href) ? "text-fg" : "text-muted",
-              )}
+              className={linkClass(isActive(l.href))}
             >
               {l.label}
             </Link>
@@ -142,14 +161,24 @@ export function Nav({
           <Link
             href="/search"
             aria-label="Search"
-            className="hidden h-10 w-10 items-center justify-center rounded-full border border-hair text-muted transition-colors hover:border-gold/50 hover:text-fg lg:flex"
+            className={cn(
+              "hidden h-10 w-10 items-center justify-center rounded-full border transition-colors lg:flex",
+              light
+                ? "border-white/25 text-white/70 hover:border-white/60 hover:text-white"
+                : "border-hair text-muted hover:border-gold/50 hover:text-fg",
+            )}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
               <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.6" />
               <path d="M21 21l-4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
             </svg>
           </Link>
-          <Button href="/book" variant="primary" size="sm" className="hidden sm:inline-flex">
+          <Button
+            href="/book"
+            variant={light ? "light" : "primary"}
+            size="sm"
+            className="hidden sm:inline-flex"
+          >
             {ctaLabel}
           </Button>
           {/* Mobile toggle */}
@@ -159,7 +188,10 @@ export function Nav({
             aria-expanded={open}
             aria-controls="mobile-menu"
             onClick={() => setOpen((v) => !v)}
-            className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border border-hair text-fg lg:hidden"
+            className={cn(
+              "relative z-50 flex h-10 w-10 items-center justify-center rounded-full border lg:hidden",
+              light ? "border-white/25 text-white" : "border-hair text-fg",
+            )}
           >
             <span className="sr-only">Menu</span>
             <div className="relative h-4 w-5">

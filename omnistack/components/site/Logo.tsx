@@ -19,16 +19,20 @@ export function LogoMark({ className }: { className?: string }) {
 export function Logo({
   brand,
   className,
+  tone = "dark",
 }: {
   brand: string;
   className?: string;
+  tone?: "light" | "dark";
 }) {
   const [first, ...rest] = brand.split(" ");
+  const light = tone === "light";
   return (
     <Link
       href="/"
       className={cn(
-        "group inline-flex items-center gap-2.5 text-fg",
+        "group inline-flex items-center gap-2.5",
+        light ? "text-white" : "text-fg",
         className,
       )}
       aria-label={`${brand} - home`}
@@ -36,7 +40,9 @@ export function Logo({
       <LogoMark className="transition-transform duration-300 group-hover:rotate-3" />
       <span className="text-[15px] font-semibold tracking-tight">
         {first}
-        {rest.length ? <span className="text-muted"> {rest.join(" ")}</span> : null}
+        {rest.length ? (
+          <span className={light ? "text-white/60" : "text-muted"}> {rest.join(" ")}</span>
+        ) : null}
       </span>
     </Link>
   );
