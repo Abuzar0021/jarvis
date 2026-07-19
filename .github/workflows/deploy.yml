@@ -21,7 +21,23 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      # Until the VPS_* secrets are added (see SETUP.md), skip cleanly instead
+      # of failing on every push. Adding the secrets activates real deploys
+      # with no further changes.
+      - name: Check deploy secrets
+        id: check
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+        run: |
+          if [ -z "$VPS_HOST" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::VPS secrets are not configured. Skipping deploy. See SETUP.md (Automatic deploy) to enable."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Configure SSH
+        if: steps.check.outputs.configured == 'true'
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_PORT: ${{ secrets.VPS_PORT }}
@@ -35,6 +51,7 @@ jobs:
           ssh-keyscan -p "${VPS_PORT:-22}" -H "$VPS_HOST" >> ~/.ssh/known_hosts 2>/dev/null
 
       - name: Deploy over SSH
+        if: steps.check.outputs.configured == 'true'
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_PORT: ${{ secrets.VPS_PORT }}
@@ -72,6 +89,7 @@ jobs:
           REMOTE
 
       - name: Health check
+        if: steps.check.outputs.configured == 'true'
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_PORT: ${{ secrets.VPS_PORT }}
