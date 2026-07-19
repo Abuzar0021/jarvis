@@ -31,7 +31,7 @@ function waveD(y: number, amp: number, phase: number, cycles = 2.4) {
 }
 
 /**
- * Interactive footer centerpiece: seven gold strings, evenly stacked like the
+ * Interactive footer centerpiece: seven neon strings, evenly stacked like the
  * OmniStack mark, that you can pluck with the cursor. Each string rings with a
  * damped sine wave (redrawn each frame) and plays a synthesized note from the
  * audio engine. Purely decorative delight, so the SVG is aria-hidden and the
@@ -81,9 +81,9 @@ export function FooterWordmark() {
       >
         <defs>
           <linearGradient id="fw-gold" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stopColor="#8f5f28" />
-            <stop offset="0.5" stopColor="#b98a4a" />
-            <stop offset="1" stopColor="#8f5f28" />
+            <stop offset="0" stopColor="#2fe0ee" />
+            <stop offset="0.5" stopColor="#ff2fa0" />
+            <stop offset="1" stopColor="#2fe0ee" />
           </linearGradient>
         </defs>
         {STRINGS.map((s, i) => (

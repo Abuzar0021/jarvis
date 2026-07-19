@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Marquee } from "@/components/motion/Marquee";
 
 /**
- * Infinite ticker band bridging the act stage and the light coda: the trust
+ * Infinite ticker band bridging the painting scenes and the coda: the trust
  * items scroll as an engraved-plate marquee, with the woodcut horn engraving
  * repeating as a textural medallion between entries. Pure CSS motion via
  * Marquee (pauses on hover and under reduced motion).
@@ -11,7 +11,7 @@ export function TickerBand({ items }: { items: string[] }) {
   return (
     <section
       aria-label="Who we work with"
-      className="border-y border-white/10 bg-[#0b0a07] py-8"
+      className="border-y border-white/10 bg-black py-8"
     >
       <Marquee>
         {items.map((item) => (

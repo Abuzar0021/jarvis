@@ -33,7 +33,7 @@ export default async function PricingPage() {
                 className={cn(
                   "relative flex h-full flex-col rounded-3xl border p-8 transition-colors",
                   m.highlighted
-                    ? "border-gold/50 bg-card shadow-[0_30px_80px_-40px_rgba(27,22,14,0.2)]"
+                    ? "border-gold/50 bg-card shadow-[0_30px_80px_-40px_rgba(47,224,238,0.2)]"
                     : "border-hair bg-card",
                 )}
               >

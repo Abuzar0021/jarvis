@@ -39,8 +39,8 @@ export default function GlobalError({
           onClick={reset}
           style={{
             marginTop: "24px",
-            border: "1px solid rgba(212,175,55,0.6)",
-            background: "rgba(212,175,55,0.12)",
+            border: "1px solid rgba(47,224,238,0.6)",
+            background: "rgba(47,224,238,0.12)",
             color: "#fff",
             borderRadius: "999px",
             padding: "10px 20px",

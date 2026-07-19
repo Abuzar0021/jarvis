@@ -48,12 +48,12 @@ export function readingTime(body: string): number {
   return Math.max(1, Math.round(words / 200));
 }
 
-/** Deterministic gold-tinted gradient for project covers without an image. */
+/** Deterministic jewel-toned gradient for project covers without an image. */
 export function coverGradient(seed: string): string {
   let h = 0;
   for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) % 360;
   const a = h;
   const b = (h + 40) % 360;
-  // Muted warm-light wash so fallback covers sit naturally on parchment.
-  return `linear-gradient(135deg, hsl(${a} 22% 88%) 0%, hsl(${b} 26% 80%) 60%, #ddd5c2 100%)`;
+  // Dark saturated wash so fallback covers sit naturally on the black theme.
+  return `linear-gradient(135deg, hsl(${a} 45% 20%) 0%, hsl(${b} 50% 12%) 60%, #0a0a0a 100%)`;
 }

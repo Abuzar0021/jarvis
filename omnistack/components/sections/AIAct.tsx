@@ -38,7 +38,7 @@ export function AIAct({ ai }: { ai: SiteContent["aiShowcase"] }) {
             <span className="h-1.5 w-1.5 rounded-full bg-[var(--neon-magenta)]" aria-hidden />
             {ai.eyebrow}
           </span>
-          <h2 className="display mt-6 text-balance text-[clamp(2.25rem,4.4vw,4rem)]">
+          <h2 className="display-serif mt-6 text-balance text-[clamp(2.25rem,4.4vw,4rem)]">
             {ai.title}
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-white/70">{ai.body}</p>

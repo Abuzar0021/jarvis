@@ -1,21 +1,21 @@
 @import "tailwindcss";
 
 /*
-  OmniStack Digital - design tokens (Renaissance redesign, Phase 1)
-  Parchment, ink, and bronze. Gallery-calm surfaces, grotesk display type,
-  serif italic accents. Token NAMES are unchanged so every existing
-  component restyles itself; only the values moved.
+  OmniStack Digital - design tokens (Living Renaissance redesign)
+  Pure black editorial ground, off-white ink, cyan accent (unifying with the
+  cinematic scenes' neon language). Token NAMES are unchanged so every
+  existing component restyles itself; only the values moved.
 */
 @theme {
   /* Color tokens */
-  --color-page: #f2efe6; /* page background: warm parchment */
-  --color-surface: #eae6d9; /* deeper cream surfaces (nav blur, footer) */
-  --color-card: #faf8f2; /* cards, panels: near-white warm */
-  --color-hair: #d9d3c2; /* hairline borders */
-  --color-fg: #1b160e; /* primary text: warm ink */
-  --color-muted: #6f6553; /* secondary text: olive-umber */
-  --color-gold: #8f5f28; /* accent: antique bronze ink */
-  --color-gold-soft: rgba(143, 95, 40, 0.1); /* bronze washes */
+  --color-page: #000000; /* page background: pure black */
+  --color-surface: #0a0a0a; /* nav blur, footer: barely-elevated black */
+  --color-card: #111110; /* cards, panels: elevated black */
+  --color-hair: rgba(255, 255, 255, 0.15); /* hairline borders */
+  --color-fg: #f4f1ea; /* primary text: off-white */
+  --color-muted: #8f8b82; /* secondary text: warm gray */
+  --color-gold: #2fe0ee; /* accent: cyan (matches the scenes' neon-cyan) */
+  --color-gold-soft: rgba(47, 224, 238, 0.12); /* cyan washes */
 
   /* Typography */
   --font-sans: "Archivo Variable", ui-sans-serif, system-ui, -apple-system,
@@ -102,13 +102,32 @@
 
 @layer base {
   :root {
-    color-scheme: light;
+    color-scheme: dark;
 
-    /* Hero canvas accent glow (Renaissance edition). Kept out of the palette
-       tokens on purpose, so no bg-/text- utilities are generated; these feed
-       the drifting duotone light inside the hero art plate. */
+    /* Scene accent glow. Kept out of the palette tokens on purpose, so no
+       bg-/text- utilities are generated; these feed the drifting duotone
+       light inside the painting scenes and are also referenced directly
+       (e.g. var(--neon-cyan)) anywhere a raw color value is needed. */
     --neon-cyan: #2fe0ee;
     --neon-magenta: #ff2fa0;
+  }
+
+  /* The Studio CMS is a back-office editing tool, not part of the public
+     "Living Renaissance" site - it stays on the original light, practical
+     palette so long editing sessions over forms/tables stay legible. Since
+     Tailwind's bg-page/text-fg/etc. utilities just read these custom
+     properties, redeclaring them here re-scopes every admin component
+     without touching any of their className strings. */
+  [data-admin-theme] {
+    color-scheme: light;
+    --color-page: #f2efe6;
+    --color-surface: #eae6d9;
+    --color-card: #faf8f2;
+    --color-hair: #d9d3c2;
+    --color-fg: #1b160e;
+    --color-muted: #6f6553;
+    --color-gold: #8f5f28;
+    --color-gold-soft: rgba(143, 95, 40, 0.1);
   }
 
   html {
@@ -124,23 +143,23 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* Bronze selection */
+  /* Cyan selection */
   ::selection {
-    background: rgba(143, 95, 40, 0.25);
+    background: rgba(47, 224, 238, 0.25);
     color: var(--color-fg);
   }
 
-  /* Accessible focus ring - 2px bronze outline + offset */
+  /* Accessible focus ring - 2px cyan outline + offset */
   :where(a, button, input, textarea, select, [tabindex]):focus-visible {
     outline: 2px solid var(--color-gold);
     outline-offset: 2px;
     border-radius: 2px;
   }
 
-  /* Thin, warm scrollbar */
+  /* Thin, dark scrollbar */
   * {
     scrollbar-width: thin;
-    scrollbar-color: #c9c2af var(--color-page);
+    scrollbar-color: #3a3a38 var(--color-page);
   }
   *::-webkit-scrollbar {
     width: 10px;
@@ -150,7 +169,7 @@
     background: var(--color-page);
   }
   *::-webkit-scrollbar-thumb {
-    background: #c9c2af;
+    background: #3a3a38;
     border-radius: 999px;
     border: 2px solid var(--color-page);
   }
@@ -158,11 +177,23 @@
 
 @layer utilities {
   /* Display headline treatment: bold grotesk, tight tracking, 0.9 leading.
-     Size is set per use, e.g. text-[clamp(3.5rem,9.6vw,8.75rem)]. */
+     Size is set per use, e.g. text-[clamp(3.5rem,9.6vw,8.75rem)]. For the
+     giant page-anchoring headlines, pair with .display-serif instead. */
   .display {
     font-weight: 700;
     letter-spacing: -0.04em;
     line-height: 0.92;
+  }
+
+  /* Giant kinetic serif headline treatment: the large, page-anchoring
+     statement per section (SectionHeading, page-top h1s). Instrument Serif
+     only ships weight 400, so no bold override here - it reads plenty bold
+     at display sizes on its own (see the Hero scene, which uses it bare). */
+  .display-serif {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 0.98;
   }
 
   /* Serif italic accent for key words inside display/subhead copy */
@@ -184,12 +215,12 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  /* Warm ochre radial wash (hero only) */
+  /* Cyan radial wash (page-top headers) */
   .gold-glow {
     background: radial-gradient(
       60% 60% at 50% 0%,
-      rgba(143, 95, 40, 0.1) 0%,
-      rgba(143, 95, 40, 0.03) 35%,
+      rgba(47, 224, 238, 0.1) 0%,
+      rgba(47, 224, 238, 0.03) 35%,
       transparent 70%
     );
   }

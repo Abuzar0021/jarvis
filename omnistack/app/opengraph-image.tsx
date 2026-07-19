@@ -20,7 +20,7 @@ export default async function OpengraphImage() {
           justifyContent: "space-between",
           backgroundColor: "#050505",
           backgroundImage:
-            "radial-gradient(60% 60% at 50% 0%, rgba(212,175,55,0.18) 0%, rgba(5,5,5,0) 60%)",
+            "radial-gradient(60% 60% at 50% 0%, rgba(47,224,238,0.18) 0%, rgba(5,5,5,0) 60%)",
           padding: "72px",
           fontFamily: "sans-serif",
         }}
@@ -33,9 +33,9 @@ export default async function OpengraphImage() {
               gap: "6px",
             }}
           >
-            <div style={{ width: "64px", height: "12px", borderRadius: "4px", border: "2px solid #D4AF37" }} />
-            <div style={{ width: "64px", height: "12px", borderRadius: "4px", border: "2px solid rgba(212,175,55,0.7)" }} />
-            <div style={{ width: "64px", height: "12px", borderRadius: "4px", border: "2px solid rgba(212,175,55,0.4)" }} />
+            <div style={{ width: "64px", height: "12px", borderRadius: "4px", border: "2px solid #2fe0ee" }} />
+            <div style={{ width: "64px", height: "12px", borderRadius: "4px", border: "2px solid rgba(47,224,238,0.7)" }} />
+            <div style={{ width: "64px", height: "12px", borderRadius: "4px", border: "2px solid rgba(47,224,238,0.4)" }} />
           </div>
           <div style={{ fontSize: "30px", fontWeight: 600, color: "#ffffff" }}>{site.brand}</div>
         </div>
@@ -59,7 +59,7 @@ export default async function OpengraphImage() {
         </div>
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ fontSize: "24px", color: "#D4AF37" }}>{locations}</div>
+          <div style={{ fontSize: "24px", color: "#2fe0ee" }}>{locations}</div>
           <div style={{ fontSize: "24px", color: "#A3A3A3" }}>{site.contact.email}</div>
         </div>
       </div>

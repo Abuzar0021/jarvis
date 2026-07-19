@@ -78,7 +78,7 @@ export default async function ServicePage({
             </div>
           </Reveal>
           <Reveal delay={0.08}>
-            <h1 className="mt-4 max-w-3xl text-balance text-4xl font-semibold tracking-tight sm:text-5xl md:text-[3.25rem] md:leading-[1.05]">
+            <h1 className="display-serif mt-4 max-w-3xl text-balance text-4xl sm:text-5xl md:text-[3.25rem]">
               {service.name}
             </h1>
           </Reveal>

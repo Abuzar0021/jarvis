@@ -35,7 +35,7 @@ export function ClosingAct({
             </span>
           </Reveal>
           <Reveal delay={0.06}>
-            <h2 className="display mt-7 text-balance text-[clamp(2.75rem,6.5vw,6rem)]">
+            <h2 className="display-serif mt-7 text-balance text-[clamp(2.75rem,6.5vw,6rem)]">
               {cta.headline}
             </h2>
           </Reveal>

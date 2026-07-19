@@ -33,7 +33,7 @@ export function Spotlight() {
       className="pointer-events-none absolute inset-0 z-20 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
       style={{
         background:
-          "radial-gradient(420px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(143,95,40,0.08), transparent 70%)",
+          "radial-gradient(420px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(47,224,238,0.1), transparent 70%)",
       }}
     />
   );

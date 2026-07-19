@@ -42,7 +42,7 @@ export function SectionHeading({
         as="h2"
         splitBy="words"
         stagger={0.05}
-        className="mt-4 text-balance text-3xl font-semibold tracking-tight sm:text-4xl md:text-[2.75rem] md:leading-[1.05]"
+        className="display-serif mt-4 text-balance text-3xl sm:text-4xl md:text-[2.75rem]"
       >
         {title}
       </BlurTextReveal>

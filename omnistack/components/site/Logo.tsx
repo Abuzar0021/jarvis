@@ -9,9 +9,9 @@ export function LogoMark({ className }: { className?: string }) {
       fill="none"
       aria-hidden
     >
-      <rect x="6" y="4" width="20" height="7" rx="2.4" stroke="#8f5f28" strokeWidth="1.6" />
-      <rect x="6" y="12.5" width="20" height="7" rx="2.4" stroke="#8f5f28" strokeWidth="1.6" opacity="0.7" />
-      <rect x="6" y="21" width="20" height="7" rx="2.4" stroke="#8f5f28" strokeWidth="1.6" opacity="0.4" />
+      <rect x="6" y="4" width="20" height="7" rx="2.4" stroke="#2fe0ee" strokeWidth="1.6" />
+      <rect x="6" y="12.5" width="20" height="7" rx="2.4" stroke="#2fe0ee" strokeWidth="1.6" opacity="0.7" />
+      <rect x="6" y="21" width="20" height="7" rx="2.4" stroke="#2fe0ee" strokeWidth="1.6" opacity="0.4" />
     </svg>
   );
 }

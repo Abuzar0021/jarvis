@@ -27,7 +27,7 @@ export function ServicesAct({
           </span>
         </Reveal>
         <Reveal delay={0.06}>
-          <h2 className="display mt-6 text-balance text-[clamp(2.25rem,4.6vw,4.25rem)]">
+          <h2 className="display-serif mt-6 text-balance text-[clamp(2.25rem,4.6vw,4.25rem)]">
             {intro}
           </h2>
         </Reveal>

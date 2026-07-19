@@ -29,7 +29,6 @@ export function Nav({
   ctaLabel: string;
 }) {
   const [scrolled, setScrolled] = useState(false);
-  const [heroDark, setHeroDark] = useState(false);
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
   const pathname = usePathname();
@@ -38,18 +37,16 @@ export function Nav({
 
   useEffect(() => {
     // Pages with a full-bleed hero mark it [data-nav-hero]: the nav stays
-    // transparent over it and gains its blur/tint once you scroll past. When
-    // that hero is a dark canvas ([data-nav-tone="dark"]) the transparent nav
-    // switches to light text so it reads over the paintings. A page can chain
-    // several dark sentinels back to back (e.g. the Hero ScrollScene followed
-    // by the Editions wipe stage) - they're treated as one continuous dark run.
+    // transparent over it and gains its blur/tint once you scroll past. The
+    // whole site is dark now, so there's no separate light/dark text state
+    // to track any more - just when to switch from transparent to the
+    // blurred bar. A page can chain several sentinels back to back (e.g.
+    // the Hero ScrollScene followed by the other painting scenes) - they're
+    // treated as one continuous run for this threshold.
     const heroes = Array.from(
       document.querySelectorAll<HTMLElement>("[data-nav-hero]"),
     );
     const onScroll = () => {
-      setHeroDark(heroes[0]?.getAttribute("data-nav-tone") === "dark");
-      // Stay transparent over the whole run (each section can be many
-      // viewports tall); flip to the blur bar once it has all scrolled past.
       const runHeight = heroes.reduce((sum, el) => sum + el.offsetHeight, 0);
       const threshold = runHeight ? Math.max(runHeight - window.innerHeight, 8) : 8;
       setScrolled(window.scrollY > threshold);
@@ -70,19 +67,10 @@ export function Nav({
     };
   }, [open]);
 
-  // Light-on-dark treatment while transparent over a dark canvas hero.
-  const light = heroDark && !scrolled && !open;
-
   const linkClass = (active: boolean) =>
     cn(
       "rounded-full px-3.5 py-2 text-sm transition-colors",
-      light
-        ? active
-          ? "text-white"
-          : "text-white/70 hover:text-white"
-        : active
-          ? "text-fg"
-          : "text-muted hover:text-fg",
+      active ? "text-fg" : "text-muted hover:text-fg",
     );
 
   return (
@@ -95,7 +83,7 @@ export function Nav({
       )}
     >
       <nav className="mx-auto flex h-[68px] max-w-[1240px] items-center justify-between px-5 sm:px-8">
-        <Logo brand={brand} tone={light ? "light" : "dark"} />
+        <Logo brand={brand} />
 
         {/* Desktop links */}
         <div className="hidden items-center gap-1 lg:flex">
@@ -164,24 +152,14 @@ export function Nav({
           <Link
             href="/search"
             aria-label="Search"
-            className={cn(
-              "hidden h-10 w-10 items-center justify-center rounded-full border transition-colors lg:flex",
-              light
-                ? "border-white/25 text-white/70 hover:border-white/60 hover:text-white"
-                : "border-hair text-muted hover:border-gold/50 hover:text-fg",
-            )}
+            className="hidden h-10 w-10 items-center justify-center rounded-full border border-hair text-muted transition-colors hover:border-gold/50 hover:text-fg lg:flex"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
               <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.6" />
               <path d="M21 21l-4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
             </svg>
           </Link>
-          <Button
-            href="/book"
-            variant={light ? "light" : "primary"}
-            size="sm"
-            className="hidden sm:inline-flex"
-          >
+          <Button href="/book" variant="primary" size="sm" className="hidden sm:inline-flex">
             {ctaLabel}
           </Button>
           {/* Mobile toggle */}
@@ -191,10 +169,7 @@ export function Nav({
             aria-expanded={open}
             aria-controls="mobile-menu"
             onClick={() => setOpen((v) => !v)}
-            className={cn(
-              "relative z-50 flex h-10 w-10 items-center justify-center rounded-full border lg:hidden",
-              light ? "border-white/25 text-white" : "border-hair text-fg",
-            )}
+            className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border border-hair text-fg lg:hidden"
           >
             <span className="sr-only">Menu</span>
             <div className="relative h-4 w-5">

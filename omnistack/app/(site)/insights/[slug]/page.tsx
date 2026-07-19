@@ -80,7 +80,7 @@ export default async function PostPage({
             </div>
           </Reveal>
           <Reveal delay={0.08}>
-            <h1 className="mt-4 max-w-3xl text-balance text-4xl font-semibold tracking-tight sm:text-5xl md:leading-[1.07]">
+            <h1 className="display-serif mt-4 max-w-3xl text-balance text-4xl sm:text-5xl">
               {post.title}
             </h1>
           </Reveal>
