@@ -1,4 +1,4 @@
-# OmniStack Digital — Setup & Deployment
+# OmniStack Digital - Setup & Deployment
 
 ## Local development
 
@@ -23,10 +23,10 @@ CI runs all three on every push (`.github/workflows/ci.yml`).
 
 Copy `.env.example` → `.env.local` (dev) or `.env` (Docker). Set before launch:
 
-- `ADMIN_PASSWORD`, `ADMIN_SECRET` — admin login + cookie signing.
-- `NEXT_PUBLIC_SITE_URL` — your domain (canonicals, sitemap, OG, feed).
-- `SMTP_*` / `CONTACT_TO` — email notifications for enquiries (optional).
-- `NEXT_PUBLIC_UMAMI_SRC` / `NEXT_PUBLIC_UMAMI_WEBSITE_ID` — analytics (optional).
+- `ADMIN_PASSWORD`, `ADMIN_SECRET` - admin login + cookie signing.
+- `NEXT_PUBLIC_SITE_URL` - your domain (canonicals, sitemap, OG, feed).
+- `SMTP_*` / `CONTACT_TO` - email notifications for enquiries (optional).
+- `NEXT_PUBLIC_UMAMI_SRC` / `NEXT_PUBLIC_UMAMI_WEBSITE_ID` - analytics (optional).
 
 The site validates env on startup and logs warnings for anything missing.
 

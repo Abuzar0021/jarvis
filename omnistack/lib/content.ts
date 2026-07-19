@@ -39,7 +39,7 @@ const FALLBACK_SITE: SiteContent = {
   brand: "OmniStack Digital",
   tagline: "Products that feel inevitable.",
   description:
-    "The senior team that owns brand, design, engineering, and AI — so your product ships fast and feels like it was always meant to exist.",
+    "The senior team that owns brand, design, engineering, and AI - so your product ships fast and feels like it was always meant to exist.",
   founder: "Zar",
   about: { heading: "", story: "" },
   announcement: { enabled: false, text: "", linkLabel: "", linkHref: "" },
@@ -48,7 +48,7 @@ const FALLBACK_SITE: SiteContent = {
     headline: "Products that feel inevitable.",
     highlight: "inevitable",
     subhead:
-      "We're the senior team that owns brand, design, engineering, and AI — so your product ships fast and feels like it was always meant to exist.",
+      "We're the senior team that owns brand, design, engineering, and AI - so your product ships fast and feels like it was always meant to exist.",
     primaryCta: { label: "Book a Call", href: "/contact" },
     secondaryCta: { label: "See our work", href: "/work" },
   },
@@ -76,7 +76,7 @@ const FALLBACK_SITE: SiteContent = {
       { city: "Dublin", country: "Ireland" },
       { city: "Jakarta", country: "Indonesia" },
     ],
-    hours: "Mon–Fri",
+    hours: "Mon-Fri",
     responseTime: "We reply within one business day.",
   },
   social: [],

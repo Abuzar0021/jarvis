@@ -22,7 +22,7 @@ interface ScrollExpandMediaProps {
  * Full-viewport scroll-gated media reveal: a small media frame grows to fill
  * the screen as the visitor scrolls, then releases normal page scroll.
  * Because it captures wheel/touch input while collapsed, it only behaves
- * correctly as the first element on a page — never insert it mid-page.
+ * correctly as the first element on a page - never insert it mid-page.
  *
  * If a caller ever needs to swap `mediaType`/`mediaSrc` on a mounted
  * instance, pass a different `key` so React remounts it with fresh state
@@ -97,7 +97,7 @@ export function ScrollExpandMedia({
       if (!mediaFullyExpanded) window.scrollTo(0, 0);
     };
 
-    // Keyboard users can't drive wheel/touch deltas — give them a direct way
+    // Keyboard users can't drive wheel/touch deltas - give them a direct way
     // through instead of leaving them stuck on a section that eats scroll.
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!mediaFullyExpanded && (e.key === "PageDown" || e.key === "ArrowDown" || e.key === " " || e.key === "End")) {

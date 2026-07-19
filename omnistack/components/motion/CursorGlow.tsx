@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useReducedMotion } from "motion/react";
 
 /**
- * Faint ambient light that drifts toward the cursor. Purely decorative —
+ * Faint ambient light that drifts toward the cursor. Purely decorative -
  * mutates a ref'd element's transform directly rather than via state, and
  * is skipped entirely under prefers-reduced-motion.
  */

@@ -55,7 +55,7 @@ export function PostsEditor({ initial }: { initial: Post[] }) {
               <Field label="Author" value={p.author} onChange={(v) => patch(i, { author: v })} />
               <Field label="Published date" value={p.publishedAt} onChange={(v) => patch(i, { publishedAt: v })} type="date" />
             </div>
-            <ImageField label="Cover image" value={p.cover} onChange={(v) => patch(i, { cover: v })} hint="Optional — a branded gradient is used if empty." />
+            <ImageField label="Cover image" value={p.cover} onChange={(v) => patch(i, { cover: v })} hint="Optional - a branded gradient is used if empty." />
             <TextArea label="Excerpt" value={p.excerpt} onChange={(v) => patch(i, { excerpt: v })} rows={2} hint="Short summary shown on cards." />
             <TextArea
               label="Body"
@@ -65,8 +65,8 @@ export function PostsEditor({ initial }: { initial: Post[] }) {
               hint="Use ## for headings, - for bullet points, and a blank line between paragraphs."
             />
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="SEO title" value={p.seoTitle} onChange={(v) => patch(i, { seoTitle: v })} hint="Optional — falls back to Title." />
-              <Field label="SEO description" value={p.seoDescription} onChange={(v) => patch(i, { seoDescription: v })} hint="Optional — falls back to Excerpt." />
+              <Field label="SEO title" value={p.seoTitle} onChange={(v) => patch(i, { seoTitle: v })} hint="Optional - falls back to Title." />
+              <Field label="SEO description" value={p.seoDescription} onChange={(v) => patch(i, { seoDescription: v })} hint="Optional - falls back to Excerpt." />
             </div>
             <div className="flex flex-wrap items-center justify-between gap-4 border-t border-hair pt-4">
               <Toggle label="Feature on homepage" checked={p.featured} onChange={(v) => patch(i, { featured: v })} />

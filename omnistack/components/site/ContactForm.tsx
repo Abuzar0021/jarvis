@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const BUDGETS = ["Not sure yet", "Under €2k", "€2k–€5k", "€5k–€10k", "€10k+"];
+const BUDGETS = ["Not sure yet", "Under €2k", "€2k-€5k", "€5k-€10k", "€10k+"];
 
 const inputCls =
   "h-12 w-full rounded-xl border border-hair bg-card px-4 text-sm text-fg placeholder:text-muted/60 transition-colors focus:border-gold/60 focus:outline-none";

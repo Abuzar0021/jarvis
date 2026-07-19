@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
     await addLead(lead);
 
     const site = await getSite();
-    // Best-effort email notification — never fails the request.
+    // Best-effort email notification - never fails the request.
     await sendLeadEmail(lead, site).catch(() => undefined);
 
     logger.info("lead.received", { source: lead.source, page: lead.page });

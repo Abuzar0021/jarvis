@@ -12,7 +12,7 @@ export const contactSchema = z.object({
   source: z.string().trim().max(40).optional().default("contact"),
   page: z.string().trim().max(200).optional().default(""),
   utm: z.string().trim().max(400).optional().default(""),
-  // Honeypot — must be empty.
+  // Honeypot - must be empty.
   website: z.string().max(0).optional().default(""),
 });
 export type ContactInput = z.infer<typeof contactSchema>;

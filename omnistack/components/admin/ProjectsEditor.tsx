@@ -78,7 +78,7 @@ export function ProjectsEditor({
     { value: "", label: "None" },
     ...testimonials.map((t) => ({
       value: t.id,
-      label: `${t.company || t.authorRole || "Quote"} — ${t.quote.slice(0, 32)}…`,
+      label: `${t.company || t.authorRole || "Quote"} - ${t.quote.slice(0, 32)}…`,
     })),
   ];
 
@@ -111,8 +111,8 @@ export function ProjectsEditor({
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <ImageField label="Cover image" value={p.cover} onChange={(v) => patch(i, { cover: v })} hint="Optional — a branded gradient is used if empty." />
-              <ImageField label="Client logo" value={p.logo ?? ""} onChange={(v) => patch(i, { logo: v })} hint="Optional — small mark shown on the card and case study page." />
+              <ImageField label="Cover image" value={p.cover} onChange={(v) => patch(i, { cover: v })} hint="Optional - a branded gradient is used if empty." />
+              <ImageField label="Client logo" value={p.logo ?? ""} onChange={(v) => patch(i, { logo: v })} hint="Optional - small mark shown on the card and case study page." />
             </div>
 
             <TextArea label="Summary" value={p.summary} onChange={(v) => patch(i, { summary: v })} rows={2} hint="Short line shown on cards and search." />

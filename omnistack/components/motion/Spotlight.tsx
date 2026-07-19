@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 
 /**
  * Cursor-following highlight for card hover states. Drop as a child of any
- * `relative` element with the `group` class — it finds its own parent and
+ * `relative` element with the `group` class - it finds its own parent and
  * tracks the cursor within it, so the Server Component rendering the card
  * never has to pass an event handler across the server/client boundary.
  */

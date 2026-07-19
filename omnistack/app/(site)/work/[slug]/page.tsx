@@ -115,7 +115,7 @@ export default async function ProjectPage({
         </Container>
       </section>
 
-      {/* Cover — deliberately always the branded gradient here, never project.cover:
+      {/* Cover - deliberately always the branded gradient here, never project.cover:
           that field is a listing-page preview thumbnail, and this page already
           shows its own real header above, so reusing the same screenshot as a
           "cover" directly below it would just repeat the page back at itself. */}

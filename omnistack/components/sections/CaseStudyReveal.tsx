@@ -5,7 +5,7 @@ import type { Project } from "@/lib/types";
 
 /**
  * Cinematic scroll-gated intro built around the FitPlanCoach case study.
- * Must stay the first element on the page — see ScrollExpandMedia's own
+ * Must stay the first element on the page - see ScrollExpandMedia's own
  * doc comment for why.
  */
 export function CaseStudyReveal({ project }: { project: Project }) {
