@@ -36,6 +36,42 @@ export const scenes: Scene[] = [
     techPosition: { x: 38, y: 64 },
     golden: true,
   },
+  {
+    slug: "what-we-do",
+    bg: "/art/woodcut-horn.webp",
+    headline: "Everything you need to design, build, and grow a modern digital product - under one roof.",
+    revealDirection: "up",
+  },
+  {
+    slug: "selected-work",
+    bg: "/art/letter-scene.webp",
+    headline: "Work we're proud to put our name on.",
+    revealDirection: "left",
+  },
+  {
+    slug: "ai-native",
+    bg: "/art/armor-portrait.webp",
+    headline: "AI that does the work - not demos.",
+    revealDirection: "right",
+  },
+  {
+    slug: "by-the-numbers",
+    bg: "/art/portrait-mother.webp",
+    headline: "Trusted by founders, agencies, and teams shipping at scale.",
+    revealDirection: "center",
+  },
+  {
+    slug: "how-we-work",
+    bg: "/art/portrait-dinner.webp",
+    headline: "A clear path, every time.",
+    revealDirection: "up",
+  },
+  {
+    slug: "industries",
+    bg: "/art/portrait-reading.webp",
+    headline: "Depth across the verticals we serve.",
+    revealDirection: "up",
+  },
 ];
 
 export function getScene(slug: string): Scene {

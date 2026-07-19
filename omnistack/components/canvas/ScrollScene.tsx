@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import Image from "next/image";
 import { Canvas } from "@react-three/fiber";
-import { useReducedMotion } from "motion/react";
+import { useMotionValue, useReducedMotion } from "motion/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { StardustPlane, type StardustHandle } from "./StardustPlane";
 import { GoldenGrid } from "./GoldenGrid";
 import { CanvasErrorBoundary } from "./CanvasErrorBoundary";
+import { StageContext } from "./StageContext";
 import { Button } from "@/components/ui/Button";
 import type { Scene } from "@/lib/scenes";
 
@@ -30,24 +31,31 @@ type Cta = { label: string; href: string };
 export function ScrollScene({
   scene,
   eager,
+  coord,
   eyebrow,
   body,
   meta,
   primaryCta,
   secondaryCta,
+  children,
 }: {
   scene: Scene;
   eager?: boolean;
+  /** Small corner reference label (e.g. "SYS_REF // 00.02"), matching the wipe stage's motif. */
+  coord?: string;
   eyebrow?: string;
   body?: string;
   meta?: string;
   primaryCta?: Cta;
   secondaryCta?: Cta;
+  /** Bespoke foreground (e.g. a card deck or pipeline diagram) instead of the headline/body/cta layout. Receives useStage().fallback. */
+  children?: ReactNode;
 }) {
   const reduce = useReducedMotion();
   const [narrow, setNarrow] = useState(false);
   const [visible, setVisible] = useState(Boolean(eager));
   const [noWebgl, setNoWebgl] = useState(false);
+  const dummyProgress = useMotionValue(0);
 
   useEffect(() => {
     // One-shot capability check (WebGL support can't change at runtime), not
@@ -76,6 +84,10 @@ export function ScrollScene({
   }, []);
 
   const fallback = Boolean(reduce) || narrow;
+  // Existing act components (WorkAct, AIAct, ProofAct) read useStage().fallback
+  // to switch between animated and static rendering; the shared progress value
+  // is unused by any of them, so a stable dummy MotionValue is sufficient here.
+  const stageValue = useMemo(() => ({ progress: dummyProgress, fallback }), [dummyProgress, fallback]);
 
   // Lazy-mount the WebGL canvas only once the scene nears the viewport, and
   // unmount (disposing the GL context/textures) once it scrolls well away.
@@ -155,29 +167,35 @@ export function ScrollScene({
       >
         <Image src={scene.bg} alt="" fill sizes="100vw" className="object-cover" />
         <div className="absolute inset-0 bg-black/35" />
-        <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 py-24 text-center">
-          {eyebrow ? (
-            <span className="font-mono text-xs uppercase tracking-[0.3em] text-white/60">{eyebrow}</span>
-          ) : null}
-          <h1 className="mt-5 max-w-4xl font-serif text-[clamp(2.25rem,8vw,5.5rem)] leading-[0.98] text-white">
-            {scene.headline}
-          </h1>
-          {body ? <p className="mt-6 max-w-xl text-lg text-white/75">{body}</p> : null}
-          {primaryCta || secondaryCta ? (
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-              {primaryCta ? (
-                <Button href={primaryCta.href} variant="light" size="lg" withArrow>
-                  {primaryCta.label}
-                </Button>
+        <div className="relative z-10 flex min-h-screen flex-col justify-center px-6 py-24">
+          {children ? (
+            <StageContext.Provider value={stageValue}>{children}</StageContext.Provider>
+          ) : (
+            <div className="flex flex-col items-center text-center">
+              {eyebrow ? (
+                <span className="font-mono text-xs uppercase tracking-[0.3em] text-white/60">{eyebrow}</span>
               ) : null}
-              {secondaryCta ? (
-                <Button href={secondaryCta.href} variant="lightOutline" size="lg">
-                  {secondaryCta.label}
-                </Button>
+              <h1 className="mt-5 max-w-4xl font-serif text-[clamp(2.25rem,8vw,5.5rem)] leading-[0.98] text-white">
+                {scene.headline}
+              </h1>
+              {body ? <p className="mt-6 max-w-xl text-lg text-white/75">{body}</p> : null}
+              {primaryCta || secondaryCta ? (
+                <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+                  {primaryCta ? (
+                    <Button href={primaryCta.href} variant="light" size="lg" withArrow>
+                      {primaryCta.label}
+                    </Button>
+                  ) : null}
+                  {secondaryCta ? (
+                    <Button href={secondaryCta.href} variant="lightOutline" size="lg">
+                      {secondaryCta.label}
+                    </Button>
+                  ) : null}
+                </div>
               ) : null}
+              {meta ? <p className="mt-8 text-sm text-white/55">{meta}</p> : null}
             </div>
-          ) : null}
-          {meta ? <p className="mt-8 text-sm text-white/55">{meta}</p> : null}
+          )}
         </div>
       </section>
     );
@@ -236,49 +254,64 @@ export function ScrollScene({
 
         <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-24 bg-gradient-to-b from-black/45 to-transparent" />
 
-        <div className="relative z-20 flex h-full flex-col items-center justify-center px-6 text-center">
-          {eyebrow ? (
-            <span
-              ref={eyebrowRef}
-              className="font-mono text-xs uppercase tracking-[0.3em] text-white/60 opacity-0"
-            >
-              {eyebrow}
-            </span>
-          ) : null}
-          <h1
-            ref={headlineRef}
-            className="mt-5 max-w-4xl font-serif text-[clamp(2.5rem,8.5vw,6.5rem)] leading-[0.96] text-white opacity-0 will-change-transform"
+        {coord ? (
+          <span
+            className="pointer-events-none absolute left-5 top-[84px] z-30 font-mono text-[10px] uppercase tracking-[0.22em] text-white/50 sm:left-8"
+            aria-hidden
           >
-            {scene.headline}
-          </h1>
-          {body ? (
-            <p ref={bodyRef} className="mt-6 max-w-xl text-lg text-white/75 opacity-0 will-change-transform">
-              {body}
-            </p>
-          ) : null}
-          {primaryCta || secondaryCta ? (
-            <div
-              ref={ctaRef}
-              className="mt-9 flex flex-col gap-3 opacity-0 will-change-transform sm:flex-row sm:items-center"
+            {coord}
+          </span>
+        ) : null}
+
+        {children ? (
+          <div className="relative z-20 flex h-full flex-col justify-center py-24">
+            <StageContext.Provider value={stageValue}>{children}</StageContext.Provider>
+          </div>
+        ) : (
+          <div className="relative z-20 flex h-full flex-col items-center justify-center px-6 text-center">
+            {eyebrow ? (
+              <span
+                ref={eyebrowRef}
+                className="font-mono text-xs uppercase tracking-[0.3em] text-white/60 opacity-0"
+              >
+                {eyebrow}
+              </span>
+            ) : null}
+            <h1
+              ref={headlineRef}
+              className="mt-5 max-w-4xl font-serif text-[clamp(2.5rem,8.5vw,6.5rem)] leading-[0.96] text-white opacity-0 will-change-transform"
             >
-              {primaryCta ? (
-                <Button href={primaryCta.href} variant="light" size="lg" withArrow>
-                  {primaryCta.label}
-                </Button>
-              ) : null}
-              {secondaryCta ? (
-                <Button href={secondaryCta.href} variant="lightOutline" size="lg">
-                  {secondaryCta.label}
-                </Button>
-              ) : null}
-            </div>
-          ) : null}
-          {meta ? (
-            <p ref={metaRef} className="mt-8 text-sm text-white/55 opacity-0">
-              {meta}
-            </p>
-          ) : null}
-        </div>
+              {scene.headline}
+            </h1>
+            {body ? (
+              <p ref={bodyRef} className="mt-6 max-w-xl text-lg text-white/75 opacity-0 will-change-transform">
+                {body}
+              </p>
+            ) : null}
+            {primaryCta || secondaryCta ? (
+              <div
+                ref={ctaRef}
+                className="mt-9 flex flex-col gap-3 opacity-0 will-change-transform sm:flex-row sm:items-center"
+              >
+                {primaryCta ? (
+                  <Button href={primaryCta.href} variant="light" size="lg" withArrow>
+                    {primaryCta.label}
+                  </Button>
+                ) : null}
+                {secondaryCta ? (
+                  <Button href={secondaryCta.href} variant="lightOutline" size="lg">
+                    {secondaryCta.label}
+                  </Button>
+                ) : null}
+              </div>
+            ) : null}
+            {meta ? (
+              <p ref={metaRef} className="mt-8 text-sm text-white/55 opacity-0">
+                {meta}
+              </p>
+            ) : null}
+          </div>
+        )}
       </div>
     </div>
   );

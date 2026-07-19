@@ -1,52 +1,91 @@
 "use client";
 
-import { useState } from "react";
-import { motion, useMotionValueEvent } from "motion/react";
+import { useEffect, useState } from "react";
+import { useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
-import { useStage } from "./StageContext";
 
 /**
- * Side progress rail for the pinned act stage (the reference site's side-nav
- * mechanic): a thin vertical track whose neon fill grows with scroll progress,
- * with one numbered stop per act. Stops are real buttons that jump the page to
- * that act via Lenis (falling back to native smooth scroll). Hidden in the
- * reduced-motion / mobile fallback, where the stage is normal document flow.
+ * Side progress rail spanning the run of pinned <ScrollScene> sections (the
+ * reference site's side-nav mechanic). Each scene is independently pinned via
+ * its own GSAP ScrollTrigger, so there's no single shared progress value here;
+ * instead this reads window.scrollY directly against the combined bounding
+ * box of every [data-nav-hero] section, matching how Nav treats the same run
+ * as one continuous block. Stops are real buttons that jump to a scene via
+ * Lenis (falling back to native smooth scroll). Hidden under reduced motion
+ * or below the lg breakpoint, where scenes render as plain static sections.
  */
-export function SideRail({ units }: { units: number }) {
-  const { progress, fallback } = useStage();
+export function SideRail({ count }: { count: number }) {
+  const reduce = useReducedMotion();
+  const [narrow, setNarrow] = useState(false);
   const [active, setActive] = useState(0);
+  const [fill, setFill] = useState(0);
+  const [inRun, setInRun] = useState(true);
 
-  useMotionValueEvent(progress, "change", (p) => {
-    // The entering act becomes "current" once it is more than halfway in.
-    setActive(Math.min(units - 1, Math.max(0, Math.round(p * units) - 1)));
-  });
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1023px)");
+    const update = () => setNarrow(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
-  if (fallback) return null;
+  useEffect(() => {
+    if (reduce || narrow) return;
+
+    const onScroll = () => {
+      const sections = Array.from(document.querySelectorAll<HTMLElement>("[data-nav-hero]"));
+      if (!sections.length) return;
+      const tops = sections.map((el) => el.getBoundingClientRect().top + window.scrollY);
+      const runTop = tops[0]!;
+      const runBottom = tops[tops.length - 1]! + sections[sections.length - 1]!.offsetHeight;
+      const runHeight = runBottom - runTop - window.innerHeight;
+      const p = runHeight > 0 ? (window.scrollY - runTop) / runHeight : 0;
+      setFill(Math.min(1, Math.max(0, p)));
+      // The rail only makes sense while the pinned scene run is on screen;
+      // hide it once the page has scrolled into the lighter coda below.
+      setInRun(window.scrollY < runBottom);
+
+      const centerY = window.scrollY + window.innerHeight / 2;
+      let current = 0;
+      tops.forEach((top, i) => {
+        if (centerY >= top) current = i;
+      });
+      setActive(Math.min(count - 1, current));
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [reduce, narrow, count]);
+
+  if (reduce || narrow || !inRun) return null;
 
   const jump = (i: number) => {
-    const track = document.querySelector<HTMLElement>("[data-nav-hero]");
-    if (!track) return;
-    const top = track.getBoundingClientRect().top + window.scrollY;
-    const scrollable = track.offsetHeight - window.innerHeight;
-    const target = i === 0 ? top : top + ((i + 1) / units) * scrollable;
-    if (window.__lenis) window.__lenis.scrollTo(target);
-    else window.scrollTo({ top: target, behavior: "smooth" });
+    const sections = document.querySelectorAll<HTMLElement>("[data-nav-hero]");
+    const target = sections[i];
+    if (!target) return;
+    const top = target.getBoundingClientRect().top + window.scrollY;
+    if (window.__lenis) window.__lenis.scrollTo(top);
+    else window.scrollTo({ top, behavior: "smooth" });
   };
 
   return (
     <nav
       aria-label="Sections"
-      className="pointer-events-none absolute right-5 top-1/2 z-40 hidden -translate-y-1/2 lg:block"
+      className="pointer-events-none fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 lg:block"
     >
       <div className="relative flex flex-col items-center gap-4">
-        {/* progress track + neon fill */}
         <div className="absolute bottom-2 top-2 w-px bg-white/15" aria-hidden />
-        <motion.div
-          style={{ scaleY: progress }}
+        <div
+          style={{ transform: `scaleY(${fill})` }}
           className="absolute bottom-2 top-2 w-px origin-top bg-[linear-gradient(180deg,var(--neon-cyan),var(--neon-magenta))]"
           aria-hidden
         />
-        {Array.from({ length: units }, (_, i) => (
+        {Array.from({ length: count }, (_, i) => (
           <button
             key={i}
             type="button"
