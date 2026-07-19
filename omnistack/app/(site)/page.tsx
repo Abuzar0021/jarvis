@@ -15,7 +15,7 @@ import { Hero } from "@/components/sections/Hero";
 import { ServicesAct } from "@/components/sections/ServicesAct";
 import { TrustStrip } from "@/components/sections/TrustStrip";
 import { ValuePillars } from "@/components/sections/ValuePillars";
-import { FeaturedWork } from "@/components/sections/FeaturedWork";
+import { WorkAct } from "@/components/sections/WorkAct";
 import { AIShowcase } from "@/components/sections/AIShowcase";
 import { Process } from "@/components/sections/Process";
 import { TechStack } from "@/components/sections/TechStack";
@@ -31,9 +31,9 @@ export const revalidate = 3600;
 
 export const metadata = { alternates: { canonical: "/" } };
 
-// Full-screen cinematic acts live in the pinned wipe stage; the dense sections
-// follow in a normal-scroll coda. Grows as more acts are converted from coda.
-const ACTS = 2;
+// Full-screen cinematic acts live in the pinned wipe stage (one unit each). The
+// dense sections follow in a normal-scroll coda.
+const UNITS = 3;
 
 export default async function HomePage() {
   const [site, projects, services, testimonials, faqs, posts, industries] =
@@ -58,14 +58,17 @@ export default async function HomePage() {
   return (
     <>
       {/* Fixed-canvas cinematic acts (Editions-style scroll wipe) */}
-      <ScrollStage acts={ACTS}>
+      <ScrollStage units={UNITS}>
         <BlueprintGrid />
         <HUD />
-        <Act index={0} acts={ACTS} art="/art/portrait-dinner.webp" coord="SYS_REF // 00.01">
+        <Act unitStart={0} spanUnits={1} totalUnits={UNITS} art="/art/portrait-dinner.webp" coord="SYS_REF // 00.01">
           <Hero site={site} />
         </Act>
-        <Act index={1} acts={ACTS} art="/art/letter-scene.webp" coord="SYS_REF // 00.02">
+        <Act unitStart={1} spanUnits={1} totalUnits={UNITS} art="/art/letter-scene.webp" coord="SYS_REF // 00.02">
           <ServicesAct intro={site.servicesIntro} services={featuredServices} />
+        </Act>
+        <Act unitStart={2} spanUnits={1} totalUnits={UNITS} art="/art/portrait-reading.webp" coord="SYS_REF // 00.03">
+          <WorkAct projects={projects} />
         </Act>
       </ScrollStage>
 
@@ -73,7 +76,6 @@ export default async function HomePage() {
       <div className="relative z-10 bg-page">
         <TrustStrip label={site.trustLabel} items={trustItems} />
         <ValuePillars pillars={site.valuePillars} />
-        <FeaturedWork projects={projects} />
         <AIShowcase site={site} />
         <Process steps={site.process.steps} intro={site.process.intro} />
         <TechStack groups={site.techStack} />

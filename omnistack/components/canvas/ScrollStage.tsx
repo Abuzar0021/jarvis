@@ -12,10 +12,10 @@ import { StageContext } from "./StageContext";
  * plain stacked sections in normal flow (no pin, no transforms).
  */
 export function ScrollStage({
-  acts,
+  units,
   children,
 }: {
-  acts: number;
+  units: number;
   children: ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -53,7 +53,7 @@ export function ScrollStage({
         ref={ref}
         data-nav-hero
         data-nav-tone="dark"
-        style={{ height: `${acts * 100}vh` }}
+        style={{ height: `${units * 100}vh` }}
         className="relative"
       >
         <div className="sticky top-0 h-screen w-screen overflow-hidden bg-[#0b0a07] isolate">
