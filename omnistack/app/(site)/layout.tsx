@@ -3,6 +3,7 @@ import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
 import { WhatsAppButton } from "@/components/site/WhatsAppButton";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
+import { PageTransition } from "@/components/motion/PageTransition";
 import { getServices, getSite } from "@/lib/content";
 import type { ServiceGroup } from "@/lib/types";
 
@@ -39,7 +40,9 @@ export default async function SiteLayout({
         linkHref={site.announcement.linkHref}
       />
       <Nav brand={site.brand} grouped={grouped} ctaLabel={site.hero.primaryCta.label} />
-      <main id="main" className="flex-1">{children}</main>
+      <main id="main" className="flex-1">
+        <PageTransition>{children}</PageTransition>
+      </main>
       <Footer site={site} services={services} />
       <WhatsAppButton whatsapp={site.contact.whatsapp} brand={site.brand} />
     </>
