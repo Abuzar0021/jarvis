@@ -16,7 +16,7 @@ import { ServicesAct } from "@/components/sections/ServicesAct";
 import { TrustStrip } from "@/components/sections/TrustStrip";
 import { ValuePillars } from "@/components/sections/ValuePillars";
 import { WorkAct } from "@/components/sections/WorkAct";
-import { AIShowcase } from "@/components/sections/AIShowcase";
+import { AIAct } from "@/components/sections/AIAct";
 import { Process } from "@/components/sections/Process";
 import { TechStack } from "@/components/sections/TechStack";
 import { Stats } from "@/components/sections/Stats";
@@ -33,7 +33,7 @@ export const metadata = { alternates: { canonical: "/" } };
 
 // Full-screen cinematic acts live in the pinned wipe stage (one unit each). The
 // dense sections follow in a normal-scroll coda.
-const UNITS = 3;
+const UNITS = 4;
 
 export default async function HomePage() {
   const [site, projects, services, testimonials, faqs, posts, industries] =
@@ -70,13 +70,15 @@ export default async function HomePage() {
         <Act unitStart={2} spanUnits={1} totalUnits={UNITS} art="/art/portrait-reading.webp" coord="SYS_REF // 00.03">
           <WorkAct projects={projects} />
         </Act>
+        <Act unitStart={3} spanUnits={1} totalUnits={UNITS} art="/art/armor-portrait.webp" coord="SYS_REF // 00.04">
+          <AIAct ai={site.aiShowcase} />
+        </Act>
       </ScrollStage>
 
       {/* Coda: normal document scroll for the dense sections; footer follows (layout) */}
       <div className="relative z-10 bg-page">
         <TrustStrip label={site.trustLabel} items={trustItems} />
         <ValuePillars pillars={site.valuePillars} />
-        <AIShowcase site={site} />
         <Process steps={site.process.steps} intro={site.process.intro} />
         <TechStack groups={site.techStack} />
         <Stats stats={site.stats} />
