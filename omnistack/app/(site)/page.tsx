@@ -13,18 +13,17 @@ import { BlueprintGrid } from "@/components/canvas/BlueprintGrid";
 import { HUD } from "@/components/canvas/HUD";
 import { Hero } from "@/components/sections/Hero";
 import { ServicesAct } from "@/components/sections/ServicesAct";
-import { TrustStrip } from "@/components/sections/TrustStrip";
-import { ValuePillars } from "@/components/sections/ValuePillars";
 import { WorkAct } from "@/components/sections/WorkAct";
 import { AIAct } from "@/components/sections/AIAct";
+import { ProofAct } from "@/components/sections/ProofAct";
+import { ClosingAct } from "@/components/sections/ClosingAct";
+import { ValuePillars } from "@/components/sections/ValuePillars";
 import { Process } from "@/components/sections/Process";
 import { TechStack } from "@/components/sections/TechStack";
-import { Stats } from "@/components/sections/Stats";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { Industries } from "@/components/sections/Industries";
 import { InsightsPreview } from "@/components/sections/InsightsPreview";
 import { FAQ } from "@/components/sections/FAQ";
-import { CTABand } from "@/components/sections/CTABand";
 import { Newsletter } from "@/components/sections/Newsletter";
 
 export const revalidate = 3600;
@@ -33,7 +32,7 @@ export const metadata = { alternates: { canonical: "/" } };
 
 // Full-screen cinematic acts live in the pinned wipe stage (one unit each). The
 // dense sections follow in a normal-scroll coda.
-const UNITS = 4;
+const UNITS = 6;
 
 export default async function HomePage() {
   const [site, projects, services, testimonials, faqs, posts, industries] =
@@ -48,12 +47,6 @@ export default async function HomePage() {
     ]);
 
   const featuredServices = services.filter((s) => s.featured).slice(0, 6);
-  const trustItems = [
-    ...industries.map((i) => i.name),
-    "Founders",
-    "Agencies",
-    "Scale-ups",
-  ];
 
   return (
     <>
@@ -73,20 +66,23 @@ export default async function HomePage() {
         <Act unitStart={3} spanUnits={1} totalUnits={UNITS} art="/art/armor-portrait.webp" coord="SYS_REF // 00.04">
           <AIAct ai={site.aiShowcase} />
         </Act>
+        <Act unitStart={4} spanUnits={1} totalUnits={UNITS} art="/art/portrait-mother.webp" coord="SYS_REF // 00.05">
+          <ProofAct stats={site.stats} trustLabel={site.trustLabel} />
+        </Act>
+        <Act unitStart={5} spanUnits={1} totalUnits={UNITS} art="/art/forest-landscape.webp" coord="SYS_REF // 00.06">
+          <ClosingAct cta={site.cta} contact={site.contact} />
+        </Act>
       </ScrollStage>
 
       {/* Coda: normal document scroll for the dense sections; footer follows (layout) */}
       <div className="relative z-10 bg-page">
-        <TrustStrip label={site.trustLabel} items={trustItems} />
         <ValuePillars pillars={site.valuePillars} />
         <Process steps={site.process.steps} intro={site.process.intro} />
         <TechStack groups={site.techStack} />
-        <Stats stats={site.stats} />
         <Testimonials items={testimonials} />
         <Industries industries={industries} />
         <InsightsPreview posts={posts} />
         <FAQ faqs={faqs} />
-        <CTABand site={site} />
         <Newsletter title={site.newsletter.title} body={site.newsletter.body} />
       </div>
     </>
