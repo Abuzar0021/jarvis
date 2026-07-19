@@ -11,6 +11,7 @@ import { ScrollStage } from "@/components/canvas/ScrollStage";
 import { Act } from "@/components/canvas/Act";
 import { BlueprintGrid } from "@/components/canvas/BlueprintGrid";
 import { HUD } from "@/components/canvas/HUD";
+import { SideRail } from "@/components/canvas/SideRail";
 import { Hero } from "@/components/sections/Hero";
 import { ServicesAct } from "@/components/sections/ServicesAct";
 import { WorkAct } from "@/components/sections/WorkAct";
@@ -54,6 +55,7 @@ export default async function HomePage() {
       <ScrollStage units={UNITS}>
         <BlueprintGrid />
         <HUD />
+        <SideRail units={UNITS} />
         <Act unitStart={0} spanUnits={1} totalUnits={UNITS} art="/art/portrait-dinner.webp" coord="SYS_REF // 00.01">
           <Hero site={site} />
         </Act>
