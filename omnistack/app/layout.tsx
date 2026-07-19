@@ -93,7 +93,7 @@ export default async function RootLayout({
       className={`${GeistMono.variable} h-full`}
       suppressHydrationWarning
     >
-      <body className="min-h-full bg-base text-fg antialiased">
+      <body className="min-h-full bg-page text-fg antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

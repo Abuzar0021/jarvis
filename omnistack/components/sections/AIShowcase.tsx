@@ -7,7 +7,7 @@ import type { SiteContent } from "@/lib/types";
 function NodeFlow() {
   const nodes = ["Trigger", "Qualify", "Enrich", "Act"];
   return (
-    <div className="relative rounded-2xl border border-hair bg-base/60 p-6">
+    <div className="relative rounded-2xl border border-hair bg-page/60 p-6">
       <div className="grain absolute inset-0 rounded-2xl" aria-hidden />
       <div className="relative space-y-3">
         {nodes.map((n, i) => (

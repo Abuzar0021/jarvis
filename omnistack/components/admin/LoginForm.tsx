@@ -35,7 +35,7 @@ export function LoginForm() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-base px-5">
+    <div className="flex min-h-screen items-center justify-center bg-page px-5">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center text-center">
           <LogoMark className="h-9 w-9" />

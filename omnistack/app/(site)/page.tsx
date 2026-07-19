@@ -70,7 +70,7 @@ export default async function HomePage() {
       </ScrollStage>
 
       {/* Coda: normal document scroll for the dense sections; footer follows (layout) */}
-      <div className="relative z-10 bg-base">
+      <div className="relative z-10 bg-page">
         <TrustStrip label={site.trustLabel} items={trustItems} />
         <ValuePillars pillars={site.valuePillars} />
         <FeaturedWork projects={projects} />

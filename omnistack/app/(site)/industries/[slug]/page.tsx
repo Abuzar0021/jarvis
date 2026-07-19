@@ -130,7 +130,7 @@ export default async function IndustryPage({
                     <li key={s.id}>
                       <Link
                         href={`/services/${s.slug}`}
-                        className="group flex items-center justify-between rounded-lg border border-hair bg-base px-4 py-3 text-sm transition-colors hover:border-gold/40"
+                        className="group flex items-center justify-between rounded-lg border border-hair bg-page px-4 py-3 text-sm transition-colors hover:border-gold/40"
                       >
                         <span>{s.name}</span>
                         <span className="text-muted transition-all group-hover:translate-x-0.5 group-hover:text-gold">→</span>

@@ -28,7 +28,7 @@ export function AnnouncementBar({
   if (!enabled || !text || storedDismissed || dismissed) return null;
 
   return (
-    <div className="relative z-50 border-b border-hair bg-base">
+    <div className="relative z-50 border-b border-hair bg-page">
       <div className="mx-auto flex max-w-[1240px] items-center justify-center gap-3 px-10 py-2.5 text-center text-xs sm:text-[13px]">
         <p className="text-muted">
           {text}{" "}

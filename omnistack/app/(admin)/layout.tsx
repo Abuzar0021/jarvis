@@ -10,5 +10,5 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="bg-base text-fg">{children}</div>;
+  return <div className="bg-page text-fg">{children}</div>;
 }

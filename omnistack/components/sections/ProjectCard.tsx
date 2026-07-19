@@ -39,7 +39,7 @@ export function ProjectCard({
           </div>
         )}
         {project.results.length > 0 ? (
-          <div className="absolute bottom-4 right-4 rounded-full border border-gold/40 bg-base/70 px-3 py-1 font-mono text-xs text-gold backdrop-blur">
+          <div className="absolute bottom-4 right-4 rounded-full border border-gold/40 bg-page/70 px-3 py-1 font-mono text-xs text-gold backdrop-blur">
             {project.results[0].value} {project.results[0].label}
           </div>
         ) : null}

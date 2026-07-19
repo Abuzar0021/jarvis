@@ -155,7 +155,7 @@ export function ScrollExpandMedia({
         {bgImageSrc ? (
           <div className="absolute inset-0 -z-10">
             <Image src={bgImageSrc} alt="" fill priority className="object-cover opacity-50" />
-            <div className="absolute inset-0 bg-base/60" />
+            <div className="absolute inset-0 bg-page/60" />
           </div>
         ) : (
           <div className="gold-glow grain pointer-events-none absolute inset-0 -z-10" aria-hidden />
@@ -211,11 +211,11 @@ export function ScrollExpandMedia({
                   style={{ objectFit: "cover", objectPosition: "center" }}
                   priority
                 />
-                <div className="absolute inset-0 bg-base/30" />
+                <div className="absolute inset-0 bg-page/30" />
               </>
             ) : (
               <div
-                className="gold-glow grain animate-breathe absolute inset-0 h-full w-full bg-base"
+                className="gold-glow grain animate-breathe absolute inset-0 h-full w-full bg-page"
                 aria-hidden
               />
             )}

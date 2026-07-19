@@ -20,7 +20,7 @@ export function TechStack({ groups }: { groups: TechGroup[] }) {
                 {g.items.map((item) => (
                   <li
                     key={item}
-                    className="rounded-full border border-hair bg-base px-3 py-1.5 text-sm text-muted"
+                    className="rounded-full border border-hair bg-page px-3 py-1.5 text-sm text-muted"
                   >
                     {item}
                   </li>

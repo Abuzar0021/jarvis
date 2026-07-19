@@ -8,7 +8,7 @@
 */
 @theme {
   /* Color tokens */
-  --color-base: #f2efe6; /* page background: warm parchment */
+  --color-page: #f2efe6; /* page background: warm parchment */
   --color-surface: #eae6d9; /* deeper cream surfaces (nav blur, footer) */
   --color-card: #faf8f2; /* cards, panels: near-white warm */
   --color-hair: #d9d3c2; /* hairline borders */
@@ -117,7 +117,7 @@
   }
 
   body {
-    background-color: var(--color-base);
+    background-color: var(--color-page);
     color: var(--color-fg);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -140,19 +140,19 @@
   /* Thin, warm scrollbar */
   * {
     scrollbar-width: thin;
-    scrollbar-color: #c9c2af var(--color-base);
+    scrollbar-color: #c9c2af var(--color-page);
   }
   *::-webkit-scrollbar {
     width: 10px;
     height: 10px;
   }
   *::-webkit-scrollbar-track {
-    background: var(--color-base);
+    background: var(--color-page);
   }
   *::-webkit-scrollbar-thumb {
     background: #c9c2af;
     border-radius: 999px;
-    border: 2px solid var(--color-base);
+    border: 2px solid var(--color-page);
   }
 }
 

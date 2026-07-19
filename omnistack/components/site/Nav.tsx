@@ -213,7 +213,7 @@ export function Nav({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 top-[68px] z-40 bg-base/98 backdrop-blur-xl lg:hidden"
+            className="fixed inset-0 top-[68px] z-40 bg-page/98 backdrop-blur-xl lg:hidden"
           >
             <div
               className="flex h-[calc(100dvh-68px)] flex-col overflow-y-auto px-5 py-8 sm:px-8"

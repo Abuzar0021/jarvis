@@ -4,7 +4,7 @@ import { LogoMark } from "@/components/site/Logo";
 
 export default function NotFound() {
   return (
-    <div className="relative isolate flex min-h-screen flex-col items-center justify-center overflow-hidden bg-base text-center">
+    <div className="relative isolate flex min-h-screen flex-col items-center justify-center overflow-hidden bg-page text-center">
       <div className="gold-glow pointer-events-none absolute inset-x-0 top-0 -z-10 h-1/2" aria-hidden />
       <Container className="py-24">
         <Link href="/" className="mx-auto inline-flex" aria-label="Home">

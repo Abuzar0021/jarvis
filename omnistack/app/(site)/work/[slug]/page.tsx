@@ -239,7 +239,7 @@ export default async function ProjectPage({
                   <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Stack & focus</p>
                   <ul className="mt-4 flex flex-wrap gap-2">
                     {project.tags.map((t) => (
-                      <li key={t} className="rounded-full border border-hair bg-base px-3 py-1 text-xs text-muted">{t}</li>
+                      <li key={t} className="rounded-full border border-hair bg-page px-3 py-1 text-xs text-muted">{t}</li>
                     ))}
                   </ul>
                 </div>
