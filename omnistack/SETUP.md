@@ -64,6 +64,32 @@ edits and uploads are retained.
 > live editing/uploads won't persist there. Use a Node host with a disk, or move
 > content to a database/object store.
 
+## Automatic deploy (GitHub Actions)
+
+`.github/workflows/deploy.yml` deploys over SSH on every push to
+`claude/zen-volta-e09i96` (or manually via the Actions tab, "Run workflow"). It
+uses plain OpenSSH, no third-party action, and never touches the server's live
+`content/`, `public/uploads/`, or infra files: it stashes them, fast-forwards
+the branch, then restores the stashed versions before rebuilding.
+
+Add these as repository secrets (Settings -> Secrets and variables -> Actions):
+
+- `VPS_HOST` - server IP or hostname.
+- `VPS_USER` - SSH user (e.g. `root`).
+- `VPS_SSH_KEY` - the private key for a key pair whose public half is already
+  in that user's `~/.ssh/authorized_keys` on the server. Generate a dedicated
+  deploy key rather than reusing a personal one:
+  `ssh-keygen -t ed25519 -f deploy_key -C "github-actions-deploy" -N ""`, add
+  `deploy_key.pub` to the server, and paste `deploy_key`'s contents into this
+  secret.
+- `VPS_PORT` - SSH port (optional, defaults to 22).
+- `VPS_APP_PATH` - absolute path to the repo on the server, e.g.
+  `/root/jarvis/omnistack`.
+
+Once those are set, pushing to the branch above rebuilds and restarts the `web`
+container automatically; the workflow finishes with a health check against
+`http://localhost:3000/` on the server.
+
 ## Redirects
 
 Manage redirects in `/admin → Redirects`. They're written to

@@ -1,0 +1,95 @@
+name: Deploy to VPS
+
+# Deploys omnistack to the VPS over SSH whenever this branch is pushed, or on
+# demand. Uses plain OpenSSH (bundled on every GitHub-hosted runner) rather
+# than a third-party marketplace action, so there is no external action
+# version to trust. The remote script preserves the server's live
+# content/uploads/Caddyfile/etc (they are stashed, the branch is fast-forwarded,
+# then the stashed versions are restored) so real leads and CMS edits are never
+# overwritten by the deploy.
+on:
+  push:
+    branches:
+      - claude/zen-volta-e09i96
+  workflow_dispatch: {}
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure SSH
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "${VPS_PORT:-22}" -H "$VPS_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy over SSH
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_APP_PATH: ${{ secrets.VPS_APP_PATH }}
+          DEPLOY_BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          ssh -i ~/.ssh/deploy_key -p "${VPS_PORT:-22}" "$VPS_USER@$VPS_HOST" \
+            "APP_PATH='$VPS_APP_PATH' BRANCH='$DEPLOY_BRANCH' bash -s" <<'REMOTE'
+            set -euo pipefail
+            cd "$APP_PATH"
+
+            # Paths the server manages itself (real leads, CMS edits, uploaded
+            # media, local infra config) must always win over what git carries.
+            PRESERVE="content Caddyfile Dockerfile docker-compose.yml pnpm-workspace.yaml"
+
+            git stash push -u --message "ci-deploy-snapshot" -- $PRESERVE
+
+            git fetch origin "$BRANCH"
+            git checkout "$BRANCH"
+            git reset --hard "origin/$BRANCH"
+
+            if git stash list | head -1 | grep -q "ci-deploy-snapshot"; then
+              git checkout stash@{0} -- $PRESERVE
+              git stash drop
+            fi
+
+            docker compose build web
+            docker compose up -d web
+            docker image prune -f
+
+            echo "--- container status ---"
+            docker compose ps
+          REMOTE
+
+      - name: Health check
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          set -euo pipefail
+          for i in 1 2 3 4 5 6 7 8 9 10; do
+            if ssh -i ~/.ssh/deploy_key -p "${VPS_PORT:-22}" "$VPS_USER@$VPS_HOST" \
+              "curl -fsS -o /dev/null http://localhost:3000/"; then
+              echo "Health check passed."
+              exit 0
+            fi
+            echo "Not ready yet, retrying in 5s ($i/10)..."
+            sleep 5
+          done
+          echo "Health check failed after 10 attempts." >&2
+          exit 1
+
+      - name: Cleanup
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
