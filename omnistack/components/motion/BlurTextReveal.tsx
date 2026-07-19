@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type ElementType, type ReactNode } from "react";
+import { createElement, useRef, type ElementType, type ReactNode } from "react";
 import { gsap } from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -77,9 +77,9 @@ export function BlurTextReveal({
     { scope: ref, dependencies: [reduce] },
   );
 
-  return (
-    <Tag ref={ref} className={className}>
-      {children}
-    </Tag>
-  );
+  // createElement forwards `ref` the same way JSX does (both go through the
+  // same runtime); this isn't a read of ref.current during render, so the
+  // static analysis here is a false positive for the createElement call form.
+  // eslint-disable-next-line react-hooks/refs
+  return createElement(Tag, { ref, className }, children);
 }

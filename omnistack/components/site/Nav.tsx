@@ -40,15 +40,18 @@ export function Nav({
     // Pages with a full-bleed hero mark it [data-nav-hero]: the nav stays
     // transparent over it and gains its blur/tint once you scroll past. When
     // that hero is a dark canvas ([data-nav-tone="dark"]) the transparent nav
-    // switches to light text so it reads over the paintings.
-    const hero = document.querySelector<HTMLElement>("[data-nav-hero]");
+    // switches to light text so it reads over the paintings. A page can chain
+    // several dark sentinels back to back (e.g. the Hero ScrollScene followed
+    // by the Editions wipe stage) - they're treated as one continuous dark run.
+    const heroes = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-nav-hero]"),
+    );
     const onScroll = () => {
-      setHeroDark(hero?.getAttribute("data-nav-tone") === "dark");
-      // Stay transparent over the whole hero (a pinned full-screen stage can be
-      // many viewports tall); flip to the blur bar once it has scrolled past.
-      const threshold = hero
-        ? Math.max(hero.offsetHeight - window.innerHeight, 8)
-        : 8;
+      setHeroDark(heroes[0]?.getAttribute("data-nav-tone") === "dark");
+      // Stay transparent over the whole run (each section can be many
+      // viewports tall); flip to the blur bar once it has all scrolled past.
+      const runHeight = heroes.reduce((sum, el) => sum + el.offsetHeight, 0);
+      const threshold = runHeight ? Math.max(runHeight - window.innerHeight, 8) : 8;
       setScrolled(window.scrollY > threshold);
     };
     onScroll();
