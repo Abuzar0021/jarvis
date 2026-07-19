@@ -18,6 +18,7 @@ import { WorkAct } from "@/components/sections/WorkAct";
 import { AIAct } from "@/components/sections/AIAct";
 import { ProofAct } from "@/components/sections/ProofAct";
 import { ClosingAct } from "@/components/sections/ClosingAct";
+import { TickerBand } from "@/components/sections/TickerBand";
 import { ValuePillars } from "@/components/sections/ValuePillars";
 import { Process } from "@/components/sections/Process";
 import { TechStack } from "@/components/sections/TechStack";
@@ -48,6 +49,12 @@ export default async function HomePage() {
     ]);
 
   const featuredServices = services.filter((s) => s.featured).slice(0, 6);
+  const trustItems = [
+    ...industries.map((i) => i.name),
+    "Founders",
+    "Agencies",
+    "Scale-ups",
+  ];
 
   return (
     <>
@@ -78,6 +85,7 @@ export default async function HomePage() {
 
       {/* Coda: normal document scroll for the dense sections; footer follows (layout) */}
       <div className="relative z-10 bg-page">
+        <TickerBand items={trustItems} />
         <ValuePillars pillars={site.valuePillars} />
         <Process steps={site.process.steps} intro={site.process.intro} />
         <TechStack groups={site.techStack} />
