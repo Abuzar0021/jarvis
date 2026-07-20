@@ -246,7 +246,7 @@ export function ScrollScene({
             style={{
               left: `${scene.techPosition?.x ?? 50}%`,
               top: `${scene.techPosition?.y ?? 50}%`,
-              transform: `translate3d(-50%,-50%,0) rotate(${scene.techRotate ?? 0}deg)`,
+              transform: "translate3d(-50%,-50%,0)",
             }}
           >
             <Image src={scene.tech} alt="" fill className="object-contain" />

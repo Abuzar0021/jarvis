@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -79,9 +79,14 @@ export const StardustPlane = forwardRef<StardustHandle, { src: string }>(
   function StardustPlane({ src }, ref) {
     const { size } = useThree();
     const progressRef = useRef(0);
+    const [imageSize, setImageSize] = useState<{ width: number; height: number } | null>(null);
 
     const texture = useMemo(() => {
-      const t = new THREE.TextureLoader().load(src);
+      const loader = new THREE.TextureLoader();
+      const t = loader.load(src, (loaded) => {
+        const img = loaded.image as HTMLImageElement;
+        setImageSize({ width: img.width, height: img.height });
+      });
       t.colorSpace = THREE.SRGBColorSpace;
       return t;
     }, [src]);
@@ -112,16 +117,10 @@ export const StardustPlane = forwardRef<StardustHandle, { src: string }>(
     }, [material, size.width, size.height]);
 
     useEffect(() => {
-      const img = texture.image as HTMLImageElement | undefined;
-      if (img && img.width) {
-        material.uniforms.uImageSize.value.set(img.width, img.height);
-      } else {
-        texture.onUpdate = () => {
-          const loaded = texture.image as HTMLImageElement;
-          material.uniforms.uImageSize.value.set(loaded.width, loaded.height);
-        };
+      if (imageSize) {
+        material.uniforms.uImageSize.value.set(imageSize.width, imageSize.height);
       }
-    }, [material, texture]);
+    }, [material, imageSize]);
 
     useImperativeHandle(
       ref,
