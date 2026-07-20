@@ -2,25 +2,13 @@
 
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import Image from "next/image";
-import { Canvas } from "@react-three/fiber";
 import { useMotionValue, useReducedMotion } from "motion/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { StardustPlane, type StardustHandle } from "./StardustPlane";
 import { GoldenGrid } from "./GoldenGrid";
-import { CanvasErrorBoundary } from "./CanvasErrorBoundary";
 import { StageContext } from "./StageContext";
 import { Button } from "@/components/ui/Button";
 import type { Scene } from "@/lib/scenes";
-
-function hasWebgl() {
-  try {
-    const canvas = document.createElement("canvas");
-    return Boolean(canvas.getContext("webgl2") || canvas.getContext("webgl"));
-  } catch {
-    return false;
-  }
-}
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -54,18 +42,10 @@ export function ScrollScene({
   const reduce = useReducedMotion();
   const [narrow, setNarrow] = useState(false);
   const [visible, setVisible] = useState(Boolean(eager));
-  const [noWebgl, setNoWebgl] = useState(false);
   const progressValue = useMotionValue(0);
 
-  useEffect(() => {
-    // One-shot capability check (WebGL support can't change at runtime), not
-    // a subscription, so there's nothing to react to beyond this mount.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (!hasWebgl()) setNoWebgl(true);
-  }, []);
-
   const outerRef = useRef<HTMLDivElement>(null);
-  const stardustRef = useRef<StardustHandle>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const bodyRef = useRef<HTMLParagraphElement>(null);
   const eyebrowRef = useRef<HTMLSpanElement>(null);
@@ -115,8 +95,13 @@ export function ScrollScene({
       scrub: true,
       onUpdate: (self) => {
         const p = self.progress;
-        stardustRef.current?.setProgress(p);
         progressValue.set(p);
+
+        const imageReveal = clamp01(p / 0.45);
+        if (imageRef.current) {
+          imageRef.current.style.filter = `blur(${(1 - imageReveal) * 16}px) brightness(${0.3 + imageReveal * 0.7})`;
+          imageRef.current.style.transform = `scale(${1.05 - imageReveal * 0.05})`;
+        }
 
         const reveal = clamp01((p - 0.14) / 0.34);
         if (eyebrowRef.current) eyebrowRef.current.style.opacity = String(reveal);
@@ -205,21 +190,16 @@ export function ScrollScene({
   return (
     <div ref={outerRef} data-nav-hero data-nav-tone="dark" className="relative h-[300vh] w-full bg-black">
       <div className="sticky top-0 h-screen w-screen overflow-hidden bg-black isolate">
-        {visible && !noWebgl ? (
-          <CanvasErrorBoundary
-            fallback={<Image src={scene.bg} alt="" fill sizes="100vw" className="object-cover" />}
-          >
-            <Canvas
-              dpr={[1, 2]}
-              orthographic
-              gl={{ antialias: true, alpha: false }}
-              className="absolute inset-0"
-            >
-              <StardustPlane ref={stardustRef} src={scene.bg} />
-            </Canvas>
-          </CanvasErrorBoundary>
-        ) : visible ? (
-          <Image src={scene.bg} alt="" fill sizes="100vw" className="object-cover" />
+        {visible ? (
+          <Image
+            ref={imageRef}
+            src={scene.bg}
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover"
+            style={{ filter: "blur(16px) brightness(0.3)", transform: "scale(1.05)" }}
+          />
         ) : (
           <div className="absolute inset-0 bg-black" />
         )}
