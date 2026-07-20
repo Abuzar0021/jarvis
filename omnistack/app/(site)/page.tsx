@@ -68,12 +68,12 @@ export default async function HomePage() {
         secondaryCta={site.hero.secondaryCta}
       />
 
-      <ScrollScene scene={getScene("what-we-do")} coord="SYS_REF // 00.02">
-        <ServicesAct intro={site.servicesIntro} services={featuredServices} />
+      <ScrollScene scene={getScene("selected-work")} coord="SYS_REF // 00.02">
+        <WorkAct projects={projects} />
       </ScrollScene>
 
-      <ScrollScene scene={getScene("selected-work")} coord="SYS_REF // 00.03">
-        <WorkAct projects={projects} />
+      <ScrollScene scene={getScene("what-we-do")} coord="SYS_REF // 00.03">
+        <ServicesAct intro={site.servicesIntro} services={featuredServices} />
       </ScrollScene>
 
       <ScrollScene scene={getScene("ai-native")} coord="SYS_REF // 00.04">
