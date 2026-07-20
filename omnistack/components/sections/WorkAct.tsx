@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { motion, useTransform, type MotionValue } from "motion/react";
+import { motion, useTransform, useMotionValueEvent, type MotionValue } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { useStage } from "@/components/canvas/StageContext";
@@ -18,10 +19,11 @@ const STAGE_KEYS = ["challenge", "approach", "outcome"] as const;
 type StageKey = (typeof STAGE_KEYS)[number];
 
 /** Cover image + client/category header, shared by every project spread. */
-function CoverCard({ project }: { project: Project }) {
+function CoverCard({ project, tabIndex }: { project: Project; tabIndex?: number }) {
   return (
     <Link
       href={`/work/${project.slug}`}
+      tabIndex={tabIndex}
       className="group block overflow-hidden rounded-2xl border border-white/15 bg-[#100e0a]/80 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)] backdrop-blur-md transition-colors hover:border-white/40"
     >
       <div
@@ -112,6 +114,8 @@ function ProjectSpread({
   };
   const spreadOpacity = useTransform(activeIndex, (i) => (i === index ? 1 : 0));
   const spreadPointerEvents = useTransform(spreadOpacity, (o) => (o > 0.5 ? "auto" : "none"));
+  const [isActive, setIsActive] = useState(() => activeIndex.get() === index);
+  useMotionValueEvent(activeIndex, "change", (latest) => setIsActive(latest === index));
 
   if (reduceOnly) {
     return (
@@ -130,9 +134,10 @@ function ProjectSpread({
     <motion.div
       style={{ opacity: spreadOpacity, pointerEvents: spreadPointerEvents }}
       className="absolute inset-0"
+      aria-hidden={!isActive}
     >
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
-        <CoverCard project={project} />
+        <CoverCard project={project} tabIndex={isActive ? undefined : -1} />
         <div className="grid gap-3 sm:grid-cols-3">
           {STAGE_KEYS.map((key, i) => (
             <motion.div key={key} style={{ opacity: opacities[key] }}>
