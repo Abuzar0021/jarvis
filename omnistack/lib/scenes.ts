@@ -25,6 +25,8 @@ export interface Scene {
   revealDirection: RevealDirection;
   /** Hero-only: draw the golden-ratio vanishing-point grid before the painting resolves. */
   golden?: boolean;
+  /** Rotation (degrees) applied to the `tech` overlay image, for a stuck-on collage feel. */
+  techRotate?: number;
 }
 
 export const scenes: Scene[] = [
@@ -45,12 +47,18 @@ export const scenes: Scene[] = [
   {
     slug: "selected-work",
     bg: "/art/letter-scene.webp",
+    tech: "/tech/headphones.svg",
+    techPosition: { x: 58, y: 22 },
+    techRotate: 6,
     headline: "Work we're proud to put our name on.",
     revealDirection: "left",
   },
   {
     slug: "ai-native",
     bg: "/art/armor-portrait.webp",
+    tech: "/tech/aviator-goggles.svg",
+    techPosition: { x: 47, y: 26 },
+    techRotate: -4,
     headline: "AI that does the work - not demos.",
     revealDirection: "right",
   },
