@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useTransform } from "motion/react";
+import { motion, useTransform, type MotionValue } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { useStage } from "@/components/canvas/StageContext";
@@ -25,7 +25,7 @@ function CoverCard({ project }: { project: Project }) {
       className="group block overflow-hidden rounded-2xl border border-white/15 bg-[#100e0a]/80 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)] backdrop-blur-md transition-colors hover:border-white/40"
     >
       <div
-        className="relative aspect-[4/3] overflow-hidden"
+        className="relative aspect-[16/9] overflow-hidden"
         style={{ background: coverGradient(project.slug) }}
       >
         {project.cover ? (
@@ -76,17 +76,26 @@ function StageCard({ label, text, index }: { label: string; text: string; index:
 
 /**
  * One project's case-study spread: a cover card plus a challenge/approach/
- * outcome stack. When animated, each stage fades in as the pinned scene's own
- * scroll progress moves through this project's [start, end) slice of the run;
- * under reduced motion / narrow viewports everything renders at once.
+ * outcome stack. `activeIndex` is a shared MotionValue<number> (this
+ * project's position in the deck is `index`); the whole spread is visible
+ * only while activeIndex === index, so only one project's content occupies
+ * the pinned frame's fixed height at a time. Each stage within the visible
+ * spread still fades in in sequence, driven by the scene's own scroll
+ * progress through this project's [start, end) slice. Under reduced motion
+ * / narrow viewports every project renders at once, in normal (unbounded,
+ * non-pinned) flow, and activeIndex is ignored.
  */
 function ProjectSpread({
   project,
   range,
+  index,
+  activeIndex,
   reduceOnly,
 }: {
   project: Project;
   range: [number, number];
+  index: number;
+  activeIndex: MotionValue<number>;
   reduceOnly: boolean;
 }) {
   const { progress } = useStage();
@@ -101,6 +110,8 @@ function ProjectSpread({
     approach: approachOpacity,
     outcome: outcomeOpacity,
   };
+  const spreadOpacity = useTransform(activeIndex, (i) => (i === index ? 1 : 0));
+  const spreadPointerEvents = useTransform(spreadOpacity, (o) => (o > 0.5 ? "auto" : "none"));
 
   if (reduceOnly) {
     return (
@@ -116,28 +127,40 @@ function ProjectSpread({
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
-      <CoverCard project={project} />
-      <div className="grid gap-3 sm:grid-cols-3">
-        {STAGE_KEYS.map((key, i) => (
-          <motion.div key={key} style={{ opacity: opacities[key] }}>
-            <StageCard label={STAGE_LABELS[i]} text={project[key]} index={i} />
-          </motion.div>
-        ))}
+    <motion.div
+      style={{ opacity: spreadOpacity, pointerEvents: spreadPointerEvents }}
+      className="absolute inset-0"
+    >
+      <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+        <CoverCard project={project} />
+        <div className="grid gap-3 sm:grid-cols-3">
+          {STAGE_KEYS.map((key, i) => (
+            <motion.div key={key} style={{ opacity: opacities[key] }}>
+              <StageCard label={STAGE_LABELS[i]} text={project[key]} index={i} />
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
 /**
  * Work act: the flagship deep-dive. Each real case study (up to three, from
- * /admin) gets its own scroll-revealed challenge/approach/outcome spread,
- * each owning an equal slice of the pinned scene's scroll progress.
+ * /admin) gets its own scroll-revealed challenge/approach/outcome spread.
+ * On desktop, only one project is shown at a time — activeIndex derives
+ * which, from the pinned scene's own scroll progress — bounding the visible
+ * content to a fixed-height frame instead of stacking every project's full
+ * spread at once.
  */
 export function WorkAct({ projects }: { projects: Project[] }) {
-  const { fallback } = useStage();
+  const { fallback, progress } = useStage();
   const deck = projects.slice(0, 3);
   const slice = 1 / Math.max(deck.length, 1);
+  const activeIndex = useTransform(progress, (p) => {
+    const clamped = Math.min(1, Math.max(0, p));
+    return Math.min(deck.length - 1, Math.floor(clamped * deck.length));
+  });
 
   return (
     <Container className="relative w-full text-[#f4f1ea]">
@@ -152,16 +175,33 @@ export function WorkAct({ projects }: { projects: Project[] }) {
         <p className="mt-5 max-w-xl text-lg leading-relaxed text-white/70">{INTRO}</p>
       </div>
 
-      <div className="mt-10 space-y-10">
-        {deck.map((p, i) => (
-          <ProjectSpread
-            key={p.id}
-            project={p}
-            range={[i * slice, (i + 1) * slice]}
-            reduceOnly={fallback}
-          />
-        ))}
-      </div>
+      {fallback ? (
+        <div className="mt-10 space-y-10">
+          {deck.map((p, i) => (
+            <ProjectSpread
+              key={p.id}
+              project={p}
+              range={[i * slice, (i + 1) * slice]}
+              index={i}
+              activeIndex={activeIndex}
+              reduceOnly
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="relative mt-10 h-[280px]">
+          {deck.map((p, i) => (
+            <ProjectSpread
+              key={p.id}
+              project={p}
+              range={[i * slice, (i + 1) * slice]}
+              index={i}
+              activeIndex={activeIndex}
+              reduceOnly={false}
+            />
+          ))}
+        </div>
+      )}
 
       <div className="mt-10">
         <Button href="/work" variant="lightOutline" size="lg" withArrow>

@@ -48,7 +48,7 @@ export const scenes: Scene[] = [
     slug: "selected-work",
     bg: "/art/letter-scene.webp",
     tech: "/tech/headphones.svg",
-    techPosition: { x: 58, y: 22 },
+    techPosition: { x: 84, y: 14 },
     techRotate: 6,
     headline: "Work we're proud to put our name on.",
     revealDirection: "left",
