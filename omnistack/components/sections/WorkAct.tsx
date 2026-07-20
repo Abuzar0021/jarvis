@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
+import { motion, useTransform } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { useStage } from "@/components/canvas/StageContext";
@@ -12,12 +12,13 @@ const EYEBROW = "Selected work";
 const HEADLINE = "Work we're proud to put our name on.";
 const INTRO = "A few of the products we've designed and shipped end to end.";
 
-// Alternating rotations for the stacked pile.
-const ROTATIONS = [-9, 6, -5, 8, -3];
-const EASE = [0.16, 1, 0.3, 1] as const;
+const ROTATIONS = [-6, 5];
+const STAGE_LABELS = ["Challenge", "Approach", "Outcome"] as const;
+const STAGE_KEYS = ["challenge", "approach", "outcome"] as const;
+type StageKey = (typeof STAGE_KEYS)[number];
 
-/** The card face (cover + meta), shared by the deck and the fallback grid. */
-function CardFace({ project }: { project: Project }) {
+/** Cover image + client/category header, shared by every project spread. */
+function CoverCard({ project }: { project: Project }) {
   return (
     <Link
       href={`/work/${project.slug}`}
@@ -58,40 +59,85 @@ function CardFace({ project }: { project: Project }) {
   );
 }
 
-/** One deck card: stacked + rotated, dealing out into the row when in view. */
-function DeckCard({
-  project,
-  index,
-  count,
-}: {
-  project: Project;
-  index: number;
-  count: number;
-}) {
-  const center = (count - 1) / 2;
+/** One challenge/approach/outcome stage card. */
+function StageCard({ label, text, index }: { label: string; text: string; index: number }) {
   return (
-    <motion.div
-      initial={{ x: (index - center) * 14, rotate: ROTATIONS[index % ROTATIONS.length] }}
-      whileInView={{ x: (index - center) * 248, rotate: 0 }}
-      viewport={{ once: true, amount: 0.4 }}
-      transition={{ duration: 0.75, delay: 0.2 + index * 0.1, ease: EASE }}
-      style={{ zIndex: index }}
-      className="absolute left-1/2 top-0 -ml-[120px] w-[240px] will-change-transform"
+    <div
+      className="rounded-xl border border-white/15 bg-black/40 p-4 backdrop-blur-sm"
+      style={{ transform: `rotate(${ROTATIONS[index % ROTATIONS.length]}deg)` }}
     >
-      <CardFace project={project} />
-    </motion.div>
+      <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--neon-magenta)]">
+        {label}
+      </p>
+      <p className="mt-2 text-sm leading-relaxed text-white/80">{text}</p>
+    </div>
   );
 }
 
 /**
- * Work act foreground: the real Work copy in light type over the full-bleed
- * painting, with a project card deck that starts as a stacked, alternately
- * rotated pile and deals out into a side-by-side row when it scrolls into view.
- * Under reduced motion / on mobile it renders a static grid of the same cards.
+ * One project's case-study spread: a cover card plus a challenge/approach/
+ * outcome stack. When animated, each stage fades in as the pinned scene's own
+ * scroll progress moves through this project's [start, end) slice of the run;
+ * under reduced motion / narrow viewports everything renders at once.
+ */
+function ProjectSpread({
+  project,
+  range,
+  reduceOnly,
+}: {
+  project: Project;
+  range: [number, number];
+  reduceOnly: boolean;
+}) {
+  const { progress } = useStage();
+  const [start, end] = range;
+  const step = (end - start) / STAGE_KEYS.length;
+
+  const challengeOpacity = useTransform(progress, [start, start + step * 0.6], [0, 1]);
+  const approachOpacity = useTransform(progress, [start + step, start + step * 1.6], [0, 1]);
+  const outcomeOpacity = useTransform(progress, [start + step * 2, start + step * 2.6], [0, 1]);
+  const opacities: Record<StageKey, typeof challengeOpacity> = {
+    challenge: challengeOpacity,
+    approach: approachOpacity,
+    outcome: outcomeOpacity,
+  };
+
+  if (reduceOnly) {
+    return (
+      <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+        <CoverCard project={project} />
+        <div className="grid gap-3 sm:grid-cols-3">
+          {STAGE_KEYS.map((key, i) => (
+            <StageCard key={key} label={STAGE_LABELS[i]} text={project[key]} index={i} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+      <CoverCard project={project} />
+      <div className="grid gap-3 sm:grid-cols-3">
+        {STAGE_KEYS.map((key, i) => (
+          <motion.div key={key} style={{ opacity: opacities[key] }}>
+            <StageCard label={STAGE_LABELS[i]} text={project[key]} index={i} />
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Work act: the flagship deep-dive. Each real case study (up to three, from
+ * /admin) gets its own scroll-revealed challenge/approach/outcome spread,
+ * each owning an equal slice of the pinned scene's scroll progress.
  */
 export function WorkAct({ projects }: { projects: Project[] }) {
   const { fallback } = useStage();
-  const deck = projects.slice(0, 4);
+  const deck = projects.slice(0, 3);
+  const slice = 1 / Math.max(deck.length, 1);
 
   return (
     <Container className="relative w-full text-[#f4f1ea]">
@@ -106,19 +152,16 @@ export function WorkAct({ projects }: { projects: Project[] }) {
         <p className="mt-5 max-w-xl text-lg leading-relaxed text-white/70">{INTRO}</p>
       </div>
 
-      {fallback ? (
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {deck.map((p) => (
-            <CardFace key={p.id} project={p} />
-          ))}
-        </div>
-      ) : (
-        <div className="relative mx-auto mt-12 h-[290px] w-full">
-          {deck.map((p, i) => (
-            <DeckCard key={p.id} project={p} index={i} count={deck.length} />
-          ))}
-        </div>
-      )}
+      <div className="mt-10 space-y-10">
+        {deck.map((p, i) => (
+          <ProjectSpread
+            key={p.id}
+            project={p}
+            range={[i * slice, (i + 1) * slice]}
+            reduceOnly={fallback}
+          />
+        ))}
+      </div>
 
       <div className="mt-10">
         <Button href="/work" variant="lightOutline" size="lg" withArrow>
