@@ -55,7 +55,7 @@ export function ScrollScene({
   const [narrow, setNarrow] = useState(false);
   const [visible, setVisible] = useState(Boolean(eager));
   const [noWebgl, setNoWebgl] = useState(false);
-  const dummyProgress = useMotionValue(0);
+  const progressValue = useMotionValue(0);
 
   useEffect(() => {
     // One-shot capability check (WebGL support can't change at runtime), not
@@ -84,10 +84,10 @@ export function ScrollScene({
   }, []);
 
   const fallback = Boolean(reduce) || narrow;
-  // Existing act components (WorkAct, AIAct, ProofAct) read useStage().fallback
-  // to switch between animated and static rendering; the shared progress value
-  // is unused by any of them, so a stable dummy MotionValue is sufficient here.
-  const stageValue = useMemo(() => ({ progress: dummyProgress, fallback }), [dummyProgress, fallback]);
+  // progressValue carries this scene's own 0..1 pin progress (set below, in the
+  // ScrollTrigger onUpdate) so a scene's children (e.g. WorkAct) can drive their
+  // own scroll-linked reveals off the same timeline the background shader uses.
+  const stageValue = useMemo(() => ({ progress: progressValue, fallback }), [progressValue, fallback]);
 
   // Lazy-mount the WebGL canvas only once the scene nears the viewport, and
   // unmount (disposing the GL context/textures) once it scrolls well away.
@@ -116,6 +116,7 @@ export function ScrollScene({
       onUpdate: (self) => {
         const p = self.progress;
         stardustRef.current?.setProgress(p);
+        progressValue.set(p);
 
         const reveal = clamp01((p - 0.14) / 0.34);
         if (eyebrowRef.current) eyebrowRef.current.style.opacity = String(reveal);
@@ -155,7 +156,7 @@ export function ScrollScene({
     });
 
     return () => st.kill();
-  }, [fallback, scene.golden]);
+  }, [fallback, scene.golden, progressValue]);
 
   if (fallback) {
     return (
