@@ -81,17 +81,27 @@ prior session already built.
 
 ## Asset pipeline (7 provided paintings)
 
-- Each of the 7 paintings in `C:\Users\elahi\Downloads\assets` gets one
-  AI-generated "modern twist" composite variant: the same painting with one
-  incongruous modern object added (e.g. a laptop, headphones, a camera,
-  sneakers, a skateboard) — an homage to the reference site's visual
-  technique of classical portrait + anachronistic modern object, applied to
-  our own images from scratch. This is a generation task, not editing/copying
-  Shopify's actual images.
-- Originals are retained for non-hero placements (section dividers, card
-  backgrounds) where the untouched painting reads better.
-- This is a one-time batch (7 sources → 7 composites) done before hero
-  component work, output at a resolution suitable for full-bleed hero use.
+Revised approach (no paid image-generation credits available): rather than
+pre-baking flattened AI-composited raster images, the "modern twist" is built
+as a **live layered overlay in the browser** — an homage to the reference
+site's technique of classical portrait + anachronistic modern object, applied
+to our own images, with zero external generation dependency:
+
+- Each of the 7 paintings in `C:\Users\elahi\Downloads\assets` is used as-is
+  (no pixel editing) as a base image/texture.
+- A small set of original, hand-authored SVG icon assets (sunglasses/goggles,
+  headphones, a laptop outline, a camera, a skateboard — designed from
+  scratch, not sourced) is built once and reused across paintings.
+- Each painting placement gets one SVG icon absolutely positioned over it,
+  with a drop-shadow, slight rotation, and a scroll-triggered pop/settle
+  animation (via the same GSAP/Motion system driving the rest of the page) —
+  a deliberate sticker/collage look rather than seamless photo-blended
+  compositing. This trade-off was confirmed with the user.
+- Originals are used untouched for non-hero placements (section dividers,
+  card backgrounds) where the plain painting reads better.
+- This removes the "asset batch" pre-step entirely — the SVG icon set and
+  overlay component are built as part of the hero/component implementation
+  work, no separate generation pass required.
 
 ## Content wiring
 
