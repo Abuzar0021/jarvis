@@ -1,51 +1,58 @@
 {
   "brand": "OmniStack Digital",
-  "tagline": "Products that feel inevitable.",
-  "description": "OmniStack Digital is the senior team that owns brand, design, engineering, and AI - so ambitious teams ship products that feel inevitable. Based in Dublin and Jakarta.",
+  "tagline": "Websites you actually own.",
+  "description": "OmniStack Digital builds fast, self-hosted websites you own outright. You get the code, the keys and the hosting account, with no monthly platform fees.",
   "founder": "Zar",
   "about": {
-    "heading": "Great products deserve better than mediocre execution.",
-    "story": "OmniStack Digital exists because great products deserve better than mediocre execution. For years, our founder Zar watched ideas stall - designed by studios that couldn't build, built by shops with no taste, marketed by teams that couldn't ship.\n\nSo he assembled the team he always wished he could hire: senior designers, engineers, and AI specialists who own the entire stack and treat craft as non-negotiable. We take fewer projects and finish them properly. We explain our work in plain language.\n\nWe measure ourselves by what your product does after launch - not by what we promised before it. One accountable team, from the first sketch to the last deploy, working across Dublin and Jakarta."
+    "heading": "I started OmniStack after watching too many small businesses pay a platform forever for something they could have owned in a fortnight.",
+    "story": "One person, start to finish. You talk to the person writing the code, and nothing about your site lives anywhere you can't reach."
   },
   "announcement": {
     "enabled": true,
-    "text": "New: FitPlanCoach - a production-grade fitness web app, shipped end to end.",
+    "text": "New: Banafee Group, a bilingual corporate site shipped end to end.",
     "linkLabel": "See the work",
-    "linkHref": "/work/fitplancoach"
+    "linkHref": "/work/banafee"
   },
   "hero": {
-    "eyebrow": "Brand • Product • AI | One Senior Team",
-    "headline": "Products that feel inevitable.",
-    "highlight": "inevitable",
-    "subhead": "We own brand, design, engineering, and AI under one senior team - so your product ships fast and feels like it was always meant to exist.",
+    "eyebrow": "Solo-built · Self-hosted · Yours",
+    "headline": "Websites you actually own.",
+    "highlight": "own.",
+    "subhead": "Fast, self-hosted sites for businesses that are finished renting their own storefront. You get the code, the keys, the hosting account, and an invoice that actually ends.",
+    "note": "No monthly platform fees. Ever.",
+    "annotations": [
+      "✦ the repo, yours",
+      "$4/mo hosting, paid to your host",
+      "no platform tax",
+      "keys included ✦"
+    ],
     "primaryCta": {
-      "label": "Book a Call",
-      "href": "/book"
+      "label": "Start a build",
+      "href": "#cta"
     },
     "secondaryCta": {
-      "label": "See our work",
-      "href": "/work"
+      "label": "See the work",
+      "href": "#work"
     }
   },
   "trustLabel": "Trusted by founders, agencies, and teams shipping at scale.",
   "valuePillars": [
     {
-      "title": "One team, end to end",
-      "body": "Brand to backend to growth - no hand-offs, no seams. The people who scope your project are the people who build it."
+      "title": "Own the code",
+      "body": "The repository, the assets, the deploy pipeline, handed over in full. Hire anyone next. Or nobody."
     },
     {
-      "title": "Senior-only",
-      "body": "No junior hand-offs. Every line of work is owned by someone who has shipped at scale before."
+      "title": "Zero recurring fees",
+      "body": "Hosting runs a few dollars a month, paid to your host, not to me. No plan tiers, no ransom on your own pages."
     },
     {
-      "title": "Built to perform",
-      "body": "90+ Lighthouse, WCAG 2.2 AA, and SEO from the first commit - speed and accessibility are features, not afterthoughts."
+      "title": "Built for speed",
+      "body": "Hand-written markup, no plugin sediment. Sub-second loads on a phone with two bars of signal."
     }
   ],
-  "servicesIntro": "Everything you need to design, build, and grow a modern digital product - under one roof.",
+  "servicesIntro": "Everything you need to design, build, and grow a modern digital product, under one roof.",
   "aiShowcase": {
     "eyebrow": "AI-native by default",
-    "title": "AI that does the work - not demos.",
+    "title": "AI that does the work, not demos.",
     "body": "We design agents and automations that handle real operations, wired into your stack and monitored in production. Not a chatbot bolted on; systems that move the work forward.",
     "points": [
       "Qualify and route leads automatically",
@@ -55,27 +62,23 @@
     ]
   },
   "process": {
-    "intro": "A clear path, every time. You always know what's happening and what's next.",
+    "intro": "Two to four weeks, one person, no account management layer between you and the work.",
     "steps": [
       {
-        "title": "Discover",
-        "body": "We map your goals, users, and constraints - then agree a clear scope, timeline, and fixed price."
-      },
-      {
-        "title": "Design",
-        "body": "We design the experience and the system together, so what looks right also builds right."
+        "title": "Audit",
+        "body": "I go through what you have, what it costs you monthly, and what's actually losing you enquiries. You get the findings whether or not we work together."
       },
       {
         "title": "Build",
-        "body": "Senior engineers ship in tight iterations on a hardened, type-safe stack you can trust."
+        "body": "Design and code in one pass, on your own hosting from day one. You watch it take shape on a live staging link, not in a slide deck."
       },
       {
-        "title": "Launch",
-        "body": "We deploy on secure infrastructure with monitoring, backups, and performance baked in."
+        "title": "Review",
+        "body": "Two rounds of changes, marked up directly on the page. Copy, layout, photography: we settle it before launch, not after."
       },
       {
-        "title": "Grow",
-        "body": "We measure what your product does after launch - and improve it with SEO and iteration."
+        "title": "Handover",
+        "body": "Repo, domain, hosting, analytics and a short video walkthrough, all in your name. Support if you want it, never as a condition."
       }
     ]
   },
@@ -144,16 +147,16 @@
     }
   ],
   "cta": {
-    "headline": "Let's build something inevitable.",
-    "body": "Tell us what you're building. We'll come back with a clear, fixed plan - scope, timeline, and price.",
+    "headline": "Ready to own your website, not rent it?",
+    "body": "Send one paragraph about your business. You'll get a straight answer on cost, timeline and whether I'm the right person for it.",
     "reassurance": "We reply within one business day.",
     "button": {
-      "label": "Book a Call",
-      "href": "/book"
+      "label": "omnistacksdigital@gmail.com",
+      "href": "mailto:omnistacksdigital@gmail.com"
     }
   },
   "pricing": {
-    "intro": "Clear scope, clear timeline, clear price. Pick the way of working that fits - we give you a fixed quote before anything starts.",
+    "intro": "Clear scope, clear timeline, clear price. Pick the way of working that fits, and you get a fixed quote before anything starts.",
     "note": "Every engagement starts with a free scoping call. No hourly billing, no surprises.",
     "models": [
       {
@@ -162,15 +165,15 @@
         "priceLabel": "Fixed quote",
         "features": [
           "Defined scope, timeline, and price",
-          "Design + build by one senior team",
+          "Design and build by one person",
           "Performance, accessibility, and SEO built in",
-          "Editable CMS handover"
+          "Full repo and hosting handover"
         ],
         "highlighted": true
       },
       {
         "name": "Sprint",
-        "tagline": "An embedded senior team, by the week.",
+        "tagline": "Focused work, by the week.",
         "priceLabel": "Weekly",
         "features": [
           "Fast, focused iterations",
@@ -185,7 +188,7 @@
         "tagline": "Ongoing design, build, and growth.",
         "priceLabel": "Monthly retainer",
         "features": [
-          "A long-term product team",
+          "A long-term product partner",
           "Roadmap, build, and iterate",
           "SEO and performance care",
           "Priority support"
@@ -202,7 +205,7 @@
     "enabled": false,
     "calendarUrl": "",
     "heading": "Book a free scoping call",
-    "intro": "A short call to understand what you're building. You'll leave with a clear sense of scope, timeline, and next steps - no pressure, no jargon.",
+    "intro": "A short call to understand what you're building. You'll leave with a clear sense of scope, timeline, and next steps, with no pressure and no jargon.",
     "expectations": [
       "Tell us about your goals, timeline, and constraints",
       "We share how we'd approach it and what's possible",
@@ -210,7 +213,7 @@
     ]
   },
   "contact": {
-    "email": "abuzarelahi01@gmail.com",
+    "email": "omnistacksdigital@gmail.com",
     "whatsapp": "353896050083",
     "whatsappDisplay": "+353 89 605 0083",
     "locations": [
@@ -233,8 +236,8 @@
     },
     {
       "label": "Email",
-      "href": "mailto:abuzarelahi01@gmail.com"
+      "href": "mailto:omnistacksdigital@gmail.com"
     }
   ],
-  "footerTagline": "Brand, product, and AI, built by one senior team - from Dublin to Jakarta."
+  "footerTagline": "OmniStack Digital · Self-hosted since day one"
 }

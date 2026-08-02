@@ -1,9 +1,12 @@
 /**
  * Tiny synthesized-audio engine for interactive sound. All sound is generated
- * at runtime with the Web Audio API - no audio files. Muted by default; the
- * user opts in via the sound toggle, and the preference is remembered. The
- * AudioContext is created lazily on the first enabled sound (which always
- * happens inside a user gesture), satisfying browser autoplay policies.
+ * at runtime with the Web Audio API - no audio files.
+ *
+ * Sound is ARMED by default: with no stored preference the toggle reads "on".
+ * That does not mean anything plays on load - browsers refuse to start an
+ * AudioContext before a user gesture, so `armResume` waits for the first
+ * pointerdown/keydown and resumes the context then. An explicit opt-out is
+ * remembered in localStorage.
  */
 
 type Listener = () => void;
@@ -13,7 +16,7 @@ const SCALE = [261.63, 293.66, 329.63, 392.0, 440.0, 523.25, 587.33]; // C major
 
 let ctx: AudioContext | null = null;
 let master: GainNode | null = null;
-let enabled = false;
+let enabled = true; // armed until storage says otherwise
 let initialized = false;
 const listeners = new Set<Listener>();
 
@@ -35,12 +38,30 @@ function ensureCtx(): AudioContext | null {
   return ctx;
 }
 
+/**
+ * Browsers will not let an AudioContext make noise until the user has
+ * interacted with the page, so "on by default" can only mean "armed". This
+ * resumes the context on the first real gesture, once.
+ */
+function armResume() {
+  if (typeof window === "undefined") return;
+  const onGesture = () => {
+    if (enabled) ensureCtx();
+    window.removeEventListener("pointerdown", onGesture);
+    window.removeEventListener("keydown", onGesture);
+  };
+  window.addEventListener("pointerdown", onGesture, { once: true });
+  window.addEventListener("keydown", onGesture, { once: true });
+}
+
 export const audioEngine = {
   /** Read the persisted preference once (does not create an AudioContext). */
   init() {
     if (initialized || typeof window === "undefined") return;
     initialized = true;
-    enabled = window.localStorage.getItem(STORAGE_KEY) === "1";
+    // Default on: only an explicit stored "0" disables.
+    enabled = window.localStorage.getItem(STORAGE_KEY) !== "0";
+    armResume();
     emit();
   },
   isEnabled: () => enabled,

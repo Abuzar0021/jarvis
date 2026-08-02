@@ -3,11 +3,12 @@ import { Container } from "./Container";
 import { Reveal } from "@/components/motion/Reveal";
 import { BlurTextReveal } from "@/components/motion/BlurTextReveal";
 
+/** The design's eyebrow: a short gold rule, then tiny letterspaced caps. */
 export function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-gold">
-      <span className="h-px w-6 bg-gold/60" aria-hidden />
-      {children}
+    <span className="inline-flex items-center gap-3">
+      <span className="block h-px w-[26px] bg-gold" aria-hidden />
+      <span className="eyebrow">{children}</span>
     </span>
   );
 }
@@ -42,7 +43,7 @@ export function SectionHeading({
         as="h2"
         splitBy="words"
         stagger={0.05}
-        className="display-serif mt-4 text-balance text-3xl sm:text-4xl md:text-[2.75rem]"
+        className="display-serif mt-5 text-balance text-[clamp(30px,4.4vw,58px)]"
       >
         {title}
       </BlurTextReveal>
@@ -50,7 +51,7 @@ export function SectionHeading({
         <Reveal delay={0.1}>
           <p
             className={cn(
-              "mt-4 text-lg leading-relaxed text-muted",
+              "mt-5 max-w-[34em] text-pretty text-[15px] leading-[1.7] text-muted",
               align === "center" && "mx-auto",
             )}
           >

@@ -1,12 +1,11 @@
-import { Container } from "@/components/ui/Container";
-import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/motion/Reveal";
+import { WordReveal } from "@/components/motion/WordReveal";
+import { ClosingForm } from "@/components/site/ClosingForm";
 import type { SiteContent } from "@/lib/types";
 
 /**
- * Closing CTA: not one of the seven painting scenes, so it lives in the
- * non-pinned coda on the same black editorial theme with a lighter fade-in,
- * per the brief's own grouping of Contact alongside Testimonials/Insights/FAQ.
+ * The design's closing screen: a full-height gold pool behind a word-by-word
+ * headline, with the real contact address as the primary action.
  */
 export function ClosingAct({
   cta,
@@ -16,52 +15,45 @@ export function ClosingAct({
   contact: SiteContent["contact"];
 }) {
   return (
-    <section className="relative overflow-hidden bg-black py-24 sm:py-32">
-      {/* soft neon backlight behind the headline */}
+    <section
+      id="cta"
+      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-5 py-[clamp(90px,14vh,170px)] text-center sm:px-8 lg:px-16"
+    >
       <div
-        className="pointer-events-none absolute left-1/2 top-1/2 -z-0 h-[420px] w-[720px] max-w-[90vw] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-40 blur-3xl"
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-1/2 -ml-[600px] -mt-[600px] h-[1200px] w-[1200px]"
         style={{
           background:
-            "radial-gradient(closest-side, var(--neon-magenta), transparent 70%)",
+            "radial-gradient(circle, rgba(198,161,91,.14) 0%, rgba(198,161,91,.04) 40%, rgba(198,161,91,0) 65%)",
         }}
-        aria-hidden
       />
-      <Container className="relative w-full text-center text-[#f4f1ea]">
-        <div className="relative mx-auto max-w-3xl">
-          <Reveal>
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/70 backdrop-blur-sm">
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--neon-magenta)]" aria-hidden />
-              Get in touch
-            </span>
-          </Reveal>
-          <Reveal delay={0.06}>
-            <h2 className="display-serif mt-7 text-balance text-[clamp(2.75rem,6.5vw,6rem)]">
-              {cta.headline}
-            </h2>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-white/75">
-              {cta.body}
-            </p>
-          </Reveal>
-          <Reveal delay={0.16}>
-            <div className="mt-9 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-              <Button href={cta.button.href} variant="light" size="lg" withArrow>
-                {cta.button.label}
-              </Button>
-              <a
-                href={`mailto:${contact.email}`}
-                className="text-sm text-white/70 underline-offset-4 transition-colors hover:text-white hover:underline"
-              >
-                {contact.email}
-              </a>
-            </div>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <p className="mt-6 text-sm text-white/50">{cta.reassurance}</p>
-          </Reveal>
-        </div>
-      </Container>
+
+      <Reveal>
+        <div className="eyebrow mb-[clamp(24px,4vh,40px)]">Get in touch</div>
+      </Reveal>
+
+      <WordReveal
+        as="h2"
+        text={cta.headline}
+        highlight="own"
+        className="display-serif relative m-0 max-w-[18em] text-[clamp(44px,8.4vw,132px)] text-fg"
+      />
+
+      <Reveal delay={0.64}>
+        <p className="relative m-0 mt-[clamp(26px,4vh,42px)] max-w-[28em] text-pretty text-[clamp(15px,1.3vw,18px)] leading-[1.65] text-muted">
+          {cta.body}
+        </p>
+      </Reveal>
+
+      <Reveal delay={0.72}>
+        <ClosingForm email={contact.email} />
+      </Reveal>
+
+      <Reveal delay={0.8}>
+        <p className="relative mt-6 font-mono text-[10px] uppercase tracking-[0.24em] text-muted">
+          {cta.reassurance}
+        </p>
+      </Reveal>
     </section>
   );
 }

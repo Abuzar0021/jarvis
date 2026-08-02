@@ -142,6 +142,8 @@ export const siteSchema = z.object({
     headline: z.string().max(160),
     highlight: z.string().max(80),
     subhead: z.string().max(400),
+    note: z.string().max(120),
+    annotations: z.array(z.string().max(80)),
     primaryCta: cta,
     secondaryCta: cta,
   }),

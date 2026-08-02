@@ -1,29 +1,26 @@
-import Image from "next/image";
 import { Marquee } from "@/components/motion/Marquee";
 
 /**
- * Infinite ticker band bridging the painting scenes and the coda: the trust
- * items scroll as an engraved-plate marquee, with the woodcut horn engraving
- * repeating as a textural medallion between entries. Pure CSS motion via
- * Marquee (pauses on hover and under reduced motion).
+ * Infinite trust ticker. The paintings that used to punctuate it are gone with
+ * the old theme, so the separator is now the design's rotated gold diamond.
+ * Pure CSS motion via Marquee (pauses on hover and under reduced motion).
  */
 export function TickerBand({ items }: { items: string[] }) {
+  if (!items.length) return null;
+
   return (
     <section
       aria-label="Who we work with"
-      className="border-y border-white/10 bg-black py-8"
+      className="relative border-y border-hair py-7"
     >
       <Marquee>
         {items.map((item) => (
-          <span key={item} className="flex shrink-0 items-center gap-12">
-            <Image
-              src="/art/woodcut-horn.webp"
-              alt=""
-              width={500}
-              height={818}
-              className="h-14 w-auto rounded-md border border-white/15 opacity-80"
+          <span key={item} className="flex shrink-0 items-center gap-10">
+            <span
+              aria-hidden
+              className="block h-[7px] w-[7px] rotate-45 border border-gold/60"
             />
-            <span className="font-mono text-sm uppercase tracking-[0.22em] text-white/60">
+            <span className="font-mono text-xs uppercase tracking-[0.28em] text-muted">
               {item}
             </span>
           </span>

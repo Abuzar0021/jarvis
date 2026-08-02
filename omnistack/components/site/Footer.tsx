@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
 import { Container } from "@/components/ui/Container";
-import { FooterWordmark } from "./FooterWordmark";
+import { GildedEgg } from "./GildedEgg";
 import { SoundToggle } from "@/components/motion/SoundToggle";
 import type { Service, SiteContent } from "@/lib/types";
 import { whatsappLink } from "@/lib/utils";
@@ -17,10 +17,7 @@ export function Footer({
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative mt-auto border-t border-hair bg-surface">
-      <Container className="border-b border-hair py-12">
-        <FooterWordmark />
-      </Container>
+    <footer className="relative z-[3] mt-auto border-t border-hair bg-surface">
       <Container className="py-16">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-4">
@@ -100,6 +97,7 @@ export function Footer({
             <Link href="/privacy" className="transition-colors hover:text-fg">Privacy</Link>
             <Link href="/terms" className="transition-colors hover:text-fg">Terms</Link>
             <a href="#top" className="transition-colors hover:text-fg">Back to top ↑</a>
+            <GildedEgg />
           </div>
         </div>
       </Container>

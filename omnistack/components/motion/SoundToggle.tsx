@@ -7,7 +7,7 @@ function useSoundEnabled() {
   return useSyncExternalStore(
     (cb) => audioEngine.subscribe(cb),
     () => audioEngine.isEnabled(),
-    () => false, // server snapshot: sound is off
+    () => true, // server snapshot: sound is armed by default
   );
 }
 
@@ -24,10 +24,10 @@ export function SoundToggle({ className }: { className?: string }) {
       onClick={() => audioEngine.setEnabled(!enabled)}
       aria-pressed={enabled}
       aria-label={enabled ? "Turn sound off" : "Turn sound on"}
-      className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs transition-colors ${
+      className={`inline-flex items-center gap-2 rounded-full border px-3.5 py-2 font-mono text-[10px] uppercase tracking-[0.2em] transition-colors ${
         enabled
-          ? "border-gold/50 text-gold"
-          : "border-hair text-muted hover:border-white/30 hover:text-fg"
+          ? "border-gold/50 text-gold hover:border-gold hover:text-gold-bright"
+          : "border-hair text-muted hover:border-gold/50 hover:text-fg"
       } ${className ?? ""}`}
     >
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>

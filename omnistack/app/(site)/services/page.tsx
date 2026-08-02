@@ -64,7 +64,7 @@ export default async function ServicesPage() {
                   <Reveal key={s.id} delay={(i % 2) * 0.06}>
                     <Link
                       href={`/services/${s.slug}`}
-                      className="group flex h-full flex-col rounded-2xl border border-hair bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-[0_24px_60px_-30px_rgba(47,224,238,0.14)]"
+                      className="group flex h-full flex-col rounded-[4px] border border-hair bg-card p-6 transition-all duration-500 hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-[0_30px_70px_rgba(0,0,0,.55)]"
                     >
                       <h3 className="text-lg font-semibold tracking-tight">{s.name}</h3>
                       <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{s.summary}</p>

@@ -153,6 +153,10 @@ export interface SiteContent {
     headline: string;
     highlight: string; // the gold word/phrase inside the headline
     subhead: string;
+    // The line beside the pulsing dot under the hero CTAs.
+    note: string;
+    // Four short lines the cursor spotlight uncovers around the wordmark.
+    annotations: string[];
     primaryCta: CTA;
     secondaryCta: CTA;
   };

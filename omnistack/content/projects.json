@@ -41,10 +41,10 @@
     "category": "Fitness Web App",
     "year": "2025",
     "summary": "A production-grade fitness web app that turns coaching plans into a clean, guided experience for clients.",
-    "body": "FitPlanCoach is a web application built to make coaching scalable. We designed and engineered a clear, guided product where plans, progress, and day-to-day actions live in one place.\n\nUnder the hood it's a modern, type-safe stack built to grow - fast page loads, a responsive interface that works on the gym floor, and an architecture ready for new features without a rewrite. The interface stays out of the way so the training does the talking.\n\nFrom UI to backend, it was delivered end to end by one senior team.",
+    "body": "FitPlanCoach is a web application built to make coaching scalable. We designed and engineered a clear, guided product where plans, progress, and day-to-day actions live in one place.\n\nUnder the hood it's a modern, type-safe stack built to grow - fast page loads, a responsive interface that works on the gym floor, and an architecture ready for new features without a rewrite. The interface stays out of the way so the training does the talking.\n\nFrom UI to backend, it was delivered end to end by one person.",
     "challenge": "FitPlanCoach needed to make coaching scalable - turning plans, progress, and daily actions into one clear product instead of spreadsheets and scattered messages.",
     "approach": "We designed and engineered a guided web app on a modern, type-safe stack: fast page loads, a responsive interface that works on the gym floor, and an architecture ready for new features without a rewrite.",
-    "outcome": "A production-grade product that feels effortless for clients and was delivered end to end by one senior team - from UI to backend - and ready to grow.",
+    "outcome": "A production-grade product that feels effortless for clients and was delivered end to end, from UI to backend, and ready to grow.",
     "gallery": ["/media/work-fitplancoach-detail.webp", "/media/work-fitplancoach-mobile.webp"],
     "testimonialId": "tst_3",
     "cover": "/media/fitplancoach-real.webp",
@@ -66,5 +66,42 @@
     "sortOrder": 2,
     "seoTitle": "FitPlanCoach - Fitness Web App Case Study",
     "seoDescription": "How we designed and built FitPlanCoach, a production-grade fitness web app, end to end on a modern stack."
+  },
+  {
+    "id": "prj_banafee",
+    "title": "Banafee Group",
+    "slug": "banafee",
+    "client": "Banafee Group",
+    "category": "Corporate Website",
+    "year": "2026",
+    "summary": "A bilingual corporate site for a Malaysian halal food and retail group, built as one cinematic scroll with its own markdown blog and self-hosted admin.",
+    "body": "Banafee Group has run halal food and retail in Malaysia since 1970, trading today as Banafee Xpress and Banafee Mart. The brief was a corporate site that carried that heritage without reading like a brochure, and that the team could keep updating themselves.\n\nThe result is a single-page experience built around momentum scrolling and scroll-triggered reveals: parallax section headers, animated counters, a pinned horizontal gallery that walks through twelve outlet and investment formats, and a custom cursor in the brand gold. Every section was written by hand in both English and Bahasa Melayu, with machine translation available for further languages.\n\nBehind it sits a markdown blog and a password-protected admin with a live-preview editor and image upload, so news and openings go up without a developer. Structured data, sitemap, manifest and security headers were part of the build rather than an afterthought.",
+    "challenge": "A group with more than fifty years of trading history needed a site that felt considered rather than templated, served customers in two languages, and could be updated by the team without going back to a developer for every announcement.",
+    "approach": "One cinematic scroll built on momentum scrolling and scroll-triggered reveals, with a pinned horizontal gallery for the twelve outlet formats and animated counters for the group's numbers. Both language versions were hand-written rather than machine-translated. A markdown blog and a password-protected admin with live preview and image upload put publishing in the client's hands.",
+    "outcome": "A bilingual corporate site the group owns and edits themselves, with structured data, sitemap and manifest for search, and hardened admin sessions, rate-limited login and security headers on the private side.",
+    "gallery": [
+      "/media/work-banafee-mobile.png",
+      "/media/work-banafee-detail.png"
+    ],
+    "testimonialId": "",
+    "cover": "/media/banafee-real.png",
+    "logo": "/logos/banafee.png",
+    "url": "https://www.banafeegroup.com",
+    "tags": [
+      "Corporate",
+      "Web Design",
+      "Bilingual",
+      "CMS"
+    ],
+    "services": [
+      "Website Development",
+      "UI/UX Design",
+      "SEO"
+    ],
+    "results": [],
+    "featured": true,
+    "sortOrder": 3,
+    "seoTitle": "Banafee Group - Corporate Website Case Study",
+    "seoDescription": "How we designed and built a bilingual corporate site for Banafee Group, a Malaysian halal food and retail group, with a self-hosted blog and admin."
   }
 ]

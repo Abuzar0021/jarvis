@@ -1,13 +1,31 @@
 import type { Metadata, Viewport } from "next";
-import { GeistMono } from "geist/font/mono";
-import "@fontsource-variable/archivo";
-import "@fontsource/instrument-serif/400.css";
-import "@fontsource/instrument-serif/400-italic.css";
+import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { getSite } from "@/lib/content";
 import { Analytics } from "@/components/site/Analytics";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+// The design's three families. All variable, self-hosted by next/font, and
+// exposed as CSS vars that globals.css maps onto --font-serif/sans/mono.
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  variable: "--font-fraunces",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSite();
@@ -46,7 +64,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#000000",
+  themeColor: "#0a0908",
   colorScheme: "dark",
 };
 
@@ -90,7 +108,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${GeistMono.variable} h-full`}
+      className={`${fraunces.variable} ${inter.variable} ${jetbrainsMono.variable} h-full`}
       suppressHydrationWarning
     >
       <body className="min-h-full bg-page text-fg antialiased">

@@ -1,39 +1,44 @@
 @import "tailwindcss";
 
 /*
-  OmniStack Digital - design tokens (Living Renaissance redesign)
-  Pure black editorial ground, off-white ink, cyan accent (unifying with the
-  cinematic scenes' neon language). Token NAMES are unchanged so every
+  OmniStack Digital - design tokens (gold-on-near-black editorial).
+  Ported from the Claude Design project: "OmniStack Digital.dc.html" plus
+  "pricing.html". Token NAMES are unchanged from the previous theme so every
   existing component restyles itself; only the values moved.
 */
 @theme {
   /* Color tokens */
-  --color-page: #000000; /* page background: pure black */
-  --color-surface: #0a0a0a; /* nav blur, footer: barely-elevated black */
-  --color-card: #111110; /* cards, panels: elevated black */
-  --color-hair: rgba(255, 255, 255, 0.15); /* hairline borders */
-  --color-fg: #f4f1ea; /* primary text: off-white */
-  --color-muted: #8f8b82; /* secondary text: warm gray */
-  --color-gold: #2fe0ee; /* accent: cyan (matches the scenes' neon-cyan) */
-  --color-gold-soft: rgba(47, 224, 238, 0.12); /* cyan washes */
+  --color-page: #0a0908; /* page ground: near-black "void" */
+  --color-surface: #12100d; /* nav blur, footer: barely elevated */
+  --color-card: #17130f; /* cards, panels: charcoal */
+  --color-card-2: #1f1a14; /* raised card, table stripe */
+  --color-hair: rgba(198, 161, 91, 0.22); /* gold hairline borders */
+  --color-hair-soft: rgba(237, 231, 218, 0.08); /* neutral hairline */
+  --color-fg: #ede7da; /* primary text: bone */
+  --color-muted: #8a8272; /* secondary text: stone */
+  --color-gold: #c6a15b; /* accent: house gold */
+  --color-gold-bright: #e9c879; /* accent: lit gold (hover, emphasis) */
+  --color-gold-soft: rgba(198, 161, 91, 0.12); /* gold washes */
 
-  /* Typography */
-  --font-sans: "Archivo Variable", ui-sans-serif, system-ui, -apple-system,
+  /* Typography - the three next/font families, wired in app/layout.tsx */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo,
+  --font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", Menlo,
     monospace;
 
-  /* Motion (Blueprint Phase 7) */
+  /* Motion - the design's two signature curves, used instead of defaults */
+  --ease-snap: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-weight: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-ui: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Animations */
   --animate-marquee: marquee 40s linear infinite;
   --animate-breathe: breathe 6s ease-in-out infinite;
-  --animate-shift-glow: shiftGlow 26s ease-in-out infinite;
-  --animate-shift-glow-alt: shiftGlowAlt 32s ease-in-out infinite;
-  --animate-bob: bob 7s ease-in-out infinite;
+  --animate-drift: om-drift 7s ease-in-out infinite;
+  --animate-pulse-dot: om-pulse 3.4s ease-in-out infinite;
+  --animate-scrollhint: om-scrollhint 2.6s ease-in-out infinite;
 }
 
 @keyframes marquee {
@@ -57,80 +62,80 @@
   }
 }
 
-/* Drifting duotone glow over the hero painting. Two layers run on separate
-   paths/speeds so the light never looks like a static sticker. */
-@keyframes shiftGlow {
+/* Gentle vertical drift for floating marks. */
+@keyframes om-drift {
   0% {
-    transform: translate3d(-8%, -6%, 0) scale(1.1);
-  }
-  33% {
-    transform: translate3d(6%, 4%, 0) scale(1.22);
-  }
-  66% {
-    transform: translate3d(2%, 9%, 0) scale(1.12);
-  }
-  100% {
-    transform: translate3d(-8%, -6%, 0) scale(1.1);
-  }
-}
-
-@keyframes shiftGlowAlt {
-  0% {
-    transform: translate3d(7%, 5%, 0) scale(1.15);
-  }
-  33% {
-    transform: translate3d(-5%, -3%, 0) scale(1.08);
-  }
-  66% {
-    transform: translate3d(-3%, -8%, 0) scale(1.24);
-  }
-  100% {
-    transform: translate3d(7%, 5%, 0) scale(1.15);
-  }
-}
-
-/* Gentle 3D bob for the floating glass widgets. */
-@keyframes bob {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) rotate(0deg);
+    transform: translateY(0);
   }
   50% {
-    transform: translate3d(0, -12px, 0) rotate(-1.2deg);
+    transform: translateY(-9px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Slow status-dot pulse (hero "no monthly fees" style row). */
+@keyframes om-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* The hero's falling scroll-hint tick. */
+@keyframes om-scrollhint {
+  0% {
+    transform: translateY(-70%);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(70%);
+    opacity: 0;
+  }
+}
+
+/* Preloader hexagon: each path sets its own --len (its measured path length)
+   and animation-delay, so the mark builds stroke by stroke. */
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
   }
 }
 
 @layer base {
   :root {
     color-scheme: dark;
-
-    /* Scene accent glow. Kept out of the palette tokens on purpose, so no
-       bg-/text- utilities are generated; these feed the drifting duotone
-       light inside the painting scenes and are also referenced directly
-       (e.g. var(--neon-cyan)) anywhere a raw color value is needed. */
-    --neon-cyan: #2fe0ee;
-    --neon-magenta: #ff2fa0;
   }
 
   /* The Studio CMS is a back-office editing tool, not part of the public
-     "Living Renaissance" site - it stays on the original light, practical
-     palette so long editing sessions over forms/tables stay legible. Since
-     Tailwind's bg-page/text-fg/etc. utilities just read these custom
-     properties, redeclaring them here re-scopes every admin component
-     without touching any of their className strings. */
+     site - it stays on a light, practical palette so long editing sessions
+     over forms and tables stay legible. Since Tailwind's bg-page/text-fg
+     utilities just read these custom properties, redeclaring them here
+     re-scopes every admin component without touching any className. */
   [data-admin-theme] {
     color-scheme: light;
     --color-page: #f2efe6;
     --color-surface: #eae6d9;
     --color-card: #faf8f2;
+    --color-card-2: #f2eee3;
     --color-hair: #d9d3c2;
+    --color-hair-soft: rgba(27, 22, 14, 0.08);
     --color-fg: #1b160e;
     --color-muted: #6f6553;
     --color-gold: #8f5f28;
+    --color-gold-bright: #b98a4a;
     --color-gold-soft: rgba(143, 95, 40, 0.1);
   }
 
   html {
+    background: var(--color-page);
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
   }
@@ -139,17 +144,18 @@
     background-color: var(--color-page);
     color: var(--color-fg);
     font-family: var(--font-sans);
+    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
 
-  /* Cyan selection */
+  /* Gold selection */
   ::selection {
-    background: rgba(47, 224, 238, 0.25);
-    color: var(--color-fg);
+    background: var(--color-gold);
+    color: var(--color-page);
   }
 
-  /* Accessible focus ring - 2px cyan outline + offset */
+  /* Accessible focus ring - 2px gold outline + offset */
   :where(a, button, input, textarea, select, [tabindex]):focus-visible {
     outline: 2px solid var(--color-gold);
     outline-offset: 2px;
@@ -159,44 +165,43 @@
   /* Thin, dark scrollbar */
   * {
     scrollbar-width: thin;
-    scrollbar-color: #3a3a38 var(--color-page);
+    scrollbar-color: #2b241c var(--color-page);
   }
   *::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 9px;
+    height: 9px;
   }
   *::-webkit-scrollbar-track {
     background: var(--color-page);
   }
   *::-webkit-scrollbar-thumb {
-    background: #3a3a38;
-    border-radius: 999px;
-    border: 2px solid var(--color-page);
+    background: #2b241c;
+    border-radius: 9px;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: var(--color-gold);
   }
 }
 
 @layer utilities {
-  /* Display headline treatment: bold grotesk, tight tracking, 0.9 leading.
-     Size is set per use, e.g. text-[clamp(3.5rem,9.6vw,8.75rem)]. For the
-     giant page-anchoring headlines, pair with .display-serif instead. */
+  /* Grotesk display treatment, for the few places that stay sans. */
   .display {
-    font-weight: 700;
-    letter-spacing: -0.04em;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 0.96;
+  }
+
+  /* The design's primary headline treatment: Fraunces at light weight, tight
+     leading, negative tracking. Size is set per use, e.g.
+     text-[clamp(52px,9.2vw,148px)]. */
+  .display-serif {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    letter-spacing: -0.03em;
     line-height: 0.92;
   }
 
-  /* Giant kinetic serif headline treatment: the large, page-anchoring
-     statement per section (SectionHeading, page-top h1s). Instrument Serif
-     only ships weight 400, so no bold override here - it reads plenty bold
-     at display sizes on its own (see the Hero scene, which uses it bare). */
-  .display-serif {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    letter-spacing: -0.01em;
-    line-height: 0.98;
-  }
-
-  /* Serif italic accent for key words inside display/subhead copy */
+  /* Serif italic accent for key words inside display/subhead copy. */
   .serif-accent {
     font-family: var(--font-serif);
     font-style: italic;
@@ -204,23 +209,30 @@
     letter-spacing: -0.015em;
   }
 
-  /* Subtle paper grain over sections (2-4% opacity) */
-  .grain::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.035;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* The design's eyebrow: tiny, heavily letterspaced, uppercase gold. */
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.38em;
+    text-transform: uppercase;
+    color: var(--color-gold);
   }
 
-  /* Cyan radial wash (page-top headers) */
+  /* Fixed dot-grain film over the page (the design's #om-grain layer). */
+  .grain {
+    background-image: radial-gradient(
+      rgba(237, 231, 218, 0.045) 1px,
+      transparent 1px
+    );
+    background-size: 3px 3px;
+    mix-blend-mode: screen;
+  }
+
+  /* Gold radial wash (page-top headers). */
   .gold-glow {
     background: radial-gradient(
       60% 60% at 50% 0%,
-      rgba(47, 224, 238, 0.1) 0%,
-      rgba(47, 224, 238, 0.03) 35%,
+      rgba(198, 161, 91, 0.12) 0%,
+      rgba(198, 161, 91, 0.04) 35%,
       transparent 70%
     );
   }
@@ -229,8 +241,8 @@
     text-wrap: balance;
   }
 
-  .animate-marquee {
-    animation: var(--animate-marquee);
+  .text-pretty {
+    text-wrap: pretty;
   }
 
   /* Hide content visually but keep it for screen readers */
@@ -247,8 +259,11 @@
   }
 }
 
-/* Respect reduced motion everywhere (Blueprint Phase 11) */
+/* Respect reduced motion everywhere */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *,
   *::before,
   *::after {

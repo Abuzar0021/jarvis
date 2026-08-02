@@ -37,20 +37,22 @@ async function writeJson(file: string, data: unknown): Promise<void> {
 
 const FALLBACK_SITE: SiteContent = {
   brand: "OmniStack Digital",
-  tagline: "Products that feel inevitable.",
+  tagline: "Websites you actually own.",
   description:
-    "The senior team that owns brand, design, engineering, and AI - so your product ships fast and feels like it was always meant to exist.",
+    "Fast, self-hosted websites you own outright. You get the code, the keys and the hosting account, with no monthly platform fees.",
   founder: "Zar",
   about: { heading: "", story: "" },
   announcement: { enabled: false, text: "", linkLabel: "", linkHref: "" },
   hero: {
-    eyebrow: "Digital product studio",
-    headline: "Products that feel inevitable.",
-    highlight: "inevitable",
+    eyebrow: "Solo-built · Self-hosted · Yours",
+    headline: "Websites you actually own.",
+    highlight: "own.",
     subhead:
-      "We're the senior team that owns brand, design, engineering, and AI - so your product ships fast and feels like it was always meant to exist.",
-    primaryCta: { label: "Book a Call", href: "/contact" },
-    secondaryCta: { label: "See our work", href: "/work" },
+      "Fast, self-hosted sites for businesses that are finished renting their own storefront. You get the code, the keys, the hosting account, and an invoice that actually ends.",
+    note: "No monthly platform fees. Ever.",
+    annotations: [],
+    primaryCta: { label: "Start a build", href: "#cta" },
+    secondaryCta: { label: "See the work", href: "#work" },
   },
   trustLabel: "Trusted by founders, agencies, and teams shipping at scale.",
   valuePillars: [],

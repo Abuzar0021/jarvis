@@ -1,7 +1,8 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { usePathname } from "next/navigation";
+import { useSafeReducedMotion } from "./useSafeReducedMotion";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -13,7 +14,7 @@ const EASE = [0.16, 1, 0.3, 1] as const;
  */
 export function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const reduce = useReducedMotion();
+  const reduce = useSafeReducedMotion();
 
   if (reduce) return <>{children}</>;
 

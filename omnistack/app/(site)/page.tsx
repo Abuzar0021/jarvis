@@ -1,109 +1,63 @@
-import {
-  getFaqs,
-  getFeaturedPosts,
-  getFeaturedProjects,
-  getIndustries,
-  getServices,
-  getSite,
-  getTestimonials,
-} from "@/lib/content";
-import { ScrollScene } from "@/components/canvas/ScrollScene";
-import { SideRail } from "@/components/canvas/SideRail";
-import { getScene } from "@/lib/scenes";
-import { ServicesAct } from "@/components/sections/ServicesAct";
-import { WorkAct } from "@/components/sections/WorkAct";
-import { AIAct } from "@/components/sections/AIAct";
-import { ProofAct } from "@/components/sections/ProofAct";
-import { HowWeWorkAct } from "@/components/sections/HowWeWorkAct";
-import { IndustriesAct } from "@/components/sections/IndustriesAct";
-import { ClosingAct } from "@/components/sections/ClosingAct";
-import { TickerBand } from "@/components/sections/TickerBand";
+import { getFeaturedProjects, getSite, getTestimonials } from "@/lib/content";
+import { Hero } from "@/components/sections/Hero";
 import { ValuePillars } from "@/components/sections/ValuePillars";
-import { TechStack } from "@/components/sections/TechStack";
+import { Process } from "@/components/sections/Process";
+import { Handover } from "@/components/sections/Handover";
+import { WorkTrack } from "@/components/sections/WorkTrack";
 import { Testimonials } from "@/components/sections/Testimonials";
-import { InsightsPreview } from "@/components/sections/InsightsPreview";
-import { FAQ } from "@/components/sections/FAQ";
-import { Newsletter } from "@/components/sections/Newsletter";
+import { Founder } from "@/components/sections/Founder";
+import { ClosingAct } from "@/components/sections/ClosingAct";
 
 export const revalidate = 3600;
 
 export const metadata = { alternates: { canonical: "/" } };
 
-// The seven "Living Renaissance" painting scenes, each its own GSAP-pinned
-// <ScrollScene> with the stardust shader reveal. Contact/Testimonials/Insights/
-// FAQ stay in the lighter, non-pinned coda per the brief's own grouping.
-const SCENE_COUNT = 7;
-
+/**
+ * The homepage is the design one to one: hero, differentiators, process,
+ * pinned case-study track, founder, closing CTA. Sections that used to live
+ * here (services, AI, stats, industries, ticker, tech stack, testimonials,
+ * insights, FAQ, newsletter) are not part of the design and were removed.
+ */
 export default async function HomePage() {
-  const [site, projects, services, testimonials, faqs, posts, industries] =
-    await Promise.all([
-      getSite(),
-      getFeaturedProjects(3),
-      getServices(),
-      getTestimonials(),
-      getFaqs(),
-      getFeaturedPosts(3),
-      getIndustries(),
-    ]);
+  const [site, projects, testimonials] = await Promise.all([
+    getSite(),
+    getFeaturedProjects(3),
+    getTestimonials(),
+  ]);
 
-  const featuredServices = services.filter((s) => s.featured).slice(0, 6);
-  const trustItems = [
-    ...industries.map((i) => i.name),
-    "Founders",
-    "Agencies",
-    "Scale-ups",
-  ];
+  // One quote only. The other two are already attached to their own case
+  // studies, and a single pull-quote reads stronger here than a wall of them.
+  const featuredQuote = testimonials.filter((t) => t.featured).slice(0, 1);
 
   return (
     <>
-      <SideRail count={SCENE_COUNT} />
-
-      <ScrollScene
-        scene={getScene("hero")}
-        eager
+      <Hero
+        brand={site.brand}
         eyebrow={site.hero.eyebrow}
-        body={site.hero.subhead}
-        meta={`${site.contact.responseTime} | ${site.contact.locations.map((l) => l.city).join(" & ")}`}
+        headline={site.hero.headline}
+        highlight={site.hero.highlight}
+        subhead={site.hero.subhead}
         primaryCta={site.hero.primaryCta}
         secondaryCta={site.hero.secondaryCta}
+        meta={site.hero.note}
+        annotations={site.hero.annotations}
       />
 
-      <ScrollScene scene={getScene("selected-work")} coord="SYS_REF // 00.02">
-        <WorkAct projects={projects} />
-      </ScrollScene>
-
-      <ScrollScene scene={getScene("what-we-do")} coord="SYS_REF // 00.03">
-        <ServicesAct intro={site.servicesIntro} services={featuredServices} />
-      </ScrollScene>
-
-      <ScrollScene scene={getScene("ai-native")} coord="SYS_REF // 00.04">
-        <AIAct ai={site.aiShowcase} />
-      </ScrollScene>
-
-      <ScrollScene scene={getScene("by-the-numbers")} coord="SYS_REF // 00.05">
-        <ProofAct stats={site.stats} trustLabel={site.trustLabel} />
-      </ScrollScene>
-
-      <ScrollScene scene={getScene("how-we-work")} coord="SYS_REF // 00.06">
-        <HowWeWorkAct steps={site.process.steps} intro={site.process.intro} />
-      </ScrollScene>
-
-      <ScrollScene scene={getScene("industries")} coord="SYS_REF // 00.07">
-        <IndustriesAct industries={industries} />
-      </ScrollScene>
-
+      <ValuePillars pillars={site.valuePillars} />
+      <Process steps={site.process.steps} intro={site.process.intro} />
+      {/* Not in the design, added deliberately: the site promises you own the
+          code, so it should show what changes hands rather than assert it. */}
+      <Handover />
+      <WorkTrack projects={projects} />
+      {/* Not in the design, added deliberately: proof belongs directly after
+          the work, before the pitch turns back to the person selling it. */}
+      <Testimonials items={featuredQuote} />
+      <Founder
+        about={site.about}
+        founder={site.founder}
+        locations={site.contact.locations}
+      />
       <ClosingAct cta={site.cta} contact={site.contact} />
-
-      {/* Coda: normal document scroll for the dense sections; footer follows (layout) */}
-      <div className="relative z-10 bg-page">
-        <TickerBand items={trustItems} />
-        <ValuePillars pillars={site.valuePillars} />
-        <TechStack groups={site.techStack} />
-        <Testimonials items={testimonials} />
-        <InsightsPreview posts={posts} />
-        <FAQ faqs={faqs} />
-        <Newsletter title={site.newsletter.title} body={site.newsletter.body} />
-      </div>
     </>
   );
 }

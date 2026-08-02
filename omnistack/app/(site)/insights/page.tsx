@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/site/PageHeader";
 import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/motion/Reveal";
 import { PostCard } from "@/components/sections/PostCard";
+import { Newsletter } from "@/components/sections/Newsletter";
 import { CTABand } from "@/components/sections/CTABand";
 
 export const revalidate = 3600;
@@ -56,6 +57,10 @@ export default async function InsightsPage() {
           <p className="text-muted">Articles are on the way. Check back soon.</p>
         )}
       </Section>
+
+      {/* The homepage is now the design one to one and has no newsletter, so
+          the signup lives here, next to the writing it is a signup for. */}
+      <Newsletter title={site.newsletter.title} body={site.newsletter.body} />
 
       <CTABand site={site} />
     </>
