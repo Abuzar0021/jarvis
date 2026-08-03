@@ -21,6 +21,10 @@ COPY . .
 # bake correctly into statically prerendered pages.
 ARG NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+# Same reason: the Search Console tag is emitted by generateMetadata, which
+# runs during prerender, so an empty value here means no tag in the HTML.
+ARG GOOGLE_SITE_VERIFICATION=
+ENV GOOGLE_SITE_VERIFICATION=$GOOGLE_SITE_VERIFICATION
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN pnpm build
 

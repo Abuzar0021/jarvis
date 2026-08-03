@@ -56,6 +56,13 @@ export async function generateMetadata(): Promise<Metadata> {
       icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
     },
     robots: { index: true, follow: true },
+    // Set GOOGLE_SITE_VERIFICATION in .env to emit the Search Console meta tag.
+    // Kept in env rather than hardcoded so the property can be verified, or
+    // re-verified under a different account, without a code change. Next omits
+    // the whole block when the value is undefined.
+    verification: process.env.GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+      : undefined,
   };
 }
 
