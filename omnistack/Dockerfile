@@ -7,7 +7,10 @@ WORKDIR /app
 
 # ---- deps ----
 FROM base AS deps
-COPY package.json pnpm-lock.yaml ./
+# pnpm-workspace.yaml carries the build-script allow/ignore list. Without it in
+# this stage pnpm 11 finds two unapproved build scripts and exits 1 with
+# ERR_PNPM_IGNORED_BUILDS, which is fatal rather than the warning it used to be.
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 
 # ---- build ----
