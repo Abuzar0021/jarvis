@@ -1,4 +1,4 @@
-import { getFeaturedProjects, getSite, getTestimonials } from "@/lib/content";
+import { getApprovedTestimonials, getFeaturedProjects, getSite } from "@/lib/content";
 import { Hero } from "@/components/sections/Hero";
 import { ValuePillars } from "@/components/sections/ValuePillars";
 import { Process } from "@/components/sections/Process";
@@ -22,12 +22,9 @@ export default async function HomePage() {
   const [site, projects, testimonials] = await Promise.all([
     getSite(),
     getFeaturedProjects(3),
-    getTestimonials(),
+    getApprovedTestimonials(),
   ]);
 
-  // One quote only. The other two are already attached to their own case
-  // studies, and a single pull-quote reads stronger here than a wall of them.
-  const featuredQuote = testimonials.filter((t) => t.featured).slice(0, 1);
 
   return (
     <>
@@ -50,8 +47,10 @@ export default async function HomePage() {
       <Handover />
       <WorkTrack projects={projects} />
       {/* Not in the design, added deliberately: proof belongs directly after
-          the work, before the pitch turns back to the person selling it. */}
-      <Testimonials items={featuredQuote} />
+          the work, before the pitch turns back to the person selling it. The
+          section shows one quote and picks it itself, so an approved review
+          still lands here even if nobody flagged one as featured. */}
+      <Testimonials items={testimonials} />
       <Founder
         about={site.about}
         founder={site.founder}

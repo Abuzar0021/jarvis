@@ -77,7 +77,7 @@ export function ClosingForm({ email }: { email: string }) {
   }
 
   const field =
-    "w-full rounded-[3px] border border-hair bg-card px-4 py-3.5 text-left text-[15px] text-fg outline-none transition-colors placeholder:text-muted focus:border-gold";
+    "w-full rounded-[3px] border border-hair bg-card px-4 py-3.5 text-left text-[15px] text-fg transition-colors placeholder:text-muted focus:border-gold";
 
   return (
     <form

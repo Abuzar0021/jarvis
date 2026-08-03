@@ -110,7 +110,7 @@ function useCountUp(target: number, reduce: boolean): number {
 }
 
 const SLIDER_CLASS = cn(
-  "h-[2px] w-full cursor-pointer appearance-none bg-hair outline-none",
+  "h-[2px] w-full cursor-pointer appearance-none bg-hair",
   "[&::-webkit-slider-thumb]:h-[18px] [&::-webkit-slider-thumb]:w-[18px]",
   "[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full",
   "[&::-webkit-slider-thumb]:border-[3px] [&::-webkit-slider-thumb]:border-page",
@@ -275,7 +275,7 @@ function EstimateCapture({
         required
         autoComplete="name"
         placeholder="Your name"
-        className="h-12 w-full rounded-[2px] border border-hair bg-page px-4 text-sm text-fg outline-none transition-colors placeholder:text-muted focus:border-gold"
+        className="h-12 w-full rounded-[2px] border border-hair bg-page px-4 text-sm text-fg transition-colors placeholder:text-muted focus:border-gold"
       />
       <label htmlFor="est-email" className="sr-only">
         Your email
@@ -289,7 +289,7 @@ function EstimateCapture({
         required
         autoComplete="email"
         placeholder="you@company.com"
-        className="mt-2.5 h-12 w-full rounded-[2px] border border-hair bg-page px-4 text-sm text-fg outline-none transition-colors placeholder:text-muted focus:border-gold"
+        className="mt-2.5 h-12 w-full rounded-[2px] border border-hair bg-page px-4 text-sm text-fg transition-colors placeholder:text-muted focus:border-gold"
       />
       {/* Honeypot. Real people never fill this. */}
       <input

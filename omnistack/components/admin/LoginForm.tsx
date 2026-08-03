@@ -50,7 +50,7 @@ export function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoFocus
-              className="w-full rounded-lg border border-hair bg-card px-3.5 py-2.5 text-sm focus:border-gold/60 focus:outline-none"
+              className="w-full rounded-lg border border-hair bg-card px-3.5 py-2.5 text-sm focus:border-gold/60"
               placeholder="••••••••"
             />
           </label>

@@ -70,6 +70,16 @@ export interface Project {
   seoDescription: string;
 }
 
+/** Moderation state. Only "approved" records ever reach a public surface. */
+export type TestimonialStatus = "pending" | "approved" | "rejected";
+
+/**
+ * How a published review was checked. "" means unverified, and the /reviews
+ * verification ledger says so in plain language: EU Omnibus requires the site
+ * to disclose whether and how reviews are verified, not to claim they all are.
+ */
+export type TestimonialVerification = "" | "email" | "handover";
+
 export interface Testimonial {
   id: string;
   quote: string;
@@ -77,6 +87,20 @@ export interface Testimonial {
   authorRole: string;
   company: string;
   featured: boolean;
+  // Everything below is normalised on read (see lib/content.ts), so records
+  // written before the review system existed keep working untouched.
+  status: TestimonialStatus;
+  /** What was actually delivered, e.g. "Five page site, booking flow". */
+  projectScope: string;
+  /** YYYY-MM. */
+  deliveredOn: string;
+  verifiedBy: TestimonialVerification;
+  /** Publish the review, hold back the name. */
+  nameWithheld: boolean;
+  /** Private. Used to verify the submitter, never rendered publicly. */
+  contactEmail: string;
+  submittedAt: string;
+  consentAt: string;
 }
 
 export interface Faq {

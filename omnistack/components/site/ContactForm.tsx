@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 const BUDGETS = ["Not sure yet", "Under €2k", "€2k-€5k", "€5k-€10k", "€10k+"];
 
 const inputCls =
-  "h-12 w-full rounded-xl border border-hair bg-card px-4 text-sm text-fg placeholder:text-muted/60 transition-colors focus:border-gold/60 focus:outline-none";
+  "h-12 w-full rounded-xl border border-hair bg-card px-4 text-sm text-fg placeholder:text-muted/60 transition-colors focus:border-gold/60";
 
 export function ContactForm({
   services,
@@ -107,7 +107,7 @@ export function ContactForm({
           name="message"
           required
           rows={5}
-          className="w-full rounded-xl border border-hair bg-card px-4 py-3 text-sm text-fg placeholder:text-muted/60 transition-colors focus:border-gold/60 focus:outline-none"
+          className="w-full rounded-xl border border-hair bg-card px-4 py-3 text-sm text-fg placeholder:text-muted/60 transition-colors focus:border-gold/60"
           placeholder="Tell us what you're building, your timeline, and what success looks like."
         />
         {errors.message ? <p className="mt-1 text-xs text-red-400">{errors.message}</p> : null}

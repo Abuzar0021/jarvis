@@ -51,7 +51,7 @@ export function SearchClient({
           onChange={(e) => onChange(e.target.value)}
           placeholder="Search work, services, industries, insights…"
           aria-label="Search the site"
-          className="h-14 w-full rounded-2xl border border-hair bg-card pl-12 pr-4 text-base text-fg placeholder:text-muted/60 focus:border-gold/60 focus:outline-none"
+          className="h-14 w-full rounded-2xl border border-hair bg-card pl-12 pr-4 text-base text-fg placeholder:text-muted/60 focus:border-gold/60"
         />
       </div>
 

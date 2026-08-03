@@ -223,13 +223,13 @@ function ResultsEditor({
               value={r.value}
               onChange={(e) => onChange(results.map((x, idx) => (idx === i ? { ...x, value: e.target.value } : x)))}
               placeholder="+182%"
-              className="w-28 rounded-lg border border-hair bg-card px-3 py-2 text-sm focus:border-gold/60 focus:outline-none"
+              className="w-28 rounded-lg border border-hair bg-card px-3 py-2 text-sm focus:border-gold/60"
             />
             <input
               value={r.label}
               onChange={(e) => onChange(results.map((x, idx) => (idx === i ? { ...x, label: e.target.value } : x)))}
               placeholder="organic traffic"
-              className="flex-1 rounded-lg border border-hair bg-card px-3 py-2 text-sm focus:border-gold/60 focus:outline-none"
+              className="flex-1 rounded-lg border border-hair bg-card px-3 py-2 text-sm focus:border-gold/60"
             />
             <button
               type="button"

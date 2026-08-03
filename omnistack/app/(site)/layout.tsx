@@ -5,7 +5,7 @@ import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { CursorGlow } from "@/components/motion/CursorGlow";
 import { Toaster } from "@/components/motion/Toast";
-import { Sculpture } from "@/components/canvas/Sculpture";
+import { SculptureMount } from "@/components/canvas/SculptureMount";
 import { getServices, getSite } from "@/lib/content";
 
 export default async function SiteLayout({
@@ -27,7 +27,7 @@ export default async function SiteLayout({
         className="grain pointer-events-none fixed inset-0 z-[6] opacity-50"
       />
       <CursorGlow />
-      <Sculpture />
+      <SculptureMount />
       <a
         href="#main"
         className="sr-only rounded-lg focus-visible:not-sr-only focus-visible:fixed focus-visible:left-4 focus-visible:top-4 focus-visible:z-[100] focus-visible:border focus-visible:border-gold focus-visible:bg-surface focus-visible:px-4 focus-visible:py-2 focus-visible:text-sm focus-visible:text-fg"

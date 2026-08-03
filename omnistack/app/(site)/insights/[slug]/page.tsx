@@ -53,7 +53,15 @@ export default async function PostPage({
     description: post.excerpt,
     datePublished: post.publishedAt,
     author: { "@type": post.author ? "Person" : "Organization", name: post.author || site.brand },
-    publisher: { "@type": "Organization", name: site.brand },
+    publisher: {
+      "@type": "Organization",
+      name: site.brand,
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/favicon.svg` },
+    },
+    // Google treats a missing dateModified as "never updated". Posts carry no
+    // separate modified date, so publishedAt is the honest value for both.
+    dateModified: post.publishedAt,
+    ...(post.cover ? { image: `${SITE_URL}${post.cover}` } : {}),
     mainEntityOfPage: `${SITE_URL}/insights/${post.slug}`,
     articleSection: post.category,
   };

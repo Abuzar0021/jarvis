@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getProject, getProjects, getSite, getTestimonials } from "@/lib/content";
+import { getApprovedTestimonials, getProject, getProjects, getSite } from "@/lib/content";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
@@ -9,6 +9,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { Prose } from "@/components/ui/Prose";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { CTABand } from "@/components/sections/CTABand";
+import { ReviewCard } from "@/components/sections/ReviewCard";
 import { coverGradient } from "@/lib/utils";
 
 export const revalidate = 3600;
@@ -45,7 +46,7 @@ export default async function ProjectPage({
     getProject(slug),
     getSite(),
     getProjects(),
-    getTestimonials(),
+    getApprovedTestimonials(),
   ]);
   if (!project) notFound();
 
@@ -171,17 +172,11 @@ export default async function ProjectPage({
             )}
 
             {linkedTestimonial ? (
-              <Reveal>
-                <figure className="mt-12 rounded-3xl border border-hair bg-card p-8">
-                  <span className="text-4xl leading-none text-gold" aria-hidden>“</span>
-                  <blockquote className="mt-2 text-balance text-xl font-medium leading-snug tracking-tight sm:text-2xl">
-                    {linkedTestimonial.quote}
-                  </blockquote>
-                  <figcaption className="mt-5 text-sm text-muted">
-                    {[linkedTestimonial.authorName, linkedTestimonial.authorRole].filter(Boolean).join(", ")}
-                    {linkedTestimonial.company ? ` · ${linkedTestimonial.company}` : ""}
-                  </figcaption>
-                </figure>
+              <Reveal className="mt-12">
+                {/* Was assembling its own attribution, which rendered a
+                    leading " · " whenever name and role were both empty. The
+                    shared card owns that logic now. */}
+                <ReviewCard review={linkedTestimonial} variant="featured" />
               </Reveal>
             ) : null}
 

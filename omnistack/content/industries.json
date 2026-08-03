@@ -13,8 +13,7 @@
     "services": [
       "website-development",
       "ui-ux-design",
-      "seo",
-      "branding"
+      "seo"
     ],
     "body": "Hospitality is decided in seconds, usually on a phone. We build mobile-first sites that load instantly, look as considered as the room, and put the menu, story, and booking a tap apart.\n\nEverything is editable without a developer - menus, hours, and specials - and structured so you rank for the local searches that actually fill tables. We can integrate the booking and ordering tools you already use, or build something cleaner.\n\nThe result is a site that does more than look good: it brings people through the door.",
     "cover": "",
@@ -61,7 +60,7 @@
     "services": [
       "saas-platforms",
       "web-applications",
-      "ai-agents",
+      "ai-automation",
       "seo"
     ],
     "body": "Startups live and die on momentum. We embed as a senior product team - designing, building, and shipping in tight iterations - so you move fast without mortgaging the future.\n\nWe architect for scale from day one: clean data models, real auth and roles, and the AI and automation that give small teams outsized leverage. When you raise or grow, the foundation holds.\n\nOne accountable team, from the first sketch to the last deploy.",
@@ -86,7 +85,7 @@
       "website-development",
       "performance-optimization",
       "seo",
-      "ai-automations"
+      "ai-automation"
     ],
     "body": "In retail, speed is revenue. We build storefronts that load instantly, earn trust, and guide shoppers to checkout without friction.\n\nPerformance, accessibility, and SEO are built in - not bolted on - so you rank and convert at the same time. We automate the repetitive work behind the scenes, from catalog syncs to post-purchase flows.\n\nThe outcome is a store that feels fast and sells more.",
     "cover": "",
@@ -108,9 +107,8 @@
     ],
     "services": [
       "website-development",
-      "branding",
       "seo",
-      "ai-automations"
+      "ai-automation"
     ],
     "body": "For firms that sell expertise, the website is the first impression - and often the deciding one. We build credible, distinctive sites that reflect the quality of your work and turn visitors into qualified enquiries.\n\nBehind the scenes, we automate the busywork: qualifying leads, routing enquiries, and following up - so your team spends time on clients, not admin.\n\nBrand, build, and growth, handled by one senior team.",
     "cover": "",
@@ -134,7 +132,7 @@
       "website-development",
       "web-applications",
       "seo",
-      "ai-integrations"
+      "ai-automation"
     ],
     "body": "Property is browsed on the move and decided fast. We build listing experiences that are quick to search, beautiful on mobile, and built to handle large, changing inventories.\n\nWe wire in fast lead capture and routing - and the integrations that connect your CRM and portals - so no enquiry slips through. Performance and SEO bring the right buyers in.\n\nA site and system built to convert, not just display.",
     "cover": "",

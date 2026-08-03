@@ -37,13 +37,9 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description: site.description,
     applicationName: site.brand,
-    keywords: [
-      "digital product agency",
-      "full stack development agency",
-      "AI automation agency",
-      "web design Dublin",
-      "Next.js development agency",
-    ],
+    // No `keywords`. Google has ignored the meta keywords tag for years, and the
+    // list here still described the old agency positioning, so it was dead
+    // weight that happened to also be wrong.
     authors: [{ name: site.brand }],
     openGraph: {
       type: "website",
@@ -82,6 +78,9 @@ export default async function RootLayout({
       email: site.contact.email,
       telephone: `+${site.contact.whatsapp}`,
       image: `${siteUrl}/opengraph-image`,
+      // Google prefers a raster logo for rich results, so a 512px PNG would be
+      // better than the SVG mark once one exists.
+      logo: `${siteUrl}/favicon.svg`,
       address: site.contact.locations.map((l) => ({
         "@type": "PostalAddress",
         addressLocality: l.city,

@@ -259,6 +259,38 @@
   }
 }
 
+/* Scroll-driven hairline draw across the top edge of each review grid cell.
+   The cell already sits on a static hairline from the grid gap; this walks a
+   gold line across it as the card enters.
+
+   This needs its own prefers-reduced-motion gate. The global reduce block
+   below zeroes animation-duration, which a view() timeline ignores entirely:
+   progress is driven by scroll position, not time, so the animation would run
+   at full strength for exactly the people who asked it not to. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .review-draw::after {
+      content: "";
+      position: absolute;
+      inset-inline: 0;
+      top: 0;
+      height: 1px;
+      background: var(--color-gold);
+      transform-origin: left center;
+      scale: 0 1;
+      animation: review-hairline linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 40%;
+    }
+  }
+}
+
+@keyframes review-hairline {
+  to {
+    scale: 1 1;
+  }
+}
+
 /* Respect reduced motion everywhere */
 @media (prefers-reduced-motion: reduce) {
   html {

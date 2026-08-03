@@ -20,7 +20,7 @@ export function Footer({
     <footer className="relative z-[3] mt-auto border-t border-hair bg-surface">
       <Container className="py-16">
         <div className="grid gap-12 md:grid-cols-12">
-          <div className="md:col-span-4">
+          <div className="md:col-span-3">
             <Logo brand={site.brand} />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
               {site.footerTagline}
@@ -70,7 +70,19 @@ export function Footer({
             </ul>
           </div>
 
-          <div className="md:col-span-4">
+          {/* Reviews live here rather than in the main nav. Someone deciding
+              whether to hire arrives at proof through the work, not through a
+              top level tab that reads like a request for applause. */}
+          <div className="md:col-span-2">
+            <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Clients</h3>
+            <ul className="mt-4 space-y-2.5 text-sm">
+              <li><Link href="/reviews" className="text-muted transition-colors hover:text-fg">Reviews</Link></li>
+              <li><Link href="/reviews/new" className="text-muted transition-colors hover:text-fg">Write a review</Link></li>
+              <li><Link href="/reviews#verification" className="text-muted transition-colors hover:text-fg">How we verify</Link></li>
+            </ul>
+          </div>
+
+          <div className="md:col-span-3">
             <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Get in touch</h3>
             <ul className="mt-4 space-y-3 text-sm">
               <li>

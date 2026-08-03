@@ -182,7 +182,7 @@ function rowBtn(onClick: () => void, label: string) {
   );
 }
 
-const ipt = "w-full rounded-lg border border-hair bg-card px-3 py-2 text-sm focus:border-gold/60 focus:outline-none";
+const ipt = "w-full rounded-lg border border-hair bg-card px-3 py-2 text-sm focus:border-gold/60";
 
 function PairList({
   items,

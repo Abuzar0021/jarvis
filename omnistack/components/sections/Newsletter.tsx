@@ -50,7 +50,7 @@ export function Newsletter({ title, body }: { title: string; body: string }) {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@company.com"
                   aria-label="Email address"
-                  className="h-12 flex-1 rounded-full border border-hair bg-card px-5 text-sm text-fg placeholder:text-muted/60 focus:border-gold/50 focus:outline-none"
+                  className="h-12 flex-1 rounded-full border border-hair bg-card px-5 text-sm text-fg placeholder:text-muted/60 focus:border-gold/50"
                 />
                 <input
                   type="text"

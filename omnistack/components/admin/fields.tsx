@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 const inputCls =
-  "w-full rounded-lg border border-hair bg-card px-3.5 py-2.5 text-sm text-fg placeholder:text-muted/50 transition-colors focus:border-gold/60 focus:outline-none";
+  "w-full rounded-lg border border-hair bg-card px-3.5 py-2.5 text-sm text-fg placeholder:text-muted/50 transition-colors focus:border-gold/60";
 
 export function PageTitle({
   title,

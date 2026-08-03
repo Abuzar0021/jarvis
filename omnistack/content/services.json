@@ -60,54 +60,14 @@
     "featured": false
   },
   {
-    "id": "svc_ai-solutions",
-    "name": "AI Solutions",
-    "slug": "ai-solutions",
+    "id": "svc_ai-automation",
+    "name": "AI Automation",
+    "slug": "ai-automation",
     "group": "AI",
-    "summary": "AI features that earn their place in the product.",
-    "body": "We identify where AI genuinely helps, then build it into your product with the right model, guardrails, and evaluation.",
-    "deliverables": ["Use-case discovery", "Model selection & prompts", "Guardrails & evaluation", "Production monitoring"],
-    "featured": false
-  },
-  {
-    "id": "svc_ai-agents",
-    "name": "AI Agents",
-    "slug": "ai-agents",
-    "group": "AI",
-    "summary": "Agents that do real work, not demos.",
-    "body": "Autonomous and human-in-the-loop agents that handle real operations - research, outreach, support, and more - wired into your stack.",
-    "deliverables": ["Agent design & tooling", "Human-in-the-loop controls", "Integration with your systems", "Observability & cost control"],
+    "summary": "Agents and automations that do real work, not demos.",
+    "body": "One service covering the whole range: finding where AI genuinely helps, building it, and running it in production.\n\nThat means autonomous and human-in-the-loop agents that handle real operations such as research, outreach and support, wired into the systems you already run. It means automations that qualify leads, generate content on brand, and keep data in sync between your tools without anyone copying and pasting. And it means adding intelligence to an existing CRM, helpdesk or internal tool rather than replacing it.\n\nEvery build starts with a process audit, because most of what looks like an AI problem is a workflow problem. What survives that audit gets the right model, real guardrails, an evaluation set, and cost and failure monitoring, so you can tell whether it is working after launch rather than hoping.",
+    "deliverables": ["Process audit & use-case discovery", "Agent design, tooling & human-in-the-loop controls", "Automated pipelines & system integrations", "Model selection, prompts & guardrails", "Evaluation, observability & cost control", "Documentation & handover"],
     "featured": true
-  },
-  {
-    "id": "svc_ai-automations",
-    "name": "AI Automations",
-    "slug": "ai-automations",
-    "group": "AI",
-    "summary": "Automate the busywork end to end.",
-    "body": "Automations that qualify leads, generate content, and sync systems while you sleep - monitored and reliable.",
-    "deliverables": ["Workflow mapping", "Automated pipelines", "Notifications & logging", "Failure handling"],
-    "featured": true
-  },
-  {
-    "id": "svc_ai-integrations",
-    "name": "AI Integrations",
-    "slug": "ai-integrations",
-    "group": "AI",
-    "summary": "Bring AI into the tools you already run.",
-    "body": "Add intelligence to your existing CRM, helpdesk, or internal tools without replacing them.",
-    "deliverables": ["Integration architecture", "Secure data handling", "Custom AI endpoints", "Rollout & training"],
-    "featured": false
-  },
-  {
-    "id": "svc_workflow-automation",
-    "name": "Workflow Automation",
-    "slug": "workflow-automation",
-    "group": "AI",
-    "summary": "Remove the manual steps between your tools.",
-    "body": "We connect your apps and processes so data flows and tasks trigger themselves - fewer errors, more time back.",
-    "deliverables": ["Process audit", "Automation build", "Integrations", "Documentation"],
-    "featured": false
   },
   {
     "id": "svc_uiux",
@@ -118,16 +78,6 @@
     "body": "Research-led product and web design that's beautiful and usable - and built to translate cleanly into code.",
     "deliverables": ["UX research & flows", "High-fidelity UI", "Design system", "Prototypes"],
     "featured": true
-  },
-  {
-    "id": "svc_branding",
-    "name": "Branding",
-    "slug": "branding",
-    "group": "Design",
-    "summary": "Identity that feels premium and human.",
-    "body": "Logo, type, color, and voice - a complete identity system your whole product can be built on.",
-    "deliverables": ["Logo & marks", "Type & color system", "Brand guidelines", "Assets & templates"],
-    "featured": false
   },
   {
     "id": "svc_performance",
@@ -157,26 +107,6 @@
     "summary": "Campaigns that drive the right traffic.",
     "body": "Paid and organic growth aligned to your funnel, measured against revenue - not vanity metrics.",
     "deliverables": ["Channel strategy", "Campaign setup", "Landing pages", "Analytics & reporting"],
-    "featured": false
-  },
-  {
-    "id": "svc_ugc",
-    "name": "UGC Advertising",
-    "slug": "ugc-advertising",
-    "group": "Grow",
-    "summary": "Creative that performs on social.",
-    "body": "User-generated-style ad creative built to stop the scroll and convert across paid social.",
-    "deliverables": ["Creative concepts", "Scripting", "Edited ad creative", "Performance iteration"],
-    "featured": false
-  },
-  {
-    "id": "svc_maintenance",
-    "name": "Maintenance & Support",
-    "slug": "maintenance-support",
-    "group": "Grow",
-    "summary": "Stay fast, secure, and up to date.",
-    "body": "Ongoing care for your product - updates, monitoring, fixes, and small improvements, handled.",
-    "deliverables": ["Updates & security patches", "Uptime monitoring", "Bug fixes", "Monthly improvements"],
     "featured": false
   }
 ]

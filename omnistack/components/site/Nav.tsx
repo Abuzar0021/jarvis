@@ -10,16 +10,25 @@ import { Magnetic } from "@/components/motion/Magnetic";
 import { cn } from "@/lib/utils";
 
 /**
- * The design's nav: four links and one gold pill, fixed over the page.
+ * The design's nav, plus the two routes it left out.
  *
- * Three of the four point at homepage sections, so off the homepage they have
- * to become "/#id" or they resolve against the current route and go nowhere.
+ * The design ships four links. That looked right and ranked badly: it left the
+ * 18 service pages and 6 industry pages reachable only from the footer, and
+ * /work linked from no desktop nav at all. Services and Industries are back
+ * because internal links are how those pages get crawled and weighted.
+ *
+ * An entry with an `id` is a homepage section. On the homepage it scrolls; off
+ * it, it falls back to `href` if there is one, otherwise to "/#id". That is why
+ * Work carries both: it scrolls to the pinned track on the homepage and routes
+ * to the work index everywhere else.
  */
 const NAV_LINKS: { label: string; id?: string; href?: string }[] = [
   { label: "Why", id: "why" },
   { label: "Process", id: "process" },
+  { label: "Services", href: "/services" },
+  { label: "Industries", href: "/industries" },
   { label: "Pricing", href: "/pricing" },
-  { label: "Work", id: "work" },
+  { label: "Work", id: "work", href: "/work" },
 ];
 
 export function Nav({ brand, ctaLabel }: { brand: string; ctaLabel: string }) {
@@ -29,7 +38,7 @@ export function Nav({ brand, ctaLabel }: { brand: string; ctaLabel: string }) {
   const pathname = usePathname();
   const onHome = pathname === "/";
   const to = (l: { id?: string; href?: string }) =>
-    l.href ?? (onHome ? `#${l.id}` : `/#${l.id}`);
+    l.id && onHome ? `#${l.id}` : (l.href ?? `/#${l.id}`);
 
   useEffect(() => {
     // The design keeps the bar translucent over the first half-viewport, then

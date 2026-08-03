@@ -5,7 +5,8 @@
     "authorName": "",
     "authorRole": "Founder",
     "company": "Startup client",
-    "featured": true
+    "featured": true,
+    "status": "approved"
   },
   {
     "id": "tst_2",
@@ -13,7 +14,8 @@
     "authorName": "",
     "authorRole": "Owner",
     "company": "Restaurant client",
-    "featured": false
+    "featured": false,
+    "status": "approved"
   },
   {
     "id": "tst_3",
@@ -21,6 +23,7 @@
     "authorName": "",
     "authorRole": "Product Lead",
     "company": "Fitness client",
-    "featured": false
+    "featured": false,
+    "status": "approved"
   }
 ]

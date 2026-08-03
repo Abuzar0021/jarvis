@@ -93,11 +93,28 @@ export function WorkTrack({ projects }: { projects: Project[] }) {
       }
     };
 
+    // Keyboard focus has to drive the scrub, not fight it. Without this, tabbing
+    // into the track lands on a card the loop is still rendering at 16% opacity,
+    // or one sitting thousands of pixels outside the viewport, because card
+    // position is a function of window.scrollY and the browser only scrolled to
+    // satisfy focus. Inverting the same maths gives the scroll position that
+    // centres the focused card, so it arrives lit and on screen.
+    const onFocusIn = (e: FocusEvent) => {
+      const target = e.target;
+      if (!(target instanceof HTMLElement)) return;
+      const card = cards.find((c) => c.el.contains(target));
+      if (!card || dist <= 0) return;
+      const wanted = Math.min(1, Math.max(0, (card.centre - vw * 0.46) / dist));
+      window.scrollTo({ top: wrapTop + wanted * len, behavior: "instant" });
+    };
+
     raf = requestAnimationFrame(tick);
     window.addEventListener("resize", measure);
+    track.addEventListener("focusin", onFocusIn);
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", measure);
+      track.removeEventListener("focusin", onFocusIn);
     };
   }, [reduce]);
 
@@ -122,7 +139,11 @@ export function WorkTrack({ projects }: { projects: Project[] }) {
         style={{ height: `${100 + panels * 60}vh` }}
         className="relative"
       >
-        <div className="sticky top-0 flex h-[100svh] flex-col justify-center overflow-hidden">
+        {/* overflow-clip, not overflow-hidden: hidden is still programmatically
+            scrollable, so focusing a card made the browser set scrollLeft on
+            this container. The loop only ever writes `transform`, so the two
+            offsets stacked and the track stayed displaced for the session. */}
+        <div className="sticky top-0 flex h-[100svh] flex-col justify-center overflow-clip">
           <div className="px-5 pb-[clamp(24px,4vh,44px)] sm:px-8 lg:px-16">
             <Header>
               <div className="flex items-center gap-3.5 pb-1.5">

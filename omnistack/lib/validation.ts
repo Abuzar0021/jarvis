@@ -67,14 +67,54 @@ export const serviceSchema = z.object({
   featured: z.boolean().optional().default(false),
 });
 
+/** A YYYY-MM month, or empty. */
+const MONTH = /^(\d{4}-(0[1-9]|1[0-2]))?$/;
+
 export const testimonialSchema = z.object({
   id: z.string().optional(),
-  quote: z.string().trim().min(5).max(1000),
+  quote: z.string().trim().min(5).max(1200),
   authorName: z.string().trim().max(120).optional().default(""),
   authorRole: z.string().trim().max(120).optional().default(""),
-  company: z.string().trim().max(120).optional().default(""),
+  company: z.string().trim().max(160).optional().default(""),
   featured: z.boolean().optional().default(false),
+  // New records default to pending: nothing reaches the public site without a
+  // person deciding it should.
+  status: z.enum(["pending", "approved", "rejected"]).optional().default("pending"),
+  projectScope: z.string().trim().max(200).optional().default(""),
+  deliveredOn: z.string().trim().regex(MONTH, "Use YYYY-MM").optional().default(""),
+  verifiedBy: z.enum(["", "email", "handover"]).optional().default(""),
+  nameWithheld: z.boolean().optional().default(false),
+  contactEmail: z.string().trim().max(200).optional().default(""),
+  submittedAt: z.string().trim().max(40).optional().default(""),
+  consentAt: z.string().trim().max(40).optional().default(""),
 });
+
+/**
+ * The public /reviews/new endpoint. Deliberately not testimonialSchema: a
+ * visitor may not set status, featured, verifiedBy or any timestamp. Those are
+ * decided server side and in the admin.
+ */
+export const reviewSubmissionSchema = z.object({
+  name: z.string().trim().min(2, "Please enter your name").max(120),
+  role: z.string().trim().max(120).optional().default(""),
+  company: z.string().trim().max(160).optional().default(""),
+  projectScope: z
+    .string()
+    .trim()
+    .min(3, "Tell us in a few words what was built")
+    .max(200, "Keep the scope under 200 characters"),
+  quote: z
+    .string()
+    .trim()
+    .min(40, "A useful review runs to at least 40 characters")
+    .max(1200, "Please keep the review under 1200 characters"),
+  email: z.string().trim().regex(EMAIL, "Enter a valid email").max(200),
+  nameWithheld: z.boolean().optional().default(false),
+  consent: z.literal(true, "Please confirm you agree to your review being published"),
+  // Honeypot - must be empty.
+  website: z.string().max(0).optional().default(""),
+});
+export type ReviewSubmissionInput = z.infer<typeof reviewSubmissionSchema>;
 
 export const faqSchema = z.object({
   id: z.string().optional(),

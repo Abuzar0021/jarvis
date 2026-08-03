@@ -1,4 +1,5 @@
 import { randomBytes } from "node:crypto";
+import type { Testimonial } from "./types";
 
 /** Join class names, dropping falsy values. */
 export function cn(...parts: Array<string | false | null | undefined>): string {
@@ -46,6 +47,26 @@ export function formatDate(iso: string): string {
 export function readingTime(body: string): number {
   const words = body.trim().split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.round(words / 200));
+}
+
+/**
+ * The one place attribution is assembled, so every surface renders the same
+ * two lines and none of them can produce a dangling separator.
+ */
+export function attribution(t: Testimonial) {
+  const line1 = t.nameWithheld ? "" : t.authorName;
+  const line2 = [t.authorRole, t.company].filter(Boolean).join(", ");
+  return { line1, line2 };
+}
+
+/**
+ * The credibility rule. A review is publishable only when a reader can tell
+ * who said it (name, role, or a named company or sector) and what was actually
+ * delivered. A bare quote attached to nobody is marketing, not evidence.
+ */
+export function canPublish(t: Testimonial): boolean {
+  const { line1, line2 } = attribution(t);
+  return Boolean((line1.trim() || line2.trim()) && t.projectScope.trim());
 }
 
 /** Deterministic jewel-toned gradient for project covers without an image. */

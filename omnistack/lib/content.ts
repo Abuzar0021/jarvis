@@ -132,8 +132,52 @@ export async function saveServices(services: Service[]): Promise<void> {
 
 /* -------------------------------------------------------- Testimonials --- */
 
+/**
+ * Fills the review fields on records written before the review system existed.
+ * Unknown records default to "pending", so a hand-edited or restored file can
+ * never quietly publish something nobody approved.
+ */
+function normalizeTestimonial(raw: Partial<Testimonial>): Testimonial {
+  return {
+    id: raw.id ?? "",
+    quote: raw.quote ?? "",
+    authorName: raw.authorName ?? "",
+    authorRole: raw.authorRole ?? "",
+    company: raw.company ?? "",
+    featured: raw.featured ?? false,
+    status: raw.status ?? "pending",
+    projectScope: raw.projectScope ?? "",
+    deliveredOn: raw.deliveredOn ?? "",
+    verifiedBy: raw.verifiedBy ?? "",
+    nameWithheld: raw.nameWithheld ?? false,
+    contactEmail: raw.contactEmail ?? "",
+    submittedAt: raw.submittedAt ?? "",
+    consentAt: raw.consentAt ?? "",
+  };
+}
+
+/** Everything, including pending and rejected. Admin only. */
 export async function getTestimonials(): Promise<Testimonial[]> {
-  return readJson<Testimonial[]>("testimonials.json", []);
+  const list = await readJson<Partial<Testimonial>[]>("testimonials.json", []);
+  return list.map(normalizeTestimonial);
+}
+
+/**
+ * The only read a public surface may use. Also blanks the reviewer's private
+ * email, so no page can leak it even by accident.
+ */
+export async function getApprovedTestimonials(): Promise<Testimonial[]> {
+  const list = await getTestimonials();
+  return list
+    .filter((t) => t.status === "approved")
+    .map((t) => ({ ...t, contactEmail: "" }));
+}
+
+/** Appends a single submission. Never used to change an existing record. */
+export async function addTestimonial(item: Testimonial): Promise<void> {
+  const list = await readJson<Partial<Testimonial>[]>("testimonials.json", []);
+  list.push(item);
+  await writeJson("testimonials.json", list);
 }
 
 export async function saveTestimonials(items: Testimonial[]): Promise<void> {

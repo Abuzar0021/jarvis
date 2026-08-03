@@ -45,7 +45,9 @@ export function Founder({
 
         <Reveal delay={0.14}>
           <div>
-            <div className="eyebrow mb-[22px]">The person doing it</div>
+            {/* An h2, not a div: this was the only section on the page with no
+                heading at all. The styling is unchanged. */}
+            <h2 className="eyebrow mb-[22px]">The person doing it</h2>
             {paragraphs.map((p) => (
               <p
                 key={p.slice(0, 40)}
