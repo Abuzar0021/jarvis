@@ -145,8 +145,8 @@
     "gallery": [],
     "testimonialId": "",
     "cover": "/media/mostar-cover.webp",
-    "video": "",
-    "videoPoster": "",
+    "video": "/media/mostar-motion.mp4",
+    "videoPoster": "/media/mostar-motion-poster.webp",
     "logo": "",
     "url": "",
     "tags": [
