@@ -5,8 +5,13 @@
     "slug": "website-development",
     "group": "Build",
     "summary": "Fast, beautiful, SEO-first sites that convert.",
-    "body": "Marketing sites and landing pages engineered for speed, accessibility, and search from the first commit. Built on Next.js so they load instantly and rank well.",
-    "deliverables": ["Design system & responsive build", "Headless CMS so you can edit everything", "90+ Lighthouse & Core Web Vitals", "On-page SEO & schema"],
+    "body": "Most small business websites are rented. You pay a platform every month, the site lives on their servers, the templates are theirs, and the day you stop paying it disappears. Three years in you have spent thousands and own nothing you can take with you.\n\nThis is the other option. You get a site built for you, and you get the code, the repository, the domain and the hosting account. Not a licence to use it. The actual thing.\n\n## How it is built\n\nEvery site is built on Next.js and rendered ahead of time, so a page arrives as finished HTML rather than as a JavaScript bundle the visitor's phone has to assemble first. That is why these sites feel instant on a mid range Android on mobile data, which is what most of your visitors are actually using.\n\nThe build targets a Lighthouse score above 90 and passing Core Web Vitals, because Google uses page experience as a ranking input and because a slow site loses people before they read anything. Structured data, sitemap, canonical tags and Open Graph are part of the build rather than a plugin added afterwards.\n\nYou get a content editor for the parts that change. Text, images, projects, prices. No developer, no ticket, no waiting.\n\n## What it costs to run\n\nA static site on a small server costs roughly four dollars a month, paid directly to your host, not to us. There is no platform fee, no per seat charge, and no annual increase decided by somebody else. Compare that to the sixty to five hundred a month that hosted platforms and agency retainers typically charge and the difference over a few years is usually larger than the build itself.\n\n## What you actually receive at handover\n\nThe repository with full history, transferred to your account. The domain, in your name. The hosting account, in your name, paid with your card. Analytics, if you want it, under your login. And a walkthrough so you can edit the site yourself.\n\nIf you later want to hire somebody else, you hand them a normal Next.js repository and they get to work. Nothing is locked, nothing is proprietary, and there is no exit fee, because there is nothing to exit from.\n\n## Who this suits\n\nBusinesses that have outgrown a template, that are tired of paying rent on their own storefront, or that were quoted a five figure sum by an agency for something a solo build does better. It suits people who want to know what they own.\n\nIt is a poor fit if you want somebody else permanently responsible for every change, or if you need a large team and a long contract. Say so early and we will tell you honestly.",
+    "deliverables": [
+      "Design system & responsive build",
+      "Headless CMS so you can edit everything",
+      "90+ Lighthouse & Core Web Vitals",
+      "On-page SEO & schema"
+    ],
     "featured": true
   },
   {
@@ -15,8 +20,13 @@
     "slug": "web-applications",
     "group": "Build",
     "summary": "Production-grade products built to scale from day one.",
-    "body": "Dashboards, portals, and platforms with real authentication, data, and roles. Type-safe end to end and architected so new features don't mean a rewrite.",
-    "deliverables": ["Auth, roles & permissions", "Database design & APIs", "Reusable component library", "Testing & CI/CD"],
+    "body": "A marketing site tells people about your business. A web application is your business: the booking system, the customer portal, the dashboard, the internal tool your staff use all day.\n\nThe difference that matters commercially is that applications are where software companies lock you in hardest. Per user pricing, per transaction fees, and data held in a format you cannot export. A tool that costs eighty a month at five users costs eight hundred at fifty, and the price rises exactly as you grow.\n\n## How these are built\n\nNext.js and TypeScript on the application side, with a real database rather than a spreadsheet pretending to be one. Authentication, roles and permissions built properly, because these are the parts that quietly become security incidents when they are improvised.\n\nServer rendered where it should be indexed, client rendered where it needs to be interactive. Sessions signed and rate limited. Input validated on the server, never trusting what the browser sends.\n\nEverything runs on infrastructure you control. Your database, your server, your backups.\n\n## What that changes\n\nYour per user cost does not rise as you add staff, because there are no per user licences. Your data is in your database and you can export or query it however you like. And if the tool needs to do something unusual, it can, because it was written for your process rather than configured around somebody else's.\n\n## When not to do this\n\nIf an off the shelf product genuinely does what you need, buy it. Custom software is worth building when the tool is close to what you do rather than beside it, when the subscription cost has grown past the build cost, or when the workaround your team performs every day is itself the problem. If none of those is true, we will tell you to keep your subscription.",
+    "deliverables": [
+      "Auth, roles & permissions",
+      "Database design & APIs",
+      "Reusable component library",
+      "Testing & CI/CD"
+    ],
     "featured": true
   },
   {
@@ -26,7 +36,12 @@
     "group": "Build",
     "summary": "Native-feeling apps from one shared codebase.",
     "body": "Cross-platform mobile apps that share logic with your web product, so you ship faster and maintain less.",
-    "deliverables": ["iOS & Android builds", "Offline & push notifications", "App store submission", "Analytics & crash reporting"],
+    "deliverables": [
+      "iOS & Android builds",
+      "Offline & push notifications",
+      "App store submission",
+      "Analytics & crash reporting"
+    ],
     "featured": false
   },
   {
@@ -35,8 +50,13 @@
     "slug": "custom-software",
     "group": "Build",
     "summary": "Bespoke systems for problems off-the-shelf can't solve.",
-    "body": "Internal tools, integrations, and engines tailored to how your business actually runs.",
-    "deliverables": ["Discovery & technical spec", "Scalable architecture", "Documentation & handover", "Ongoing support"],
+    "body": "Most businesses run on a gap. Two systems that do not talk to each other, a process held together by a spreadsheet somebody maintains by hand, or a report that takes a person half a day every week to assemble.\n\nCustom software is worth building when that gap costs more than closing it. Not before.\n\n## What this usually looks like\n\nAn integration that moves data between systems that were never designed to cooperate, so nobody retypes it. An internal tool that replaces a spreadsheet several people edit at once and periodically break. A process engine that applies your rules consistently instead of relying on whoever is on shift remembering them. A reporting layer that reads your real data instead of a monthly export.\n\nNone of these are glamorous. All of them return time immediately.\n\n## How it works\n\nIt starts with discovery, which is mostly watching how the work is done now and finding where the time actually goes. That produces a written technical specification with a fixed scope and a price, before anything is built.\n\nThen the build, in stages you can see, with the architecture chosen for what you need rather than what is fashionable. Then documentation written for whoever maintains it next, which may well not be us, and handover of the repository and infrastructure.\n\n## Why the handover matters more here than anywhere else\n\nInternal tools are where custom software becomes a trap. A system only one developer understands, with no documentation, hosted on an account nobody else can access, is a liability disguised as an asset. It is also how a lot of contractors keep clients.\n\nSo the deliverable includes the specification, commented code, a written explanation of how it runs and how to deploy it, and the accounts in your name. You should be able to hand the whole thing to another developer and have them productive in a day.\n\n## Being straight about cost\n\nCustom software is the most expensive thing on this list and the easiest to get wrong. If a subscription product does eighty percent of what you need, that is usually the better buy. Bring the problem first and we will tell you honestly whether it is worth building.",
+    "deliverables": [
+      "Discovery & technical spec",
+      "Scalable architecture",
+      "Documentation & handover",
+      "Ongoing support"
+    ],
     "featured": false
   },
   {
@@ -46,7 +66,12 @@
     "group": "Build",
     "summary": "Platforms engineered for reliability and growth.",
     "body": "Multi-tenant SaaS with billing, onboarding, and admin - built to onboard your hundredth customer as smoothly as your first.",
-    "deliverables": ["Multi-tenant architecture", "Subscriptions & billing", "Admin & analytics", "Scalable infrastructure"],
+    "deliverables": [
+      "Multi-tenant architecture",
+      "Subscriptions & billing",
+      "Admin & analytics",
+      "Scalable infrastructure"
+    ],
     "featured": false
   },
   {
@@ -56,7 +81,12 @@
     "group": "Build",
     "summary": "Connect the tools you already use.",
     "body": "Reliable integrations between your product and the services it depends on - payments, CRMs, data, and more.",
-    "deliverables": ["Secure API design", "Third-party integrations", "Webhooks & sync", "Monitoring & retries"],
+    "deliverables": [
+      "Secure API design",
+      "Third-party integrations",
+      "Webhooks & sync",
+      "Monitoring & retries"
+    ],
     "featured": false
   },
   {
@@ -66,7 +96,14 @@
     "group": "AI",
     "summary": "Agents and automations that do real work, not demos.",
     "body": "One service covering the whole range: finding where AI genuinely helps, building it, and running it in production.\n\nThat means autonomous and human-in-the-loop agents that handle real operations such as research, outreach and support, wired into the systems you already run. It means automations that qualify leads, generate content on brand, and keep data in sync between your tools without anyone copying and pasting. And it means adding intelligence to an existing CRM, helpdesk or internal tool rather than replacing it.\n\nEvery build starts with a process audit, because most of what looks like an AI problem is a workflow problem. What survives that audit gets the right model, real guardrails, an evaluation set, and cost and failure monitoring, so you can tell whether it is working after launch rather than hoping.",
-    "deliverables": ["Process audit & use-case discovery", "Agent design, tooling & human-in-the-loop controls", "Automated pipelines & system integrations", "Model selection, prompts & guardrails", "Evaluation, observability & cost control", "Documentation & handover"],
+    "deliverables": [
+      "Process audit & use-case discovery",
+      "Agent design, tooling & human-in-the-loop controls",
+      "Automated pipelines & system integrations",
+      "Model selection, prompts & guardrails",
+      "Evaluation, observability & cost control",
+      "Documentation & handover"
+    ],
     "featured": true
   },
   {
@@ -76,7 +113,12 @@
     "group": "Design",
     "summary": "Interfaces with restraint and intent.",
     "body": "Research-led product and web design that's beautiful and usable - and built to translate cleanly into code.",
-    "deliverables": ["UX research & flows", "High-fidelity UI", "Design system", "Prototypes"],
+    "deliverables": [
+      "UX research & flows",
+      "High-fidelity UI",
+      "Design system",
+      "Prototypes"
+    ],
     "featured": true
   },
   {
@@ -85,8 +127,13 @@
     "slug": "performance-optimization",
     "group": "Design",
     "summary": "Make what you have fast.",
-    "body": "Audits and fixes that lift Core Web Vitals, Lighthouse scores, and conversion - measurably.",
-    "deliverables": ["Performance audit", "Core Web Vitals fixes", "Image & font optimization", "Before/after report"],
+    "body": "A slow site costs money in two directions at once. Visitors leave before the page finishes, and Google ranks it lower because page experience is a ranking input. Both problems have the same set of causes, and most of them are introduced by decisions made when the site was built.\n\n## What is usually wrong\n\nImages shipped at full resolution and served to phones. A hero image the browser is told is not urgent, so it starts downloading late. JavaScript bundles that block the main thread for hundreds of milliseconds before anything is interactive. Web fonts that swap in after the text has already rendered and shove the layout down. Analytics and chat widgets loaded before the content.\n\nMost of these are invisible on a fast laptop and obvious on a four year old Android on mobile data, which is why so many sites feel fine to the person who commissioned them and slow to everybody else.\n\n## How the work is done\n\nThe starting point is a measurement, not an opinion: Lighthouse and Core Web Vitals on both mobile and desktop, with the specific failing metrics identified. Then the causes are fixed in order of what the numbers say, which usually means the largest contentful paint element first, then main thread blocking, then layout shift.\n\nTypical changes: preloading and prioritising the image that actually is the largest contentful paint, sizing images to how they are displayed rather than how they were uploaded, splitting heavy libraries so they load only on the routes that use them, removing polyfills modern browsers do not need, and eliminating the layout reads that force the browser to recalculate geometry mid animation.\n\n## What you get\n\nA before and after measurement you can reproduce, a written list of what changed and why, and the code. Not a dashboard subscription.\n\n## An honest limit\n\nThere is a point past which further gains cost more than they return, and it arrives sooner than most agencies admit. If your site already loads quickly and passes Core Web Vitals, more optimisation is not where your next customer comes from, and we will say so rather than sell you a package.",
+    "deliverables": [
+      "Performance audit",
+      "Core Web Vitals fixes",
+      "Image & font optimization",
+      "Before/after report"
+    ],
     "featured": false
   },
   {
@@ -95,8 +142,13 @@
     "slug": "seo",
     "group": "Grow",
     "summary": "Traffic, rankings, and conversions that compound.",
-    "body": "Technical and content SEO built into the product, not bolted on - so you rank for the searches that bring customers.",
-    "deliverables": ["Technical SEO", "Keyword & content strategy", "Schema & internal linking", "Reporting"],
+    "body": "Most SEO work is sold as a monthly retainer with a report attached. This is not that. The technical foundation is built into the site at construction, and it stays working without anybody billing you to maintain it.\n\n## What gets built in\n\nEvery page is server rendered, so search engines receive finished HTML rather than having to execute JavaScript to discover your content. Each page carries its own title, description and canonical URL. Structured data is emitted where it earns something: organisation and logo, breadcrumbs, articles on posts, FAQ where a page genuinely answers questions. A sitemap is generated automatically from your real content, so it never drifts out of date, and robots.txt points at it.\n\nCore Web Vitals are treated as part of the build rather than an optimisation pass afterwards. Largest contentful paint, interaction latency and layout shift are all ranking inputs, and all three are far cheaper to get right while building than to retrofit.\n\nInternal linking is structured so that services, industries and case studies reinforce each other instead of competing for the same query.\n\n## What is honest about the rest\n\nRankings take months, not weeks, and nobody who tells you otherwise is being straight with you. A new domain has no history and no links, and Google is deliberately slow to trust one. What the technical work does is remove every reason for Google not to rank you. It does not manufacture demand.\n\nContent and links are what move position after that, and both take time and real effort. If you want that work done, it is a separate conversation with a separate price, and we will tell you plainly whether the search volume in your market justifies it. For plenty of local businesses it does not, and a Google Business Profile plus a fast site will do more than a year of blogging.\n\n## What you can check yourself\n\nEverything here is verifiable. Run your site through PageSpeed Insights. View source and read the meta tags. Open the sitemap. Paste a page into Google's Rich Results Test. We would rather you check than take our word for it, which is also why no page on this site claims a ranking result it cannot show you.\n\n## What you own\n\nThe same as everything else. The code, the configuration, the analytics account. If you stop working with us, none of it switches off.",
+    "deliverables": [
+      "Technical SEO",
+      "Keyword & content strategy",
+      "Schema & internal linking",
+      "Reporting"
+    ],
     "featured": true
   },
   {
@@ -106,7 +158,12 @@
     "group": "Grow",
     "summary": "Campaigns that drive the right traffic.",
     "body": "Paid and organic growth aligned to your funnel, measured against revenue - not vanity metrics.",
-    "deliverables": ["Channel strategy", "Campaign setup", "Landing pages", "Analytics & reporting"],
+    "deliverables": [
+      "Channel strategy",
+      "Campaign setup",
+      "Landing pages",
+      "Analytics & reporting"
+    ],
     "featured": false
   }
 ]

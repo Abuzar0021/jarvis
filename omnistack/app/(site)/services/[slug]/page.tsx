@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getService, getServices, getSite } from "@/lib/content";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
+import { Prose } from "@/components/ui/Prose";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/motion/Reveal";
 import { Eyebrow } from "@/components/ui/Section";
@@ -42,7 +43,6 @@ export default async function ServicePage({
   if (!service) notFound();
 
   const related = all.filter((s) => s.group === service.group && s.slug !== service.slug).slice(0, 4);
-  const paragraphs = service.body.split("\n\n").filter(Boolean);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -98,17 +98,17 @@ export default async function ServicePage({
       <Section>
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-7">
-            <div className="space-y-5 text-lg leading-relaxed text-muted">
-              {paragraphs.length ? (
-                paragraphs.map((p, i) => (
-                  <Reveal key={i} delay={i * 0.04}>
-                    <p>{p}</p>
-                  </Reveal>
-                ))
-              ) : (
-                <p>{service.summary}</p>
-              )}
-            </div>
+            {/* Prose, not a plain paragraph split: these bodies use markdown
+                headings, and a real h2 is worth more to a reader scanning the
+                page and to search than a bold line inside a paragraph. Prose
+                already carries the same wrapper classes this used. */}
+            {service.body.trim() ? (
+              <Reveal>
+                <Prose body={service.body} />
+              </Reveal>
+            ) : (
+              <p className="text-lg leading-relaxed text-muted">{service.summary}</p>
+            )}
           </div>
 
           <aside className="lg:col-span-5">
