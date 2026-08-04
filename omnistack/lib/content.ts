@@ -95,19 +95,46 @@ export async function saveSite(site: SiteContent): Promise<void> {
 
 /* ------------------------------------------------------------ Projects --- */
 
+/**
+ * Fills fields added after a record was written. `kind` defaults to "work", so
+ * every project predating the templates gallery stays portfolio work. The
+ * opposite default would have silently emptied /work the moment this shipped,
+ * which is exactly how every testimonial vanished when `status` was introduced.
+ */
+function normalizeProject(raw: Partial<Project>): Project {
+  return {
+    ...(raw as Project),
+    kind: raw.kind === "template" ? "template" : "work",
+    video: raw.video ?? "",
+    videoPoster: raw.videoPoster ?? "",
+  };
+}
+
+/** Both kinds. Public surfaces should use getWork() or getTemplates(). */
 export async function getProjects(): Promise<Project[]> {
-  const list = await readJson<Project[]>("projects.json", []);
-  return [...list].sort(
-    (a, b) => a.sortOrder - b.sortOrder || a.title.localeCompare(b.title),
-  );
+  const list = await readJson<Partial<Project>[]>("projects.json", []);
+  return list
+    .map(normalizeProject)
+    .sort((a, b) => a.sortOrder - b.sortOrder || a.title.localeCompare(b.title));
+}
+
+/** Delivered client work: the portfolio, the sitemap and search all use this. */
+export async function getWork(): Promise<Project[]> {
+  return (await getProjects()).filter((p) => p.kind === "work");
+}
+
+/** Published templates. Never mixed into, or presented as, client work. */
+export async function getTemplates(): Promise<Project[]> {
+  return (await getProjects()).filter((p) => p.kind === "template");
 }
 
 export async function getProject(slug: string): Promise<Project | undefined> {
   return (await getProjects()).find((p) => p.slug === slug);
 }
 
+/** Featured client work for the homepage track. Templates are excluded. */
 export async function getFeaturedProjects(limit = 3): Promise<Project[]> {
-  const all = await getProjects();
+  const all = await getWork();
   const featured = all.filter((p) => p.featured);
   return (featured.length ? featured : all).slice(0, limit);
 }

@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { HoverDistortImage } from "@/components/canvas/HoverDistortImage";
+import { CardVideo } from "@/components/sections/CardVideo";
 import { Magnetic } from "@/components/motion/Magnetic";
 import { coverGradient } from "@/lib/utils";
 import type { Project } from "@/lib/types";
@@ -38,7 +39,7 @@ export function WorkTrack({ projects }: { projects: Project[] }) {
     let len = 1;
     let dist = 0;
     let vw = 1;
-    let cards: { el: HTMLElement; centre: number }[] = [];
+    let cards: { el: HTMLElement; centre: number; video: HTMLElement | null }[] = [];
 
     const measure = () => {
       vw = window.innerWidth;
@@ -52,6 +53,7 @@ export function WorkTrack({ projects }: { projects: Project[] }) {
         // full-width sticky wrapper, so screen x is just this plus the shift.
         el,
         centre: el.offsetLeft + el.offsetWidth / 2,
+        video: el.querySelector<HTMLElement>("[data-card-video]"),
       }));
     };
 
@@ -62,6 +64,9 @@ export function WorkTrack({ projects }: { projects: Project[] }) {
     // stops, because the raw delta it chases is then zero.
     let lastY = window.scrollY;
     let vel = 0;
+
+    // Index of the card currently allowed to play, or -1 for none.
+    let playing = -1;
 
     let raf = 0;
     const tick = () => {
@@ -81,7 +86,13 @@ export function WorkTrack({ projects }: { projects: Project[] }) {
       track.style.transform = `translate3d(${shift.toFixed(1)}px,0,0) skewX(${skew.toFixed(2)}deg)`;
       if (barRef.current) barRef.current.style.width = `${(t * 100).toFixed(1)}%`;
 
-      for (const card of cards) {
+      // Which card is nearest centre, so exactly one motion preview decodes.
+      // Several playing at once on the heaviest page of the site, alongside
+      // three.js and GSAP, is the difference between smooth and a slideshow.
+      let bestIdx = -1;
+      let bestOff = Infinity;
+
+      cards.forEach((card, i) => {
         const cx = (card.centre + shift) / vw;
         const off = Math.max(-1, Math.min(1, (cx - 0.46) * 1.5));
         card.el.style.opacity = String(Math.max(0.16, 1 - Math.abs(off) * 0.85));
@@ -90,6 +101,23 @@ export function WorkTrack({ projects }: { projects: Project[] }) {
         )}deg) scale(${(1 - Math.abs(off) * 0.08).toFixed(3)}) translateZ(${(
           -Math.abs(off) * 90
         ).toFixed(1)}px)`;
+
+        const mag = Math.abs(off);
+        if (card.video && mag < bestOff) {
+          bestOff = mag;
+          bestIdx = i;
+        }
+      });
+
+      // Below 0.35 the card is legible enough to be worth playing. Writing the
+      // attribute only on change keeps this out of the 60fps path: an unchanged
+      // dataset write still invalidates style, and MutationObserver would fire
+      // on every frame.
+      const wanted = bestOff < 0.35 ? bestIdx : -1;
+      if (wanted !== playing) {
+        if (playing >= 0) cards[playing]?.video?.setAttribute("data-playing", "0");
+        if (wanted >= 0) cards[wanted]?.video?.setAttribute("data-playing", "1");
+        playing = wanted;
       }
     };
 
@@ -229,7 +257,17 @@ function CaseCard({
           className="relative h-[clamp(220px,34vh,380px)] overflow-hidden"
           style={{ background: coverGradient(project.slug) }}
         >
-          {project.cover ? (
+          {/* Video wins when there is one, otherwise nothing about this card
+              changes. A project with no clip must look exactly as it did before
+              motion previews existed. */}
+          {project.video ? (
+            <CardVideo
+              src={project.video}
+              poster={project.videoPoster || project.cover}
+              alt={`${project.title} - ${project.category}`}
+              className="absolute inset-0"
+            />
+          ) : project.cover ? (
             <HoverDistortImage
               src={project.cover}
               alt={`${project.title} - ${project.category}`}

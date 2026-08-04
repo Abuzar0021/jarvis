@@ -1,12 +1,12 @@
 import type { MetadataRoute } from "next";
-import { getIndustries, getPosts, getProjects, getServices } from "@/lib/content";
+import { getIndustries, getPosts, getWork, getServices } from "@/lib/content";
 
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
   const [projects, services, posts, industries] = await Promise.all([
-    getProjects(),
+    getWork(),
     getServices(),
     getPosts(),
     getIndustries(),

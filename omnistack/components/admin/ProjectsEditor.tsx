@@ -15,6 +15,7 @@ import {
 
 const blank = (): Project => ({
   id: "",
+  kind: "work",
   title: "New project",
   slug: "",
   client: "",
@@ -28,6 +29,8 @@ const blank = (): Project => ({
   gallery: [],
   testimonialId: "",
   cover: "",
+  video: "",
+  videoPoster: "",
   logo: "",
   url: "",
   tags: [],
@@ -101,6 +104,19 @@ export function ProjectsEditor({
           </summary>
 
           <div className="space-y-5 border-t border-hair p-5">
+            {/* Work and templates are kept apart deliberately. Templates never
+                appear in /work, the sitemap or search, because a design nobody
+                commissioned must not read as a delivered case study. */}
+            <SelectField
+              label="Type"
+              value={p.kind ?? "work"}
+              onChange={(v) => patch(i, { kind: v === "template" ? "template" : "work" })}
+              options={[
+                { value: "work", label: "Client work (shown in /work)" },
+                { value: "template", label: "Template (shown in /templates)" },
+              ]}
+            />
+
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Title" value={p.title} onChange={(v) => patch(i, { title: v })} />
               <Field label="Slug" value={p.slug} onChange={(v) => patch(i, { slug: v })} hint="Auto-generated from title if left blank" mono />
@@ -113,6 +129,11 @@ export function ProjectsEditor({
             <div className="grid gap-4 sm:grid-cols-2">
               <ImageField label="Cover image" value={p.cover} onChange={(v) => patch(i, { cover: v })} hint="Optional - a branded gradient is used if empty." />
               <ImageField label="Client logo" value={p.logo ?? ""} onChange={(v) => patch(i, { logo: v })} hint="Optional - small mark shown on the card and case study page." />
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field label="Motion preview (mp4)" value={p.video ?? ""} onChange={(v) => patch(i, { video: v })} placeholder="/media/banafee-motion.mp4" hint="Optional - a looping clip that plays while this card is centred. A matching .webm beside it is used automatically. Leave empty to keep the still image." mono />
+              <ImageField label="Video poster" value={p.videoPoster ?? ""} onChange={(v) => patch(i, { videoPoster: v })} hint="Optional - first frame, shown before the clip plays and under reduced motion. Falls back to the cover image." />
             </div>
 
             <TextArea label="Summary" value={p.summary} onChange={(v) => patch(i, { summary: v })} rows={2} hint="Short line shown on cards and search." />

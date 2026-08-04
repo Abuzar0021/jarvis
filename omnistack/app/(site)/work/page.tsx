@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getProjects, getSite } from "@/lib/content";
+import { getWork, getSite } from "@/lib/content";
 import { PageHeader } from "@/components/site/PageHeader";
 import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/motion/Reveal";
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function WorkPage() {
-  const [projects, site] = await Promise.all([getProjects(), getSite()]);
+  const [projects, site] = await Promise.all([getWork(), getSite()]);
 
   const jsonLd = {
     "@context": "https://schema.org",

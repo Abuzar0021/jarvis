@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getApprovedTestimonials, getProject, getProjects, getSite } from "@/lib/content";
+import { getApprovedTestimonials, getProject, getWork, getSite } from "@/lib/content";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
@@ -23,7 +23,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const project = await getProject(slug);
-  if (!project) return { title: "Case study" };
+  if (!project || project.kind !== "work") return { title: "Case study" };
   return {
     title: project.seoTitle || `${project.title} - ${project.category}`,
     description: project.seoDescription || project.summary,
@@ -45,10 +45,13 @@ export default async function ProjectPage({
   const [project, site, all, testimonials] = await Promise.all([
     getProject(slug),
     getSite(),
-    getProjects(),
+    getWork(),
     getApprovedTestimonials(),
   ]);
-  if (!project) notFound();
+  // A template must 404 here rather than render as a case study. Its own page
+  // lives under /templates, and this route states outright that the work on it
+  // was delivered for a client.
+  if (!project || project.kind !== "work") notFound();
 
   const others = all.filter((p) => p.slug !== project.slug).slice(0, 2);
   const gallery = project.gallery ?? [];

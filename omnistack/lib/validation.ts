@@ -24,6 +24,9 @@ export const newsletterSchema = z.object({
 
 export const projectSchema = z.object({
   id: z.string().optional(),
+  // Defaults to "work", so a record saved without this field stays portfolio
+  // work and nothing can become a template by omission.
+  kind: z.enum(["work", "template"]).optional().default("work"),
   title: z.string().trim().min(2).max(160),
   slug: z.string().trim().max(120).optional().default(""),
   client: z.string().trim().max(160).optional().default(""),
@@ -37,6 +40,8 @@ export const projectSchema = z.object({
   gallery: z.array(z.string().trim().max(600)).optional().default([]),
   testimonialId: z.string().trim().max(60).optional().default(""),
   cover: z.string().trim().max(600).optional().default(""),
+  video: z.string().trim().max(600).optional().default(""),
+  videoPoster: z.string().trim().max(600).optional().default(""),
   logo: z.string().trim().max(600).optional().default(""),
   url: z.string().trim().max(400).optional().default(""),
   tags: z.array(z.string().trim().max(60)).optional().default([]),

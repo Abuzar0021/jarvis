@@ -43,8 +43,17 @@ export interface Service {
   featured: boolean;
 }
 
+/**
+ * Delivered client work, or a template published for inspiration. Templates are
+ * kept out of /work, the sitemap and search on purpose: a design nobody paid for
+ * must never read as a case study. Absent means "work", so every record written
+ * before this field existed stays portfolio work.
+ */
+export type ProjectKind = "work" | "template";
+
 export interface Project {
   id: string;
+  kind: ProjectKind;
   title: string;
   slug: string;
   client: string;
@@ -59,6 +68,14 @@ export interface Project {
   gallery: string[]; // additional image URLs
   testimonialId: string; // optional linked testimonial
   cover: string; // image URL (optional) - falls back to a branded gradient
+  /**
+   * Looping motion preview, e.g. "/media/banafee-motion.mp4". A sibling .webm is
+   * offered first when present. Empty means the card keeps its still image, and
+   * that path must stay pixel for pixel what it was before video existed.
+   */
+  video: string;
+  /** First frame of `video`. Falls back to `cover` when empty. */
+  videoPoster: string;
   logo: string; // client logo mark URL (optional)
   url: string; // live site link
   tags: string[];

@@ -15,7 +15,7 @@
     "testimonialId": "tst_2",
     "cover": "/media/clovey-kitchen-real.webp",
     "logo": "/logos/clovey-kitchen.jpg",
-    "url": "https://www.cloveyrestaurant.com/",
+    "url": "",
     "tags": [
       "Restaurant",
       "Web Design",
@@ -31,7 +31,10 @@
     "featured": true,
     "sortOrder": 1,
     "seoTitle": "Clovey Restaurant - Restaurant Website Case Study",
-    "seoDescription": "How we designed and built a fast, brand-forward, mobile-first website for Clovey Restaurant - menu, story, and bookings."
+    "seoDescription": "How we designed and built a fast, brand-forward, mobile-first website for Clovey Restaurant - menu, story, and bookings.",
+    "kind": "work",
+    "video": "",
+    "videoPoster": ""
   },
   {
     "id": "prj_fitplancoach",
@@ -68,7 +71,10 @@
     "featured": true,
     "sortOrder": 2,
     "seoTitle": "FitPlanCoach - Fitness Web App Case Study",
-    "seoDescription": "How we designed and built FitPlanCoach, a production-grade fitness web app, end to end on a modern stack."
+    "seoDescription": "How we designed and built FitPlanCoach, a production-grade fitness web app, end to end on a modern stack.",
+    "kind": "work",
+    "video": "/media/fitplancoach-motion.mp4",
+    "videoPoster": "/media/fitplancoach-motion-poster.webp"
   },
   {
     "id": "prj_banafee",
@@ -118,6 +124,9 @@
     "featured": true,
     "sortOrder": 3,
     "seoTitle": "Banafee Group - Corporate Website Case Study",
-    "seoDescription": "How we designed and built a bilingual corporate site for Banafee Group, a Malaysian halal food and retail group, with a self-hosted blog and admin."
+    "seoDescription": "How we designed and built a bilingual corporate site for Banafee Group, a Malaysian halal food and retail group, with a self-hosted blog and admin.",
+    "kind": "work",
+    "video": "/media/banafee-motion.mp4",
+    "videoPoster": "/media/banafee-motion-poster.webp"
   }
 ]
