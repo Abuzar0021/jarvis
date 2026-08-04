@@ -45,7 +45,10 @@
     "challenge": "FitPlanCoach needed to make coaching scalable - turning plans, progress, and daily actions into one clear product instead of spreadsheets and scattered messages.",
     "approach": "We designed and engineered a guided web app on a modern, type-safe stack: fast page loads, a responsive interface that works on the gym floor, and an architecture ready for new features without a rewrite.",
     "outcome": "A production-grade product that feels effortless for clients and was delivered end to end, from UI to backend, and ready to grow.",
-    "gallery": ["/media/work-fitplancoach-detail.webp", "/media/work-fitplancoach-mobile.webp"],
+    "gallery": [
+      "/media/work-fitplancoach-detail.webp",
+      "/media/work-fitplancoach-mobile.webp"
+    ],
     "testimonialId": "tst_3",
     "cover": "/media/fitplancoach-real.webp",
     "logo": "/logos/fitplancoach.png",
@@ -78,7 +81,7 @@
     "body": "Banafee Group has run halal food and retail in Malaysia since 1970, trading today as Banafee Xpress and Banafee Mart. The brief was a corporate site that carried that heritage without reading like a brochure, and that the team could keep updating themselves.\n\nThe result is a single-page experience built around momentum scrolling and scroll-triggered reveals: parallax section headers, animated counters, a pinned horizontal gallery that walks through twelve outlet and investment formats, and a custom cursor in the brand gold. Every section was written by hand in both English and Bahasa Melayu, with machine translation available for further languages.\n\nBehind it sits a markdown blog and a password-protected admin with a live-preview editor and image upload, so news and openings go up without a developer. Structured data, sitemap, manifest and security headers were part of the build rather than an afterthought.",
     "challenge": "A group with more than fifty years of trading history needed a site that felt considered rather than templated, served customers in two languages, and could be updated by the team without going back to a developer for every announcement.",
     "approach": "One cinematic scroll built on momentum scrolling and scroll-triggered reveals, with a pinned horizontal gallery for the twelve outlet formats and animated counters for the group's numbers. Both language versions were hand-written rather than machine-translated. A markdown blog and a password-protected admin with live preview and image upload put publishing in the client's hands.",
-    "outcome": "A bilingual corporate site the group owns and edits themselves, with structured data, sitemap and manifest for search, and hardened admin sessions, rate-limited login and security headers on the private side.",
+    "outcome": "A bilingual corporate site the group owns and edits themselves, with structured data, sitemap and manifest for search, and hardened admin sessions, rate-limited login and security headers on the private side. Measured with Google PageSpeed Insights on 3 August 2026: SEO 100 out of 100, cumulative layout shift of 0.018 against Google's 0.1 threshold, and a desktop largest contentful paint of 1.1 seconds. These are lab measurements rather than field data, and anyone can rerun them.",
     "gallery": [
       "/media/work-banafee-mobile.png",
       "/media/work-banafee-detail.png"
@@ -98,7 +101,20 @@
       "UI/UX Design",
       "SEO"
     ],
-    "results": [],
+    "results": [
+      {
+        "label": "Lighthouse SEO",
+        "value": "100/100"
+      },
+      {
+        "label": "Layout shift",
+        "value": "0.018"
+      },
+      {
+        "label": "Desktop LCP",
+        "value": "1.1s"
+      }
+    ],
     "featured": true,
     "sortOrder": 3,
     "seoTitle": "Banafee Group - Corporate Website Case Study",
