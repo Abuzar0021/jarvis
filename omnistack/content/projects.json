@@ -128,5 +128,42 @@
     "kind": "work",
     "video": "/media/banafee-motion.mp4",
     "videoPoster": "/media/banafee-motion-poster.webp"
+  },
+  {
+    "id": "prj_mostar",
+    "kind": "template",
+    "title": "Mostar",
+    "slug": "mostar",
+    "client": "",
+    "category": "Cinematic scroll",
+    "year": "2026",
+    "summary": "A scroll-driven story where the page holds still and the scene moves through it. Built for places, products and anything that earns attention by being looked at slowly.",
+    "body": "## What this direction is for\n\nMost pages scroll past you. This one stays put and changes: the viewport pins, and scrolling moves you through a scene rather than down a document. It suits subjects that reward dwelling on, a destination, a building, a single product, a story with a sequence to it.\n\nIt is the wrong direction for anything that needs to be skimmed. If a visitor arrives wanting a phone number and an address, they should not have to travel through a film to reach it.\n\n## What it is doing\n\nThe whole piece is one pinned section a little over three thousand pixels tall. Scroll position drives every layer independently, so the sky, the mid ground and the foreground separate as you move, and the copy panels fade in and out on their own ramps rather than all at once.\n\nPointer position adds a second, much smaller drift on top. It is a few pixels, and that is deliberate: enough that the scene feels like it has depth and is responding to you, not so much that it reads as a gimmick.\n\nThe card slider at the end runs endlessly in both directions. It holds three copies of the list and snaps silently back to the middle one when you reach an edge, so there is no rewind and no dead end.\n\n## Built to survive contact with reality\n\nScroll position is smoothed rather than read raw, so a jumpy trackpad or a heavy wheel notch cannot snap the scene. Nothing animates through layout: every frame writes transforms and opacity only, which is what keeps it steady on a mid range laptop rather than on the machine it was designed on.\n\nUnder a reduced motion setting the smoothing and the pointer drift both switch off and the scene tracks scroll directly, so the content stays reachable for anyone who asked their system for less movement.",
+    "challenge": "",
+    "approach": "",
+    "outcome": "",
+    "gallery": [],
+    "testimonialId": "",
+    "cover": "/media/mostar-cover.webp",
+    "video": "",
+    "videoPoster": "",
+    "logo": "",
+    "url": "",
+    "tags": [
+      "Pinned scroll storytelling",
+      "Layered parallax depth",
+      "Pointer-reactive drift",
+      "Endless card slider",
+      "Reduced-motion safe"
+    ],
+    "services": [
+      "website-development",
+      "ui-ux-design"
+    ],
+    "results": [],
+    "featured": true,
+    "sortOrder": 1,
+    "seoTitle": "Mostar: a cinematic scroll template",
+    "seoDescription": "A pinned, scroll-driven scene with layered parallax and pointer-reactive depth. A starting direction, not a theme: what we build from it is yours outright."
   }
 ]

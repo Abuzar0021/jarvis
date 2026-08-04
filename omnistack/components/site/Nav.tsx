@@ -23,10 +23,10 @@ import { cn } from "@/lib/utils";
  * to the work index everywhere else.
  */
 const NAV_LINKS: { label: string; id?: string; href?: string }[] = [
-  { label: "Why", id: "why" },
   { label: "Process", id: "process" },
   { label: "Services", href: "/services" },
   { label: "Industries", href: "/industries" },
+  { label: "Templates", href: "/templates" },
   { label: "Pricing", href: "/pricing" },
   { label: "Work", id: "work", href: "/work" },
 ];
