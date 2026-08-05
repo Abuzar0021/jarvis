@@ -24,6 +24,7 @@ export function WordReveal({
   className,
   delay = 0,
   as = "h2",
+  eager = false,
 }: {
   text: string;
   /** Case-insensitive word to italicise in gold. Punctuation is ignored. */
@@ -31,12 +32,53 @@ export function WordReveal({
   className?: string;
   delay?: number;
   as?: keyof typeof TAGS;
+  /**
+   * Run the reveal from CSS instead of motion. Set this on anything above the
+   * fold, and never anywhere else.
+   *
+   * The motion path holds every word at opacity 0 until the library hydrates.
+   * On the hero that made the headline the largest contentful paint and pinned
+   * it to whenever the JS bundle finished, measured at 6.4s against a 1.7s
+   * first paint on a throttled phone. CSS animates from the moment styles
+   * apply, so the same reveal costs nothing and waits for nothing.
+   */
+  eager?: boolean;
 }) {
   const reduce = useSafeReducedMotion();
   const words = text.split(" ").filter(Boolean);
   const key = (w: string) => w.replace(/[^\p{L}\p{N}]/gu, "").toLowerCase();
   const hit = highlight ? key(highlight) : null;
   const MotionTag = TAGS[as];
+
+  if (eager) {
+    const Tag = as;
+    return (
+      <Tag className={cn("word-rise text-balance", className)}>
+        {words.map((w, i) => (
+          <Fragment key={`${w}-${i}`}>
+            {i > 0 ? " " : null}
+            <span
+              className={cn(
+                "inline-block",
+                hit && key(w) === hit && "serif-accent text-gold",
+              )}
+              style={
+                {
+                  "--i": i,
+                  "--rot": i % 2 ? "-3deg" : "4deg",
+                  ...(hit && key(w) === hit
+                    ? { textShadow: "0 0 46px rgba(198,161,91,.45)" }
+                    : null),
+                } as React.CSSProperties
+              }
+            >
+              {w}
+            </span>
+          </Fragment>
+        ))}
+      </Tag>
+    );
+  }
 
   return (
     <MotionTag

@@ -291,6 +291,35 @@
   }
 }
 
+/* The hero headline reveal, driven by CSS rather than by the motion library.
+
+   That library holds every word at opacity 0 until it hydrates, which made the
+   headline the largest contentful paint and tied it to whenever the JS bundle
+   finished: 6.4s against a 1.7s first paint on a throttled phone. CSS starts
+   the moment styles apply, so the word paints almost immediately and the
+   reveal looks the same.
+
+   Reduced motion is covered by the global block below, which zeroes
+   animation-duration. That is enough here because this is a time based
+   animation, unlike .review-draw, which runs on a view() timeline and needs
+   its own gate. */
+.word-rise > span {
+  display: inline-block;
+  animation: word-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(60ms + var(--i) * 70ms);
+}
+
+@keyframes word-rise {
+  from {
+    opacity: 0;
+    transform: translateY(38px) rotate(var(--rot, 0deg));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Respect reduced motion everywhere */
 @media (prefers-reduced-motion: reduce) {
   html {

@@ -189,8 +189,12 @@ export function Hero({
           </div>
         </Reveal>
 
+        {/* eager: this h1 is the largest contentful paint. The motion path
+            holds it at opacity 0 until the bundle hydrates, which measured 6.4s
+            against a 1.7s first paint on a throttled phone. */}
         <WordReveal
           as="h1"
+          eager
           text={headline}
           highlight={highlight}
           delay={0.06}
