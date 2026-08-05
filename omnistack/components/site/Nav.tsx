@@ -61,14 +61,17 @@ export function Nav({ brand, ctaLabel }: { brand: string; ctaLabel: string }) {
   }, [open]);
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-20 border-b backdrop-blur-[14px] transition-colors duration-[400ms]",
-        scrolled || open
-          ? "border-gold/[0.22] bg-page/[0.86]"
-          : "border-gold/[0.12] bg-page/[0.4]",
-      )}
-    >
+    <>
+      <header
+        className={cn(
+          // z-50 so the bar, and the close button on it, stay above the open
+          // menu panel at z-40.
+          "fixed inset-x-0 top-0 z-50 border-b backdrop-blur-[14px] transition-colors duration-[400ms]",
+          scrolled || open
+            ? "border-gold/[0.22] bg-page"
+            : "border-gold/[0.12] bg-page/[0.4]",
+        )}
+      >
       <nav className="mx-auto flex max-w-[1400px] items-center justify-between gap-6 px-5 py-5 sm:px-8 lg:px-16">
         <Logo brand={brand} />
 
@@ -117,11 +120,19 @@ export function Nav({ brand, ctaLabel }: { brand: string; ctaLabel: string }) {
             </div>
           </button>
         </div>
-      </nav>
+        </nav>
+      </header>
 
-      {/* Mobile overlay. The design has no mobile menu, so this keeps the four
+      {/* Mobile overlay. The design has no mobile menu, so this keeps the
           design links and adds Work index / Contact so those routes stay
-          reachable without a desktop nav. */}
+          reachable without a desktop nav.
+
+          It is a sibling of the header, not a child, and that is load bearing.
+          The header carries backdrop-blur, and a backdrop-filter makes an
+          element the containing block for fixed positioned descendants. Nested
+          inside it, this panel resolved `inset-0 top-[73px]` against the 80px
+          header instead of the viewport and came out seven pixels tall, so the
+          links rendered over the page with almost no background behind them. */}
       <AnimatePresence>
         {open ? (
           <motion.div
@@ -175,6 +186,6 @@ export function Nav({ brand, ctaLabel }: { brand: string; ctaLabel: string }) {
           </motion.div>
         ) : null}
       </AnimatePresence>
-    </header>
+    </>
   );
 }
