@@ -76,6 +76,13 @@ export function HoverDistortImage({
 
   useEffect(() => {
     if (reduce) return;
+    // The whole effect is a hover response, so a device that cannot hover gets
+    // nothing from it and pays for a WebGL context, a shader compile and a
+    // texture upload per card anyway. On a mid range phone that was a large
+    // part of a fifteen second total blocking time. The plain next/image below
+    // is what those visitors already see, so skipping this changes nothing they
+    // could have noticed.
+    if (window.matchMedia("(hover: none), (pointer: coarse)").matches) return;
     const host = hostRef.current;
     const canvas = canvasRef.current;
     if (!host || !canvas) return;
