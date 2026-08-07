@@ -15,7 +15,7 @@
       "ui-ux-design",
       "seo"
     ],
-    "body": "Hospitality is decided in seconds, usually on a phone. We build mobile-first sites that load instantly, look as considered as the room, and put the menu, story, and booking a tap apart.\n\nEverything is editable without a developer - menus, hours, and specials - and structured so you rank for the local searches that actually fill tables. We can integrate the booking and ordering tools you already use, or build something cleaner.\n\nThe result is a site that does more than look good: it brings people through the door.",
+    "body": "Hospitality is decided in seconds, usually on a phone. We build mobile-first sites that load instantly, look as considered as the room, and put the menu, story, and booking a tap apart.\n\nEverything is editable without a developer - menus, hours, and specials - and structured so you rank for the local searches that actually fill tables. We can integrate the booking and ordering tools you already use, or build something cleaner.\n\nThe result is a site that does more than look good: it brings people through the door.\n\n## What replaces what\n\nMost restaurant sites either live on a page builder that owns the account, or a booking and ordering platform that takes a cut of every table and every order on top of a monthly fee. What gets built here is the same as everything else on this site: the code, the domain and the hosting account come to you, and running it costs a few dollars a month rather than a percentage of every booking.\n\n## Who this suits\n\nRestaurants and hospitality brands that want the menu changed the same day a price does, that are tired of a booking widget taking a cut of every table, and that want a site that looks like the room rather than a template every competitor is also using.",
     "cover": "",
     "featured": true,
     "sortOrder": 1,
@@ -39,7 +39,7 @@
       "custom-software",
       "seo"
     ],
-    "body": "Great coaching is personal - but it shouldn't be trapped in spreadsheets and DMs. We design and build products that turn your method into a clear, guided experience clients actually stick with.\n\nFrom plans and progress to day-to-day actions, we build on a modern, type-safe stack that works on the gym floor and scales as you grow. The interface stays out of the way so the training does the talking.\n\nWhether it's a marketing site or a full web app, it's delivered end to end by one senior team.",
+    "body": "Great coaching is personal - but it shouldn't be trapped in spreadsheets and DMs. We design and build products that turn your method into a clear, guided experience clients actually stick with.\n\nFrom plans and progress to day-to-day actions, we build on a modern, type-safe stack that works on the gym floor and scales as you grow. The interface stays out of the way so the training does the talking.\n\nWhether it's a marketing site or a full web app, it's delivered end to end by one senior team.\n\n## What replaces what\n\nCoaches and studios usually end up on a generic fitness app subscription that charges per client and looks the same for every gym on the platform. What gets built here is yours: the plans, the client progress tracking and the branding are specific to how you actually coach, and the code and hosting belong to you rather than to the app's monthly bill.\n\n## Who this suits\n\nCoaches and studios whose method does not fit a generic template, who are paying per client for software that looks like everyone else's, and who want the product to scale with their client list without the price scaling faster than revenue does.",
     "cover": "",
     "featured": true,
     "sortOrder": 2,
@@ -63,7 +63,7 @@
       "ai-automation",
       "seo"
     ],
-    "body": "Startups live and die on momentum. We embed as a senior product team - designing, building, and shipping in tight iterations - so you move fast without mortgaging the future.\n\nWe architect for scale from day one: clean data models, real auth and roles, and the AI and automation that give small teams outsized leverage. When you raise or grow, the foundation holds.\n\nOne accountable team, from the first sketch to the last deploy.",
+    "body": "Startups live and die on momentum. We embed as a senior product team - designing, building, and shipping in tight iterations - so you move fast without mortgaging the future.\n\nWe architect for scale from day one: clean data models, real auth and roles, and the AI and automation that give small teams outsized leverage. When you raise or grow, the foundation holds.\n\nOne accountable team, from the first sketch to the last deploy.\n\n## What replaces what\n\nEarly technical debt is usually the result of speed bought at the cost of ownership: a low code platform, a template that cannot be extended, or a contractor who is the only one who understands the codebase. What gets built here is a normal, documented Next.js and TypeScript codebase from the first commit, so the team you hire next, whether that is us or your own engineers, can pick it up without a rewrite.\n\n## Who this suits\n\nFounders who need to move fast without accumulating debt they will have to unwind before a raise, and who would rather own a smaller, well built product than rent a larger one from a platform that can change its pricing under them.",
     "cover": "",
     "featured": false,
     "sortOrder": 3,
@@ -87,7 +87,7 @@
       "seo",
       "ai-automation"
     ],
-    "body": "In retail, speed is revenue. We build storefronts that load instantly, earn trust, and guide shoppers to checkout without friction.\n\nPerformance, accessibility, and SEO are built in - not bolted on - so you rank and convert at the same time. We automate the repetitive work behind the scenes, from catalog syncs to post-purchase flows.\n\nThe outcome is a store that feels fast and sells more.",
+    "body": "In retail, speed is revenue. We build storefronts that load instantly, earn trust, and guide shoppers to checkout without friction.\n\nPerformance, accessibility, and SEO are built in - not bolted on - so you rank and convert at the same time. We automate the repetitive work behind the scenes, from catalog syncs to post-purchase flows.\n\nThe outcome is a store that feels fast and sells more.\n\n## What replaces what\n\nMost storefronts run on a platform that takes a percentage of every sale on top of a monthly fee, in exchange for templates you do not own and a checkout you cannot fully customise. What gets built here runs on your own hosting for a few dollars a month, with no per transaction cut, and a catalogue and checkout built around how your store actually sells.\n\n## Who this suits\n\nRetailers who have outgrown a template storefront, who are paying a percentage of revenue for hosting that costs a fraction of that on its own, and who want performance and SEO treated as part of the build rather than a paid app added afterwards.",
     "cover": "",
     "featured": false,
     "sortOrder": 4,
@@ -110,7 +110,7 @@
       "seo",
       "ai-automation"
     ],
-    "body": "For firms that sell expertise, the website is the first impression - and often the deciding one. We build credible, distinctive sites that reflect the quality of your work and turn visitors into qualified enquiries.\n\nBehind the scenes, we automate the busywork: qualifying leads, routing enquiries, and following up - so your team spends time on clients, not admin.\n\nBrand, build, and growth, handled by one senior team.",
+    "body": "For firms that sell expertise, the website is the first impression - and often the deciding one. We build credible, distinctive sites that reflect the quality of your work and turn visitors into qualified enquiries.\n\nBehind the scenes, we automate the busywork: qualifying leads, routing enquiries, and following up - so your team spends time on clients, not admin.\n\nBrand, build, and growth, handled by one senior team.\n\n## What replaces what\n\nFirms that sell expertise are often the worst served by template builders, because the site is meant to signal judgment and instead looks like every competitor's. What gets built here is distinctive by construction rather than by a theme choice, and the code and hosting account belong to the firm, not to a subscription that stops the moment payments do.\n\n## Who this suits\n\nFirms where the website is genuinely the first impression a prospective client forms, where unqualified enquiries are costing billable time, and where the current site was built once and never revisited because nobody owns it enough to bother.",
     "cover": "",
     "featured": false,
     "sortOrder": 5,
@@ -134,7 +134,7 @@
       "seo",
       "ai-automation"
     ],
-    "body": "Property is browsed on the move and decided fast. We build listing experiences that are quick to search, beautiful on mobile, and built to handle large, changing inventories.\n\nWe wire in fast lead capture and routing - and the integrations that connect your CRM and portals - so no enquiry slips through. Performance and SEO bring the right buyers in.\n\nA site and system built to convert, not just display.",
+    "body": "Property is browsed on the move and decided fast. We build listing experiences that are quick to search, beautiful on mobile, and built to handle large, changing inventories.\n\nWe wire in fast lead capture and routing - and the integrations that connect your CRM and portals - so no enquiry slips through. Performance and SEO bring the right buyers in.\n\nA site and system built to convert, not just display.\n\n## What replaces what\n\nProperty sites are frequently built on a portal integrated platform that charges monthly for the privilege of listing your own inventory, with performance that degrades as the catalogue grows. What gets built here is engineered to stay fast at scale, with CRM and portal integrations wired in rather than paid for as add-ons, on hosting that costs a few dollars a month regardless of how many listings are live.\n\n## Who this suits\n\nAgencies and agents whose current site slows down as their inventory grows, who are paying monthly for a platform that owns the listing data, and who want lead capture and routing built to their process rather than a generic form.",
     "cover": "",
     "featured": false,
     "sortOrder": 6,
