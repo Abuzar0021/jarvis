@@ -35,7 +35,7 @@ export function Toaster() {
     <div
       role="status"
       aria-live="polite"
-      className="pointer-events-none fixed bottom-[34px] left-1/2 z-[60] rounded-full border border-gold/40 bg-card px-[22px] py-[13px] font-mono text-[11px] uppercase tracking-[0.2em] text-gold-bright shadow-[0_14px_50px_rgba(0,0,0,.6)] transition-all duration-[400ms] ease-snap"
+      className="pointer-events-none fixed bottom-[34px] left-1/2 z-[60] rounded-full border border-gold/40 bg-card/45 backdrop-blur-xl backdrop-saturate-150 px-[22px] py-[13px] font-mono text-[11px] uppercase tracking-[0.2em] text-gold-bright shadow-[inset_0_1px_0_rgba(255,255,255,.12),0_14px_50px_rgba(0,0,0,.6)] transition-all duration-[400ms] ease-snap"
       style={{
         opacity: msg ? 1 : 0,
         transform: `translate(-50%, ${msg ? "0" : "24px"})`,
