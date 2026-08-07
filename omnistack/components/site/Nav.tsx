@@ -110,7 +110,7 @@ export function Nav({ brand, ctaLabel }: { brand: string; ctaLabel: string }) {
             aria-expanded={open}
             aria-controls="mobile-menu"
             onClick={() => setOpen((v) => !v)}
-            className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border border-hair text-fg lg:hidden"
+            className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border border-hair text-fg transition-transform ease-snap active:scale-[0.94] lg:hidden"
           >
             <span className="sr-only">Menu</span>
             <div className="relative h-4 w-5">
@@ -158,8 +158,8 @@ export function Nav({ brand, ctaLabel }: { brand: string; ctaLabel: string }) {
                 ].map((l, i) => (
                   <motion.li
                     key={l.label}
-                    initial={reduce ? false : { opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={reduce ? false : { opacity: 0, transform: "translateY(12px)" }}
+                    animate={{ opacity: 1, transform: "translateY(0px)" }}
                     transition={{ delay: 0.05 + i * 0.05, duration: 0.3 }}
                   >
                     <Link

@@ -37,7 +37,7 @@ export function TemplateCard({ template }: { template: Project }) {
       onMouseLeave={() => setPlaying(false)}
       onFocus={() => setPlaying(true)}
       onBlur={() => setPlaying(false)}
-      className="group flex h-full flex-col overflow-hidden rounded-[4px] border border-hair bg-card transition-colors hover:border-gold/40"
+      className="group flex h-full flex-col overflow-hidden rounded-[4px] border border-hair bg-card transition-colors ease-snap hover:border-gold/40"
     >
       <Link href={`/templates/${template.slug}`} className="block">
         <div
@@ -57,7 +57,7 @@ export function TemplateCard({ template }: { template: Project }) {
               alt={`${template.title} template`}
               fill
               sizes="(max-width: 768px) 100vw, 620px"
-              className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              className="object-cover transition-transform duration-500 ease-snap group-hover:scale-[1.03]"
             />
           ) : null}
 
@@ -99,7 +99,7 @@ export function TemplateCard({ template }: { template: Project }) {
         <div className="mt-auto flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-hair pt-4">
           <Link
             href={`/templates/${template.slug}`}
-            className="font-mono text-[11px] uppercase tracking-[0.18em] text-gold transition-colors hover:text-gold-bright"
+            className="font-mono text-[11px] uppercase tracking-[0.18em] text-gold transition-colors ease-snap hover:text-gold-bright"
           >
             Details
           </Link>
@@ -107,7 +107,7 @@ export function TemplateCard({ template }: { template: Project }) {
             href={`/preview/${template.slug}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted transition-colors hover:text-fg"
+            className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted transition-colors ease-snap hover:text-fg"
           >
             Open live preview{" "}
             <span aria-hidden className="text-[13px]">

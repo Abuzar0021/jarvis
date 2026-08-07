@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+/* Gates hover-only effects behind devices that actually have a real hover
+   state, so a tap on touch doesn't leave a hover class "stuck" until the
+   next tap elsewhere. Stack with the existing hover:/group-hover: variant,
+   e.g. `hover-hover:hover:text-gold` or `hover-hover:group-hover:opacity-100`. */
+@custom-variant hover-hover {
+  @media (hover: hover) and (pointer: fine) {
+    @slot;
+  }
+}
+
 /*
   OmniStack Digital - design tokens (gold-on-near-black editorial).
   Ported from the Claude Design project: "OmniStack Digital.dc.html" plus

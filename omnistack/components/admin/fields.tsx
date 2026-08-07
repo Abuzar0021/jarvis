@@ -156,8 +156,8 @@ export function Toggle({
       >
         <span
           className={cn(
-            "absolute top-0.5 h-5 w-5 rounded-full bg-fg transition-all",
-            checked ? "left-[22px]" : "left-0.5",
+            "absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-fg transition-transform ease-snap",
+            checked ? "translate-x-[22px]" : "translate-x-0",
           )}
         />
       </span>

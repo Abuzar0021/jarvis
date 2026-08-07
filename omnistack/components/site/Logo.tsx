@@ -41,7 +41,7 @@ export function Logo({
     >
       <span
         aria-hidden
-        className="block h-[11px] w-[11px] rotate-45 border border-gold shadow-[0_0_14px_rgba(198,161,91,.6)] transition-transform duration-500 group-hover:rotate-[135deg]"
+        className="block h-[11px] w-[11px] rotate-45 border border-gold shadow-[0_0_14px_rgba(198,161,91,.6)] transition-transform duration-300 ease-snap group-hover:rotate-[135deg]"
       />
       <span className="text-xs font-medium uppercase tracking-[0.34em]">
         {first}

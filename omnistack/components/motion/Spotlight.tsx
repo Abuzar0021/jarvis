@@ -30,7 +30,7 @@ export function Spotlight() {
     <span
       ref={ref}
       aria-hidden
-      className="pointer-events-none absolute inset-0 z-20 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      className="pointer-events-none absolute inset-0 z-20 opacity-0 transition-opacity duration-300 hover-hover:group-hover:opacity-100"
       style={{
         background:
           "radial-gradient(420px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(198,161,91,0.1), transparent 70%)",

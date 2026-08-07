@@ -150,7 +150,7 @@ export function ClosingForm({ email }: { email: string }) {
           <button
             type="submit"
             disabled={state === "sending"}
-            className="inline-flex items-center gap-3 rounded-full bg-gold-bright px-[38px] py-[19px] text-[clamp(13px,1.1vw,15px)] font-semibold uppercase tracking-[0.08em] text-page shadow-[0_16px_60px_rgba(233,200,121,.34)] transition-colors hover:bg-fg disabled:opacity-60"
+            className="inline-flex items-center gap-3 rounded-full bg-gold-bright px-[38px] py-[19px] text-[clamp(13px,1.1vw,15px)] font-semibold uppercase tracking-[0.08em] text-page shadow-[0_16px_60px_rgba(233,200,121,.34)] transition-[background-color,transform] ease-snap active:scale-[0.97] hover:bg-fg disabled:opacity-60"
           >
             {state === "sending" ? "Sending" : "Start a build"}
             <span aria-hidden className="text-[17px] leading-none">

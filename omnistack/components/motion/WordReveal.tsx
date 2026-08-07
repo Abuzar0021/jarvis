@@ -103,8 +103,11 @@ export function WordReveal({
                 : undefined
             }
             variants={{
-              hidden: { opacity: 0, y: 38, rotate: i % 2 ? -3 : 4 },
-              shown: { opacity: 1, y: 0, rotate: 0 },
+              hidden: {
+                opacity: 0,
+                transform: `translateY(38px) rotate(${i % 2 ? -3 : 4}deg)`,
+              },
+              shown: { opacity: 1, transform: "translateY(0px) rotate(0deg)" },
             }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           >

@@ -32,7 +32,7 @@ export function GildedEgg() {
       aria-label={on ? "Turn off gilded mode" : "Turn on gilded mode"}
       aria-pressed={on}
       onClick={toggle}
-      className={`block h-2 w-2 rounded-full transition-all duration-300 ${
+      className={`block h-2 w-2 rounded-full transition-all duration-300 ease-snap active:scale-90 ${
         on
           ? "scale-150 bg-gold-bright shadow-[0_0_18px_rgba(233,200,121,.9)]"
           : "bg-gold/35 hover:scale-150 hover:bg-gold-bright hover:shadow-[0_0_18px_rgba(233,200,121,.9)]"

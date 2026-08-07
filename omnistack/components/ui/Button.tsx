@@ -7,7 +7,7 @@ type Size = "sm" | "md" | "lg";
 // The design's buttons are letterspaced uppercase pills: a solid gold primary
 // with a warm shadow, and a hairline-outlined secondary that golds on hover.
 const base =
-  "group inline-flex items-center justify-center gap-3 rounded-full font-semibold uppercase tracking-[0.08em] transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold disabled:opacity-50 disabled:pointer-events-none";
+  "group inline-flex items-center justify-center gap-3 rounded-full font-semibold uppercase tracking-[0.08em] transition-all duration-300 ease-snap active:scale-[0.97] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold disabled:opacity-50 disabled:pointer-events-none";
 
 const variants: Record<Variant, string> = {
   primary:
@@ -47,7 +47,7 @@ function Arrow() {
       viewBox="0 0 16 16"
       fill="none"
       aria-hidden
-      className="transition-transform duration-200 group-hover:translate-x-0.5"
+      className="transition-transform duration-200 ease-snap group-hover:translate-x-0.5"
     >
       <path
         d="M3 8h10M9 4l4 4-4 4"

@@ -119,7 +119,7 @@ export function ContactForm({
       <button
         type="submit"
         disabled={status === "loading"}
-        className="group inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border border-gold/60 bg-gold-soft px-6 text-sm font-medium text-fg transition-all hover:border-gold hover:bg-gold/15 disabled:opacity-50 sm:w-auto"
+        className="group inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border border-gold/60 bg-gold-soft px-6 text-sm font-medium text-fg transition-all ease-snap active:scale-[0.97] hover:border-gold hover:bg-gold/15 disabled:opacity-50 sm:w-auto"
       >
         {status === "loading" ? "Sending…" : "Send your requirements"}
         <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>

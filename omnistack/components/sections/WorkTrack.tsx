@@ -273,7 +273,7 @@ function CaseCard({
               alt={`${project.title} - ${project.category}`}
               sizes="(max-width: 768px) 100vw, 560px"
               className="absolute inset-0"
-              imageClassName="transition-transform duration-500 group-hover:scale-[1.04]"
+              imageClassName="transition-transform duration-500 ease-snap group-hover:scale-[1.04]"
             />
           ) : null}
         </div>
