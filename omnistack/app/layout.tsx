@@ -98,9 +98,9 @@ export default async function RootLayout({
         name: l.city,
       })),
       // schema.org needs strict day-code format, so this is written by hand
-      // from site.hours ("Mon-Fri, 9:00-18:00") rather than parsed from it -
+      // from site.hours ("Mon-Fri, 9:00-00:00") rather than parsed from it -
       // update both together if the hours ever change.
-      openingHours: "Mo-Fr 09:00-18:00",
+      openingHours: "Mo-Fr 09:00-00:00",
       sameAs: site.social.map((s) => s.href),
     },
     {
