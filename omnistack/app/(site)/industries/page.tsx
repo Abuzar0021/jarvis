@@ -11,7 +11,7 @@ export const revalidate = 3600;
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 export const metadata: Metadata = {
-  title: "Industries",
+  title: "Web Development by Industry",
   alternates: { canonical: "/industries" },
   description:
     "Senior design and engineering tailored to your sector - restaurants, fitness, SaaS, e-commerce, professional services, and real estate.",

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import {
+  contentUpdatedAt,
   getIndustries,
   getPosts,
   getTemplates,
@@ -18,42 +19,58 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getIndustries(),
     getTemplates(),
   ]);
-  const now = new Date();
 
-  const staticRoutes = [
-    "",
-    "/work",
-    "/templates",
-    "/services",
-    "/industries",
-    "/pricing",
-    "/insights",
-    "/reviews",
-    "/about",
-    "/contact",
-    "/book",
-    "/privacy",
-    "/terms",
-  ].map((path) => ({ url: `${base}${path}`, lastModified: now }));
+  // `lastmod` is per source file, not `new Date()`. Stamping every URL with the
+  // current time on every crawl told Google the entire site had changed that
+  // second, every single time, which is noise it learns to discard. The CMS
+  // rewrites these JSON files on save, so their mtime is the real answer, and a
+  // genuine edit now stands out instead of being lost among 37 false positives.
+  const [siteAt, projectsAt, servicesAt, industriesAt] = await Promise.all([
+    contentUpdatedAt("site.json"),
+    contentUpdatedAt("projects.json"),
+    contentUpdatedAt("services.json"),
+    contentUpdatedAt("industries.json"),
+  ]);
+
+  // Static routes render copy out of site.json, so that file's mtime is what
+  // actually dates them. The two index pages that list a collection are dated
+  // by the collection instead, since that is what changes their content.
+  const staticRoutes: MetadataRoute.Sitemap = [
+    { url: `${base}`, lastModified: siteAt },
+    { url: `${base}/work`, lastModified: projectsAt },
+    { url: `${base}/templates`, lastModified: projectsAt },
+    { url: `${base}/services`, lastModified: servicesAt },
+    { url: `${base}/industries`, lastModified: industriesAt },
+    { url: `${base}/pricing`, lastModified: siteAt },
+    { url: `${base}/insights`, lastModified: siteAt },
+    { url: `${base}/reviews`, lastModified: siteAt },
+    { url: `${base}/about`, lastModified: siteAt },
+    { url: `${base}/contact`, lastModified: siteAt },
+    { url: `${base}/book`, lastModified: siteAt },
+    { url: `${base}/privacy`, lastModified: siteAt },
+    { url: `${base}/terms`, lastModified: siteAt },
+  ];
 
   const projectRoutes = projects.map((p) => ({
     url: `${base}/work/${p.slug}`,
-    lastModified: now,
+    lastModified: projectsAt,
   }));
 
   const serviceRoutes = services.map((s) => ({
     url: `${base}/services/${s.slug}`,
-    lastModified: now,
+    lastModified: servicesAt,
   }));
 
+  // Posts are the one collection carrying a real per-record date, so they keep
+  // using it rather than the file mtime.
   const postRoutes = posts.map((p) => ({
     url: `${base}/insights/${p.slug}`,
-    lastModified: new Date(p.publishedAt || now),
+    lastModified: p.publishedAt ? new Date(p.publishedAt) : siteAt,
   }));
 
   const industryRoutes = industries.map((i) => ({
     url: `${base}/industries/${i.slug}`,
-    lastModified: now,
+    lastModified: industriesAt,
   }));
 
   // The gallery pages only. /preview/[slug] is the full bleed demo surface and
@@ -61,7 +78,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // page itself tells it to ignore.
   const templateRoutes = templates.map((t) => ({
     url: `${base}/templates/${t.slug}`,
-    lastModified: now,
+    lastModified: projectsAt,
   }));
 
   return [

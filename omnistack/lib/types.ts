@@ -41,6 +41,14 @@ export interface Service {
   body: string;
   deliverables: string[];
   featured: boolean;
+  /**
+   * Search-result copy. `summary` is a short in-page marketing line (often
+   * under 50 characters), which Google discards and rewrites when it is used
+   * as a meta description, so these carry the full-length versions instead.
+   * Optional: records written before these existed fall back to name/summary.
+   */
+  seoTitle?: string;
+  seoDescription?: string;
 }
 
 /**

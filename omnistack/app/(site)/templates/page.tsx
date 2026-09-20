@@ -12,7 +12,7 @@ export const revalidate = 3600;
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 export const metadata: Metadata = {
-  title: "Templates",
+  title: "Website Templates You Can Build From",
   alternates: { canonical: "/templates" },
   description:
     "Starting points you can point at and say build me that. Every template is a working page, not a picture, and whatever we build from one is yours outright.",

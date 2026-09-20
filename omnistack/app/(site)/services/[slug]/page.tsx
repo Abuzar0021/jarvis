@@ -21,11 +21,16 @@ export async function generateMetadata({
   const { slug } = await params;
   const service = await getService(slug);
   if (!service) return { title: "Service" };
+  // seoTitle/seoDescription are the search-result copy. `summary` is a short
+  // in-page line (often under 50 chars) that Google discards and rewrites when
+  // used as a description, so it is only the fallback for older records.
+  const title = service.seoTitle || `${service.name} Agency`;
+  const description = service.seoDescription || service.summary;
   return {
-    title: `${service.name} Agency`,
-    description: service.summary,
+    title,
+    description,
     alternates: { canonical: `/services/${service.slug}` },
-    openGraph: { title: service.name, description: service.summary },
+    openGraph: { title, description },
   };
 }
 
@@ -48,7 +53,7 @@ export default async function ServicePage({
     "@context": "https://schema.org",
     "@type": "Service",
     serviceType: service.name,
-    description: service.summary,
+    description: service.seoDescription || service.summary,
     provider: { "@type": "Organization", name: site.brand },
     areaServed: site.contact.locations.map((l) => l.country),
   };

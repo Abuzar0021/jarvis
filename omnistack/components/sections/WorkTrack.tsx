@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import { HoverDistortImage } from "@/components/canvas/HoverDistortImage";
+import { HoverDistortImageMount } from "@/components/canvas/HoverDistortImageMount";
 import { CardVideo } from "@/components/sections/CardVideo";
 import { Magnetic } from "@/components/motion/Magnetic";
 import { coverGradient } from "@/lib/utils";
@@ -268,7 +268,7 @@ function CaseCard({
               className="absolute inset-0"
             />
           ) : project.cover ? (
-            <HoverDistortImage
+            <HoverDistortImageMount
               src={project.cover}
               alt={`${project.title} - ${project.category}`}
               sizes="(max-width: 768px) 100vw, 560px"

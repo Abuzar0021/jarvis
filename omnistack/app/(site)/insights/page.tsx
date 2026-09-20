@@ -12,7 +12,7 @@ export const revalidate = 3600;
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 export const metadata: Metadata = {
-  title: "Insights",
+  title: "Insights on Web Development, SEO and AI",
   description:
     "Practical writing on design, engineering, and AI - from the team that builds and ships.",
   alternates: {

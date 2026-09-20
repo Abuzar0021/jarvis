@@ -9,7 +9,7 @@ import { whatsappLink } from "@/lib/utils";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: "Contact: Get a Project Quote",
   alternates: { canonical: "/contact" },
   description:
     "Tell us what you're building. We reply within one business day. Based in Dublin and Jakarta.",

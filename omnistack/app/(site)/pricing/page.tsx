@@ -17,7 +17,7 @@ import {
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Pricing",
+  title: "Website Pricing and Cost Calculator",
   alternates: { canonical: "/pricing" },
   description:
     "Scope your build and get a real price range in ten seconds. One time cost, you own the code, and growth work stays optional.",

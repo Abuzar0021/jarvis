@@ -10,7 +10,7 @@ import { CTABand } from "@/components/sections/CTABand";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "About",
+  title: "About: Web Studio in Dublin and Jakarta",
   alternates: { canonical: "/about" },
   description:
     "One accountable team that owns brand, design, engineering, and AI - based in Dublin and Jakarta.",

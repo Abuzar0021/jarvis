@@ -11,7 +11,7 @@ export const revalidate = 3600;
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 export const metadata: Metadata = {
-  title: "Work",
+  title: "Case Studies: Websites and Web Apps",
   alternates: { canonical: "/work" },
   description:
     "Selected products we've designed and engineered end to end - websites, web apps, and AI.",

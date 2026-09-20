@@ -12,7 +12,9 @@
       "90+ Lighthouse & Core Web Vitals",
       "On-page SEO & schema"
     ],
-    "featured": true
+    "featured": true,
+    "seoTitle": "Website Development Agency",
+    "seoDescription": "Custom Next.js websites built to load fast and rank well. You get the code, the domain and the hosting account in your name, with no monthly platform fees."
   },
   {
     "id": "svc_web-apps",
@@ -27,7 +29,9 @@
       "Reusable component library",
       "Testing & CI/CD"
     ],
-    "featured": true
+    "featured": true,
+    "seoTitle": "Web Application Development",
+    "seoDescription": "Production web apps with real authentication, user roles and a database you own. Built on Next.js, self-hosted, and handed over with the full repository."
   },
   {
     "id": "svc_mobile-apps",
@@ -42,7 +46,9 @@
       "App store submission",
       "Analytics & crash reporting"
     ],
-    "featured": false
+    "featured": false,
+    "seoTitle": "Mobile App Development",
+    "seoDescription": "React Native apps for iOS and Android, built only when a native app genuinely beats a fast mobile site. Honest scoping before a single line of code."
   },
   {
     "id": "svc_custom-software",
@@ -57,7 +63,9 @@
       "Documentation & handover",
       "Ongoing support"
     ],
-    "featured": false
+    "featured": false,
+    "seoTitle": "Custom Software Development",
+    "seoDescription": "Internal tools and integrations for problems off-the-shelf software cannot solve. You own the source code, the data and the deployment. No per-seat fees."
   },
   {
     "id": "svc_saas",
@@ -72,7 +80,9 @@
       "Admin & analytics",
       "Scalable infrastructure"
     ],
-    "featured": false
+    "featured": false,
+    "seoTitle": "SaaS Platform Development",
+    "seoDescription": "Multi-tenant SaaS platforms with billing, onboarding and an admin panel. Built to launch quickly, then scale, on infrastructure that stays yours."
   },
   {
     "id": "svc_api",
@@ -87,7 +97,9 @@
       "Webhooks & sync",
       "Monitoring & retries"
     ],
-    "featured": false
+    "featured": false,
+    "seoTitle": "API Integration Services",
+    "seoDescription": "Reliable connections between the systems you already run. Payment providers, CRMs and internal APIs, wired together and monitored in production."
   },
   {
     "id": "svc_ai-automation",
@@ -104,7 +116,9 @@
       "Evaluation, observability & cost control",
       "Documentation & handover"
     ],
-    "featured": true
+    "featured": true,
+    "seoTitle": "AI Automation and AI Agents",
+    "seoDescription": "AI agents and automations audited for real value before anything is built. Wired into your stack and monitored in production, not a chatbot bolted on."
   },
   {
     "id": "svc_uiux",
@@ -119,7 +133,9 @@
       "Design system",
       "Prototypes"
     ],
-    "featured": true
+    "featured": true,
+    "seoTitle": "UI/UX Design Services",
+    "seoDescription": "Interface design built in the same system it ships in, so what you approve is what you get. No hand-off gap between the mockup and the finished build."
   },
   {
     "id": "svc_performance",
@@ -134,7 +150,9 @@
       "Image & font optimization",
       "Before/after report"
     ],
-    "featured": false
+    "featured": false,
+    "seoTitle": "Core Web Vitals and Speed Optimization",
+    "seoDescription": "Core Web Vitals fixed and measured before and after. Faster LCP, lower CLS and a Lighthouse score above 90, with the numbers to prove the difference."
   },
   {
     "id": "svc_seo",
@@ -149,7 +167,9 @@
       "Schema & internal linking",
       "Reporting"
     ],
-    "featured": true
+    "featured": true,
+    "seoTitle": "Technical SEO Services",
+    "seoDescription": "Technical SEO built into the site instead of sold as a monthly retainer. Schema, sitemaps, canonicals and Core Web Vitals, correct from the first commit."
   },
   {
     "id": "svc_digital-marketing",
@@ -164,6 +184,8 @@
       "Landing pages",
       "Analytics & reporting"
     ],
-    "featured": false
+    "featured": false,
+    "seoTitle": "Digital Marketing Services",
+    "seoDescription": "Campaigns measured against revenue rather than impressions. Scoped honestly, including the cases where paid marketing is not yet worth running for you."
   }
 ]

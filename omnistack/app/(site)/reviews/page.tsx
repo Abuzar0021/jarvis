@@ -10,7 +10,7 @@ import { ReviewCard } from "@/components/sections/ReviewCard";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Client reviews",
+  title: "Client Reviews, Published Unedited",
   alternates: { canonical: "/reviews" },
   description:
     "Reviews written by clients, read by a person before publication, and published word for word. How they are collected, checked and moderated, in full.",

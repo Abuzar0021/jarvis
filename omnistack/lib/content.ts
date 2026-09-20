@@ -24,6 +24,24 @@ async function readJson<T>(file: string, fallback: T): Promise<T> {
   }
 }
 
+/**
+ * Real modification time of a content file, used for sitemap `lastmod`.
+ *
+ * The sitemap used to stamp every URL with `new Date()` on each request, so
+ * every crawl claimed the whole site had changed that second. Google responds
+ * to that by ignoring the field. These files are the actual source of the
+ * pages, and the CMS rewrites them on save, so their mtime is the honest
+ * answer to "when did this last change".
+ */
+export async function contentUpdatedAt(file: string): Promise<Date> {
+  try {
+    const stat = await fs.stat(path.join(CONTENT_DIR, file));
+    return stat.mtime;
+  } catch {
+    return new Date();
+  }
+}
+
 async function writeJson(file: string, data: unknown): Promise<void> {
   await fs.mkdir(CONTENT_DIR, { recursive: true });
   await fs.writeFile(
