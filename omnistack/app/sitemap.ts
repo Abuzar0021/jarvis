@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import {
   contentUpdatedAt,
   getIndustries,
+  getLocations,
   getPosts,
   getTemplates,
   getWork,
@@ -12,25 +13,29 @@ export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-  const [projects, services, posts, industries, templates] = await Promise.all([
-    getWork(),
-    getServices(),
-    getPosts(),
-    getIndustries(),
-    getTemplates(),
-  ]);
+  const [projects, services, posts, industries, templates, locations] =
+    await Promise.all([
+      getWork(),
+      getServices(),
+      getPosts(),
+      getIndustries(),
+      getTemplates(),
+      getLocations(),
+    ]);
 
   // `lastmod` is per source file, not `new Date()`. Stamping every URL with the
   // current time on every crawl told Google the entire site had changed that
   // second, every single time, which is noise it learns to discard. The CMS
   // rewrites these JSON files on save, so their mtime is the real answer, and a
   // genuine edit now stands out instead of being lost among 37 false positives.
-  const [siteAt, projectsAt, servicesAt, industriesAt] = await Promise.all([
-    contentUpdatedAt("site.json"),
-    contentUpdatedAt("projects.json"),
-    contentUpdatedAt("services.json"),
-    contentUpdatedAt("industries.json"),
-  ]);
+  const [siteAt, projectsAt, servicesAt, industriesAt, locationsAt] =
+    await Promise.all([
+      contentUpdatedAt("site.json"),
+      contentUpdatedAt("projects.json"),
+      contentUpdatedAt("services.json"),
+      contentUpdatedAt("industries.json"),
+      contentUpdatedAt("locations.json"),
+    ]);
 
   // Static routes render copy out of site.json, so that file's mtime is what
   // actually dates them. The two index pages that list a collection are dated
@@ -41,6 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/templates`, lastModified: projectsAt },
     { url: `${base}/services`, lastModified: servicesAt },
     { url: `${base}/industries`, lastModified: industriesAt },
+    { url: `${base}/locations`, lastModified: locationsAt },
     { url: `${base}/pricing`, lastModified: siteAt },
     { url: `${base}/insights`, lastModified: siteAt },
     { url: `${base}/reviews`, lastModified: siteAt },
@@ -73,6 +79,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: industriesAt,
   }));
 
+  const locationRoutes = locations.map((l) => ({
+    url: `${base}/locations/${l.slug}`,
+    lastModified: locationsAt,
+  }));
+
   // The gallery pages only. /preview/[slug] is the full bleed demo surface and
   // is noindexed, so listing it here would ask Google to crawl something the
   // page itself tells it to ignore.
@@ -87,6 +98,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...serviceRoutes,
     ...postRoutes,
     ...industryRoutes,
+    ...locationRoutes,
     ...templateRoutes,
   ];
 }

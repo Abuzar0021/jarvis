@@ -5,6 +5,7 @@ import type {
   Faq,
   Industry,
   Lead,
+  LocationPage,
   Post,
   Project,
   Redirect,
@@ -173,6 +174,23 @@ export async function getService(slug: string): Promise<Service | undefined> {
 
 export async function saveServices(services: Service[]): Promise<void> {
   await writeJson("services.json", services);
+}
+
+/* ------------------------------------------------------------ Locations --- */
+
+export async function getLocations(): Promise<LocationPage[]> {
+  const all = await readJson<LocationPage[]>("locations.json", []);
+  return [...all].sort((a, b) => a.sortOrder - b.sortOrder);
+}
+
+export async function getLocation(
+  slug: string,
+): Promise<LocationPage | undefined> {
+  return (await getLocations()).find((l) => l.slug === slug);
+}
+
+export async function saveLocations(items: LocationPage[]): Promise<void> {
+  await writeJson("locations.json", items);
 }
 
 /* -------------------------------------------------------- Testimonials --- */

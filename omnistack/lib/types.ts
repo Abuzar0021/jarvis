@@ -26,6 +26,42 @@ export interface Industry {
   seoDescription: string;
 }
 
+/**
+ * A market the studio sells into, rendered at /locations/<slug>.
+ *
+ * `presence` exists to keep these pages honest. There are offices in Dublin
+ * and Jakarta and nowhere else, so a page for a market served remotely has to
+ * say so rather than implying a local branch. Nothing here may assert an
+ * address, a phone number or a team that does not exist.
+ */
+export interface LocationPage {
+  id: string;
+  /** Display name, e.g. "Ireland" or "California". */
+  name: string;
+  slug: string;
+  /** Country, used for schema areaServed. */
+  country: string;
+  /** Sub-national region for a state page; empty for country-level pages. */
+  region: string;
+  /** Parent country page slug for a state, empty at country level. */
+  parent: string;
+  /** One line for the index card. */
+  summary: string;
+  /** Opening paragraph. */
+  intro: string;
+  /** Plain statement of whether there is an office here or it is served remotely. */
+  presence: string;
+  /** Factual working-hours overlap with this market. */
+  overlap: string;
+  /** Market-specific points. */
+  points: string[];
+  /** Remaining copy, blank-line separated paragraphs. */
+  body: string;
+  seoTitle: string;
+  seoDescription: string;
+  sortOrder: number;
+}
+
 export type SocialLink = { label: string; href: string };
 
 export type Location = { city: string; country: string };

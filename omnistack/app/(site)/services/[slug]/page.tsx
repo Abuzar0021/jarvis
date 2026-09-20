@@ -91,10 +91,31 @@ export default async function ServicePage({
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted">{service.summary}</p>
           </Reveal>
           <Reveal delay={0.16}>
-            <div className="mt-8">
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
               <Button href="/contact" variant="primary" withArrow>
                 Get a quote
               </Button>
+              {/* /pricing and /work were reachable from the nav and footer only.
+                  The twelve service pages are the largest group on the site and
+                  the obvious place a reader asks "what does this cost" and
+                  "show me one", so they carry the contextual links. */}
+              <span className="text-sm text-muted">
+                <Link
+                  href="/pricing"
+                  className="text-gold underline-offset-4 transition-opacity hover:underline hover:opacity-80"
+                >
+                  See what it costs
+                </Link>
+                <span aria-hidden className="mx-2.5 text-hair">
+                  /
+                </span>
+                <Link
+                  href="/work"
+                  className="text-gold underline-offset-4 transition-opacity hover:underline hover:opacity-80"
+                >
+                  See the work
+                </Link>
+              </span>
             </div>
           </Reveal>
         </Container>

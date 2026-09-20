@@ -64,6 +64,7 @@ export function Footer({
               <li><Link href="/work" className="text-muted transition-colors hover:text-fg">Work</Link></li>
               <li><Link href="/templates" className="text-muted transition-colors hover:text-fg">Templates</Link></li>
               <li><Link href="/industries" className="text-muted transition-colors hover:text-fg">Industries</Link></li>
+              <li><Link href="/locations" className="text-muted transition-colors hover:text-fg">Where we work</Link></li>
               <li><Link href="/pricing" className="text-muted transition-colors hover:text-fg">Pricing</Link></li>
               <li><Link href="/insights" className="text-muted transition-colors hover:text-fg">Insights</Link></li>
               <li><Link href="/about" className="text-muted transition-colors hover:text-fg">About</Link></li>

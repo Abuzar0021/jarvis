@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Reveal } from "@/components/motion/Reveal";
 import type { SiteContent } from "@/lib/types";
 
@@ -56,6 +57,18 @@ export function Founder({
                 {p}
               </p>
             ))}
+            {/* The homepage had no in-content link to /about at all, so the
+                page was reachable only from the nav and footer. This is the
+                section the story is excerpted from, which makes it the
+                natural place to send a reader who wants the rest. */}
+            <p className="m-0 mt-6">
+              <Link
+                href="/about"
+                className="text-sm text-gold underline-offset-4 transition-opacity hover:underline hover:opacity-80"
+              >
+                Read the full story behind OmniStack
+              </Link>
+            </p>
             <div className="mt-8 flex items-center gap-3.5">
               <span className="block h-px w-[34px] bg-gold" aria-hidden />
               <span className="serif-accent text-[19px] text-gold">

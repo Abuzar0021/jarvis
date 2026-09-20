@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { Container } from "@/components/ui/Container";
 
@@ -72,6 +73,18 @@ export function Newsletter({ title, body }: { title: string; body: string }) {
               {state === "error" ? (
                 <p className="mt-2 text-sm text-red-400">Something went wrong. Please try again.</p>
               ) : null}
+              {/* Same reason as the contact form: an email address collected in
+                  the EU needs the transparency notice where it is given. */}
+              <p className="mt-3 text-xs leading-relaxed text-muted">
+                Unsubscribe any time. See our{" "}
+                <Link
+                  href="/privacy"
+                  className="text-gold underline-offset-4 transition-opacity hover:underline hover:opacity-80"
+                >
+                  privacy policy
+                </Link>
+                .
+              </p>
             </form>
           )}
         </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -124,6 +125,23 @@ export function ContactForm({
         {status === "loading" ? "Sending…" : "Send your requirements"}
         <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
       </button>
+
+      {/* Stated at the point of collection rather than only in the footer.
+          The studio is established in Ireland, so a contact form taking a name,
+          an email and free text is processing personal data under the GDPR, and
+          the transparency obligation applies where the data is given, not
+          somewhere a visitor has to go looking. It is also the one genuinely
+          contextual link the privacy policy has. */}
+      <p className="text-xs leading-relaxed text-muted">
+        We use these details only to reply to your enquiry. See our{" "}
+        <Link
+          href="/privacy"
+          className="text-gold underline-offset-4 transition-opacity hover:underline hover:opacity-80"
+        >
+          privacy policy
+        </Link>
+        .
+      </p>
 
       {status === "error" ? (
         <p className="text-sm text-red-400" role="alert">
