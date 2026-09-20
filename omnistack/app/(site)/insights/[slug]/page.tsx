@@ -24,10 +24,14 @@ export async function generateMetadata({
   const post = await getPost(slug);
   if (!post) return { title: "Article" };
   return {
-    title: post.title,
-    description: post.excerpt,
+    title: post.seoTitle || post.title,
+    description: post.seoDescription || post.excerpt,
     alternates: { canonical: `/insights/${post.slug}` },
-    openGraph: { type: "article", title: post.title, description: post.excerpt },
+    openGraph: {
+      type: "article",
+      title: post.seoTitle || post.title,
+      description: post.seoDescription || post.excerpt,
+    },
   };
 }
 
@@ -49,7 +53,15 @@ export default async function PostPage({
     description: post.excerpt,
     datePublished: post.publishedAt,
     author: { "@type": post.author ? "Person" : "Organization", name: post.author || site.brand },
-    publisher: { "@type": "Organization", name: site.brand },
+    publisher: {
+      "@type": "Organization",
+      name: site.brand,
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/favicon.svg` },
+    },
+    // Google treats a missing dateModified as "never updated". Posts carry no
+    // separate modified date, so publishedAt is the honest value for both.
+    dateModified: post.publishedAt,
+    ...(post.cover ? { image: `${SITE_URL}${post.cover}` } : {}),
     mainEntityOfPage: `${SITE_URL}/insights/${post.slug}`,
     articleSection: post.category,
   };
@@ -76,7 +88,7 @@ export default async function PostPage({
             </div>
           </Reveal>
           <Reveal delay={0.08}>
-            <h1 className="mt-4 max-w-3xl text-balance text-4xl font-semibold tracking-tight sm:text-5xl md:leading-[1.07]">
+            <h1 className="display-serif mt-4 max-w-3xl text-balance text-4xl sm:text-5xl">
               {post.title}
             </h1>
           </Reveal>

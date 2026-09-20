@@ -1,4 +1,5 @@
 import { randomBytes } from "node:crypto";
+import type { Testimonial } from "./types";
 
 /** Join class names, dropping falsy values. */
 export function cn(...parts: Array<string | false | null | undefined>): string {
@@ -48,11 +49,32 @@ export function readingTime(body: string): number {
   return Math.max(1, Math.round(words / 200));
 }
 
-/** Deterministic gold-tinted gradient for project covers without an image. */
+/**
+ * The one place attribution is assembled, so every surface renders the same
+ * two lines and none of them can produce a dangling separator.
+ */
+export function attribution(t: Testimonial) {
+  const line1 = t.nameWithheld ? "" : t.authorName;
+  const line2 = [t.authorRole, t.company].filter(Boolean).join(", ");
+  return { line1, line2 };
+}
+
+/**
+ * The credibility rule. A review is publishable only when a reader can tell
+ * who said it (name, role, or a named company or sector) and what was actually
+ * delivered. A bare quote attached to nobody is marketing, not evidence.
+ */
+export function canPublish(t: Testimonial): boolean {
+  const { line1, line2 } = attribution(t);
+  return Boolean((line1.trim() || line2.trim()) && t.projectScope.trim());
+}
+
+/** Deterministic jewel-toned gradient for project covers without an image. */
 export function coverGradient(seed: string): string {
   let h = 0;
   for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) % 360;
   const a = h;
   const b = (h + 40) % 360;
-  return `linear-gradient(135deg, hsl(${a} 14% 9%) 0%, hsl(${b} 18% 6%) 60%, #050505 100%)`;
+  // Dark saturated wash so fallback covers sit naturally on the black theme.
+  return `linear-gradient(135deg, hsl(${a} 45% 20%) 0%, hsl(${b} 50% 12%) 60%, #0a0a0a 100%)`;
 }

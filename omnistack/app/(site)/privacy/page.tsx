@@ -7,6 +7,8 @@ export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
+  description: "How OmniStack Digital collects, uses, and protects your data.",
+  alternates: { canonical: "/privacy" },
   robots: { index: true, follow: true },
 };
 
@@ -14,7 +16,12 @@ export default async function PrivacyPage() {
   const site = await getSite();
   return (
     <>
-      <PageHeader eyebrow="Legal" title="Privacy Policy" intro="How we handle your data." />
+      <PageHeader
+        crumb={{ label: "Privacy Policy", href: "/privacy" }}
+        eyebrow="Legal"
+        title="Privacy Policy"
+        intro="How we handle your data."
+      />
       <Section>
         <div className="prose-invert max-w-2xl space-y-5 text-[15px] leading-relaxed text-muted">
           <p>

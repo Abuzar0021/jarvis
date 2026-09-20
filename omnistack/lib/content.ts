@@ -5,6 +5,7 @@ import type {
   Faq,
   Industry,
   Lead,
+  LocationPage,
   Post,
   Project,
   Redirect,
@@ -24,6 +25,24 @@ async function readJson<T>(file: string, fallback: T): Promise<T> {
   }
 }
 
+/**
+ * Real modification time of a content file, used for sitemap `lastmod`.
+ *
+ * The sitemap used to stamp every URL with `new Date()` on each request, so
+ * every crawl claimed the whole site had changed that second. Google responds
+ * to that by ignoring the field. These files are the actual source of the
+ * pages, and the CMS rewrites them on save, so their mtime is the honest
+ * answer to "when did this last change".
+ */
+export async function contentUpdatedAt(file: string): Promise<Date> {
+  try {
+    const stat = await fs.stat(path.join(CONTENT_DIR, file));
+    return stat.mtime;
+  } catch {
+    return new Date();
+  }
+}
+
 async function writeJson(file: string, data: unknown): Promise<void> {
   await fs.mkdir(CONTENT_DIR, { recursive: true });
   await fs.writeFile(
@@ -37,20 +56,22 @@ async function writeJson(file: string, data: unknown): Promise<void> {
 
 const FALLBACK_SITE: SiteContent = {
   brand: "OmniStack Digital",
-  tagline: "Products that feel inevitable.",
+  tagline: "Websites you actually own.",
   description:
-    "The senior team that owns brand, design, engineering, and AI — so your product ships fast and feels like it was always meant to exist.",
+    "Fast, self-hosted websites you own outright. You get the code, the keys and the hosting account, with no monthly platform fees.",
   founder: "Zar",
   about: { heading: "", story: "" },
   announcement: { enabled: false, text: "", linkLabel: "", linkHref: "" },
   hero: {
-    eyebrow: "Digital product studio",
-    headline: "Products that feel inevitable.",
-    highlight: "inevitable",
+    eyebrow: "Solo-built · Self-hosted · Yours",
+    headline: "Websites you actually own.",
+    highlight: "own.",
     subhead:
-      "We're the senior team that owns brand, design, engineering, and AI — so your product ships fast and feels like it was always meant to exist.",
-    primaryCta: { label: "Book a Call", href: "/contact" },
-    secondaryCta: { label: "See our work", href: "/work" },
+      "Fast, self-hosted sites for businesses that are finished renting their own storefront. You get the code, the keys, the hosting account, and an invoice that actually ends.",
+    note: "No monthly platform fees. Ever.",
+    annotations: [],
+    primaryCta: { label: "Start a build", href: "#cta" },
+    secondaryCta: { label: "See the work", href: "#work" },
   },
   trustLabel: "Trusted by founders, agencies, and teams shipping at scale.",
   valuePillars: [],
@@ -69,14 +90,14 @@ const FALLBACK_SITE: SiteContent = {
   newsletter: { title: "", body: "" },
   booking: { enabled: false, calendarUrl: "", heading: "", intro: "", expectations: [] },
   contact: {
-    email: "abuzarelahi01@gmail.com",
-    whatsapp: "353896050083",
-    whatsappDisplay: "+353 89 605 0083",
+    email: "omnistacksdigital@gmail.com",
+    whatsapp: "447821767235",
+    whatsappDisplay: "+44 7821 767235",
     locations: [
       { city: "Dublin", country: "Ireland" },
       { city: "Jakarta", country: "Indonesia" },
     ],
-    hours: "Mon–Fri",
+    hours: "Mon-Fri",
     responseTime: "We reply within one business day.",
   },
   social: [],
@@ -93,19 +114,46 @@ export async function saveSite(site: SiteContent): Promise<void> {
 
 /* ------------------------------------------------------------ Projects --- */
 
+/**
+ * Fills fields added after a record was written. `kind` defaults to "work", so
+ * every project predating the templates gallery stays portfolio work. The
+ * opposite default would have silently emptied /work the moment this shipped,
+ * which is exactly how every testimonial vanished when `status` was introduced.
+ */
+function normalizeProject(raw: Partial<Project>): Project {
+  return {
+    ...(raw as Project),
+    kind: raw.kind === "template" ? "template" : "work",
+    video: raw.video ?? "",
+    videoPoster: raw.videoPoster ?? "",
+  };
+}
+
+/** Both kinds. Public surfaces should use getWork() or getTemplates(). */
 export async function getProjects(): Promise<Project[]> {
-  const list = await readJson<Project[]>("projects.json", []);
-  return [...list].sort(
-    (a, b) => a.sortOrder - b.sortOrder || a.title.localeCompare(b.title),
-  );
+  const list = await readJson<Partial<Project>[]>("projects.json", []);
+  return list
+    .map(normalizeProject)
+    .sort((a, b) => a.sortOrder - b.sortOrder || a.title.localeCompare(b.title));
+}
+
+/** Delivered client work: the portfolio, the sitemap and search all use this. */
+export async function getWork(): Promise<Project[]> {
+  return (await getProjects()).filter((p) => p.kind === "work");
+}
+
+/** Published templates. Never mixed into, or presented as, client work. */
+export async function getTemplates(): Promise<Project[]> {
+  return (await getProjects()).filter((p) => p.kind === "template");
 }
 
 export async function getProject(slug: string): Promise<Project | undefined> {
   return (await getProjects()).find((p) => p.slug === slug);
 }
 
+/** Featured client work for the homepage track. Templates are excluded. */
 export async function getFeaturedProjects(limit = 3): Promise<Project[]> {
-  const all = await getProjects();
+  const all = await getWork();
   const featured = all.filter((p) => p.featured);
   return (featured.length ? featured : all).slice(0, limit);
 }
@@ -128,10 +176,71 @@ export async function saveServices(services: Service[]): Promise<void> {
   await writeJson("services.json", services);
 }
 
+/* ------------------------------------------------------------ Locations --- */
+
+export async function getLocations(): Promise<LocationPage[]> {
+  const all = await readJson<LocationPage[]>("locations.json", []);
+  return [...all].sort((a, b) => a.sortOrder - b.sortOrder);
+}
+
+export async function getLocation(
+  slug: string,
+): Promise<LocationPage | undefined> {
+  return (await getLocations()).find((l) => l.slug === slug);
+}
+
+export async function saveLocations(items: LocationPage[]): Promise<void> {
+  await writeJson("locations.json", items);
+}
+
 /* -------------------------------------------------------- Testimonials --- */
 
+/**
+ * Fills the review fields on records written before the review system existed.
+ * Unknown records default to "pending", so a hand-edited or restored file can
+ * never quietly publish something nobody approved.
+ */
+function normalizeTestimonial(raw: Partial<Testimonial>): Testimonial {
+  return {
+    id: raw.id ?? "",
+    quote: raw.quote ?? "",
+    authorName: raw.authorName ?? "",
+    authorRole: raw.authorRole ?? "",
+    company: raw.company ?? "",
+    featured: raw.featured ?? false,
+    status: raw.status ?? "pending",
+    projectScope: raw.projectScope ?? "",
+    deliveredOn: raw.deliveredOn ?? "",
+    verifiedBy: raw.verifiedBy ?? "",
+    nameWithheld: raw.nameWithheld ?? false,
+    contactEmail: raw.contactEmail ?? "",
+    submittedAt: raw.submittedAt ?? "",
+    consentAt: raw.consentAt ?? "",
+  };
+}
+
+/** Everything, including pending and rejected. Admin only. */
 export async function getTestimonials(): Promise<Testimonial[]> {
-  return readJson<Testimonial[]>("testimonials.json", []);
+  const list = await readJson<Partial<Testimonial>[]>("testimonials.json", []);
+  return list.map(normalizeTestimonial);
+}
+
+/**
+ * The only read a public surface may use. Also blanks the reviewer's private
+ * email, so no page can leak it even by accident.
+ */
+export async function getApprovedTestimonials(): Promise<Testimonial[]> {
+  const list = await getTestimonials();
+  return list
+    .filter((t) => t.status === "approved")
+    .map((t) => ({ ...t, contactEmail: "" }));
+}
+
+/** Appends a single submission. Never used to change an existing record. */
+export async function addTestimonial(item: Testimonial): Promise<void> {
+  const list = await readJson<Partial<Testimonial>[]>("testimonials.json", []);
+  list.push(item);
+  await writeJson("testimonials.json", list);
 }
 
 export async function saveTestimonials(items: Testimonial[]): Promise<void> {

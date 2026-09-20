@@ -19,7 +19,7 @@ export function BackupTools() {
       });
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.ok) {
-        setStatus("Restored ✓ — content updated.");
+        setStatus("Restored ✓ - content updated.");
         router.refresh();
       } else {
         setStatus(data.error || "Restore failed.");

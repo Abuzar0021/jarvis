@@ -1,3 +1,12 @@
-ignoredBuiltDependencies:
-  - sharp
-  - unrs-resolver
+# pnpm 11 refuses to install when a dependency has an unapproved build script,
+# and exits 1 rather than warning. The decision has to be explicit either way.
+# The older ignoredBuiltDependencies key was replaced by allowBuilds and is now
+# read by nothing, which is what broke the Docker build.
+#
+# Both are denied, which is what production has always run: sharp ships its
+# Linux binary as a normal optional dependency (@img/sharp-linux-x64), so image
+# optimisation does not depend on this script, and unrs-resolver only backs the
+# eslint import resolver, which never runs in the container.
+allowBuilds:
+  sharp: false
+  unrs-resolver: false

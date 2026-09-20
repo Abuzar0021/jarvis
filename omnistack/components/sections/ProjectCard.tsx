@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Project } from "@/lib/types";
 import { coverGradient } from "@/lib/utils";
+import { Spotlight } from "@/components/motion/Spotlight";
 
 export function ProjectCard({
   project,
@@ -12,8 +13,9 @@ export function ProjectCard({
   return (
     <Link
       href={`/work/${project.slug}`}
-      className="group block overflow-hidden rounded-2xl border border-hair bg-card transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-[0_24px_60px_-30px_rgba(212,175,55,0.4)]"
+      className="group relative block overflow-hidden rounded-[4px] border border-hair bg-card transition-all duration-500 hover:-translate-y-1.5 hover:border-gold/50 hover:shadow-[0_30px_70px_rgba(0,0,0,.55)]"
     >
+      <Spotlight />
       <div
         className={`relative overflow-hidden ${large ? "aspect-[16/10]" : "aspect-[16/11]"}`}
         style={{ background: coverGradient(project.slug) }}
@@ -22,7 +24,7 @@ export function ProjectCard({
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={project.cover}
-            alt={`${project.title} — ${project.category}`}
+            alt={`${project.title} - ${project.category}`}
             loading="lazy"
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
           />
@@ -37,8 +39,14 @@ export function ProjectCard({
           </div>
         )}
         {project.results.length > 0 ? (
-          <div className="absolute bottom-4 right-4 rounded-full border border-gold/40 bg-base/70 px-3 py-1 font-mono text-xs text-gold backdrop-blur">
+          <div className="absolute bottom-4 right-4 rounded-full border border-gold/40 bg-page/70 px-3 py-1 font-mono text-xs text-gold backdrop-blur">
             {project.results[0].value} {project.results[0].label}
+          </div>
+        ) : null}
+        {project.logo ? (
+          <div className="absolute left-4 top-4 flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl border border-hair bg-fg/95 p-1.5 shadow-lg">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={project.logo} alt={`${project.client || project.title} logo`} className="h-full w-full object-contain" />
           </div>
         ) : null}
       </div>

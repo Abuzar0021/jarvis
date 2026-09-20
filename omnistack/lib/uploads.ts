@@ -7,7 +7,7 @@ import path from "node:path";
  * you can point this at a dedicated persistent volume, e.g. UPLOADS_DIR=/data/uploads,
  * so media lives outside the build output.
  *
- * Files here are served at runtime by the /uploads/[file] route handler — NOT by
+ * Files here are served at runtime by the /uploads/[file] route handler - NOT by
  * Next's static `public/` handler, which only serves files present at build time.
  */
 export const UPLOADS_DIR =

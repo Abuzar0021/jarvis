@@ -1,0 +1,73 @@
+name: CI
+
+# Lint, type-check and build on every push and pull request.
+#
+# This file has to live at the repository root. GitHub only reads workflows
+# from <repo>/.github/workflows, and this one previously sat at
+# omnistack/.github/workflows/ci.yml, one level too deep, so it had never run
+# once. The only check reaching pull requests was the VPS deploy job, which
+# skips itself when the VPS_* secrets are absent and therefore reported a green
+# tick in about two seconds without verifying anything.
+#
+# The app is not at the repository root, so every step runs inside omnistack/
+# and the two actions that resolve files themselves are pointed at it
+# explicitly: pnpm/action-setup reads the pnpm version from that package.json
+# (packageManager: pnpm@11.18.0 - pinning a version here instead would put the
+# workflow and the repo out of step, which is what the old file did at 10), and
+# setup-node needs the lockfile path to key its cache.
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+# A branch with an open pull request matches both triggers, so every push ran
+# the job twice. Grouping on github.ref would not have fixed that: a push
+# reports refs/heads/<branch> while a pull_request reports refs/pull/<n>/merge,
+# so the two events land in different groups and both survive. head_ref is the
+# branch name on a pull_request and empty on a push, so falling back to
+# ref_name gives both events the same key.
+#
+# It also covers the more common waste: pushing twice in a minute now cancels
+# the superseded run instead of paying for a build of code already replaced.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: omnistack
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: omnistack/package.json
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: omnistack/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Type-check
+        run: pnpm typecheck
+
+      - name: Build
+        run: pnpm build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+          # Matches the Dockerfile: canonical, Open Graph and sitemap URLs are
+          # baked at build time, so building with the default localhost value
+          # would not exercise what production actually ships.
+          NEXT_PUBLIC_SITE_URL: https://omnistacksdigital.com

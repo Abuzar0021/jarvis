@@ -80,7 +80,7 @@ export default async function IndustryPage({
             </div>
           </Reveal>
           <Reveal delay={0.08}>
-            <h1 className="mt-4 max-w-3xl text-balance text-4xl font-semibold tracking-tight sm:text-5xl md:text-[3.25rem] md:leading-[1.05]">
+            <h1 className="display-serif mt-4 max-w-3xl text-balance text-4xl sm:text-5xl md:text-[3.25rem]">
               {ind.name}
             </h1>
           </Reveal>
@@ -130,7 +130,7 @@ export default async function IndustryPage({
                     <li key={s.id}>
                       <Link
                         href={`/services/${s.slug}`}
-                        className="group flex items-center justify-between rounded-lg border border-hair bg-base px-4 py-3 text-sm transition-colors hover:border-gold/40"
+                        className="group flex items-center justify-between rounded-lg border border-hair bg-page px-4 py-3 text-sm transition-colors hover:border-gold/40"
                       >
                         <span>{s.name}</span>
                         <span className="text-muted transition-all group-hover:translate-x-0.5 group-hover:text-gold">→</span>

@@ -151,7 +151,7 @@ export function ContentEditor({ initial }: { initial: SiteContent }) {
         <div className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Email (enquiries sent here)" value={site.contact.email} onChange={(v) => set({ contact: { ...site.contact, email: v } })} />
-            <Field label="WhatsApp (digits only)" value={site.contact.whatsapp} onChange={(v) => set({ contact: { ...site.contact, whatsapp: v } })} hint="e.g. 353896050083" mono />
+            <Field label="WhatsApp (digits only)" value={site.contact.whatsapp} onChange={(v) => set({ contact: { ...site.contact, whatsapp: v } })} hint="e.g. 447821767235" mono />
             <Field label="WhatsApp display" value={site.contact.whatsappDisplay} onChange={(v) => set({ contact: { ...site.contact, whatsappDisplay: v } })} />
             <Field label="Hours" value={site.contact.hours} onChange={(v) => set({ contact: { ...site.contact, hours: v } })} />
           </div>
@@ -182,7 +182,7 @@ function rowBtn(onClick: () => void, label: string) {
   );
 }
 
-const ipt = "w-full rounded-lg border border-hair bg-card px-3 py-2 text-sm focus:border-gold/60 focus:outline-none";
+const ipt = "w-full rounded-lg border border-hair bg-card px-3 py-2 text-sm focus:border-gold/60";
 
 function PairList({
   items,

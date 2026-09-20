@@ -1,69 +1,62 @@
-import {
-  getFaqs,
-  getFeaturedPosts,
-  getFeaturedProjects,
-  getIndustries,
-  getServices,
-  getSite,
-  getTestimonials,
-} from "@/lib/content";
+import { getApprovedTestimonials, getFeaturedProjects, getSite } from "@/lib/content";
 import { Hero } from "@/components/sections/Hero";
-import { TrustStrip } from "@/components/sections/TrustStrip";
 import { ValuePillars } from "@/components/sections/ValuePillars";
-import { ServicesGrid } from "@/components/sections/ServicesGrid";
-import { FeaturedWork } from "@/components/sections/FeaturedWork";
-import { AIShowcase } from "@/components/sections/AIShowcase";
 import { Process } from "@/components/sections/Process";
-import { TechStack } from "@/components/sections/TechStack";
-import { Stats } from "@/components/sections/Stats";
+import { Handover } from "@/components/sections/Handover";
+import { WorkTrack } from "@/components/sections/WorkTrack";
 import { Testimonials } from "@/components/sections/Testimonials";
-import { Industries } from "@/components/sections/Industries";
-import { InsightsPreview } from "@/components/sections/InsightsPreview";
-import { FAQ } from "@/components/sections/FAQ";
-import { CTABand } from "@/components/sections/CTABand";
-import { Newsletter } from "@/components/sections/Newsletter";
+import { Founder } from "@/components/sections/Founder";
+import { ClosingAct } from "@/components/sections/ClosingAct";
 
 export const revalidate = 3600;
 
 export const metadata = { alternates: { canonical: "/" } };
 
+/**
+ * The homepage is the design one to one: hero, differentiators, process,
+ * pinned case-study track, founder, closing CTA. Sections that used to live
+ * here (services, AI, stats, industries, ticker, tech stack, testimonials,
+ * insights, FAQ, newsletter) are not part of the design and were removed.
+ */
 export default async function HomePage() {
-  const [site, projects, services, testimonials, faqs, posts, industries] =
-    await Promise.all([
-      getSite(),
-      getFeaturedProjects(4),
-      getServices(),
-      getTestimonials(),
-      getFaqs(),
-      getFeaturedPosts(3),
-      getIndustries(),
-    ]);
+  const [site, projects, testimonials] = await Promise.all([
+    getSite(),
+    getFeaturedProjects(3),
+    getApprovedTestimonials(),
+  ]);
 
-  const featuredServices = services.filter((s) => s.featured).slice(0, 6);
-  const trustItems = [
-    ...industries.map((i) => i.name),
-    "Founders",
-    "Agencies",
-    "Scale-ups",
-  ];
 
   return (
     <>
-      <Hero site={site} />
-      <TrustStrip label={site.trustLabel} items={trustItems} />
+      <Hero
+        brand={site.brand}
+        eyebrow={site.hero.eyebrow}
+        headline={site.hero.headline}
+        highlight={site.hero.highlight}
+        subhead={site.hero.subhead}
+        primaryCta={site.hero.primaryCta}
+        secondaryCta={site.hero.secondaryCta}
+        meta={site.hero.note}
+        annotations={site.hero.annotations}
+      />
+
       <ValuePillars pillars={site.valuePillars} />
-      <ServicesGrid services={featuredServices} intro={site.servicesIntro} />
-      <FeaturedWork projects={projects} />
-      <AIShowcase site={site} />
       <Process steps={site.process.steps} intro={site.process.intro} />
-      <TechStack groups={site.techStack} />
-      <Stats stats={site.stats} />
+      {/* Not in the design, added deliberately: the site promises you own the
+          code, so it should show what changes hands rather than assert it. */}
+      <Handover />
+      <WorkTrack projects={projects} />
+      {/* Not in the design, added deliberately: proof belongs directly after
+          the work, before the pitch turns back to the person selling it. The
+          section shows one quote and picks it itself, so an approved review
+          still lands here even if nobody flagged one as featured. */}
       <Testimonials items={testimonials} />
-      <Industries industries={industries} />
-      <InsightsPreview posts={posts} />
-      <FAQ faqs={faqs} />
-      <CTABand site={site} />
-      <Newsletter title={site.newsletter.title} body={site.newsletter.body} />
+      <Founder
+        about={site.about}
+        founder={site.founder}
+        locations={site.contact.locations}
+      />
+      <ClosingAct cta={site.cta} contact={site.contact} />
     </>
   );
 }

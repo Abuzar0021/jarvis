@@ -10,10 +10,10 @@ import { CTABand } from "@/components/sections/CTABand";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "About",
+  title: "About: Web Studio in Dublin and Jakarta",
   alternates: { canonical: "/about" },
   description:
-    "One accountable team that owns brand, design, engineering, and AI — based in Dublin and Jakarta.",
+    "One accountable team that owns brand, design, engineering, and AI - based in Dublin and Jakarta.",
 };
 
 export default async function AboutPage() {
@@ -23,6 +23,7 @@ export default async function AboutPage() {
   return (
     <>
       <PageHeader
+        crumb={{ label: "About", href: "/about" }}
         eyebrow="About"
         title={site.about.heading || site.tagline}
         intro={site.description}
@@ -42,7 +43,7 @@ export default async function AboutPage() {
           <aside className="lg:col-span-5">
             <Reveal>
               <div className="rounded-2xl border border-hair bg-card p-7">
-                <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Founder</h2>
+                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Founder</p>
                 <p className="mt-4 text-xl font-semibold tracking-tight">{site.founder}</p>
                 <p className="mt-2 text-[15px] leading-relaxed text-muted">
                   Still reviews every project that ships. The person who scopes your work is the

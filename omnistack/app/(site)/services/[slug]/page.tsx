@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getService, getServices, getSite } from "@/lib/content";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
+import { Prose } from "@/components/ui/Prose";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/motion/Reveal";
 import { Eyebrow } from "@/components/ui/Section";
@@ -20,11 +21,16 @@ export async function generateMetadata({
   const { slug } = await params;
   const service = await getService(slug);
   if (!service) return { title: "Service" };
+  // seoTitle/seoDescription are the search-result copy. `summary` is a short
+  // in-page line (often under 50 chars) that Google discards and rewrites when
+  // used as a description, so it is only the fallback for older records.
+  const title = service.seoTitle || `${service.name} Agency`;
+  const description = service.seoDescription || service.summary;
   return {
-    title: `${service.name} Agency`,
-    description: service.summary,
+    title,
+    description,
     alternates: { canonical: `/services/${service.slug}` },
-    openGraph: { title: service.name, description: service.summary },
+    openGraph: { title, description },
   };
 }
 
@@ -42,13 +48,12 @@ export default async function ServicePage({
   if (!service) notFound();
 
   const related = all.filter((s) => s.group === service.group && s.slug !== service.slug).slice(0, 4);
-  const paragraphs = service.body.split("\n\n").filter(Boolean);
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Service",
     serviceType: service.name,
-    description: service.summary,
+    description: service.seoDescription || service.summary,
     provider: { "@type": "Organization", name: site.brand },
     areaServed: site.contact.locations.map((l) => l.country),
   };
@@ -78,7 +83,7 @@ export default async function ServicePage({
             </div>
           </Reveal>
           <Reveal delay={0.08}>
-            <h1 className="mt-4 max-w-3xl text-balance text-4xl font-semibold tracking-tight sm:text-5xl md:text-[3.25rem] md:leading-[1.05]">
+            <h1 className="display-serif mt-4 max-w-3xl text-balance text-4xl sm:text-5xl md:text-[3.25rem]">
               {service.name}
             </h1>
           </Reveal>
@@ -86,10 +91,31 @@ export default async function ServicePage({
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted">{service.summary}</p>
           </Reveal>
           <Reveal delay={0.16}>
-            <div className="mt-8">
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
               <Button href="/contact" variant="primary" withArrow>
                 Get a quote
               </Button>
+              {/* /pricing and /work were reachable from the nav and footer only.
+                  The twelve service pages are the largest group on the site and
+                  the obvious place a reader asks "what does this cost" and
+                  "show me one", so they carry the contextual links. */}
+              <span className="text-sm text-muted">
+                <Link
+                  href="/pricing"
+                  className="text-gold underline-offset-4 transition-opacity hover:underline hover:opacity-80"
+                >
+                  See what it costs
+                </Link>
+                <span aria-hidden className="mx-2.5 text-hair">
+                  /
+                </span>
+                <Link
+                  href="/work"
+                  className="text-gold underline-offset-4 transition-opacity hover:underline hover:opacity-80"
+                >
+                  See the work
+                </Link>
+              </span>
             </div>
           </Reveal>
         </Container>
@@ -98,17 +124,17 @@ export default async function ServicePage({
       <Section>
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-7">
-            <div className="space-y-5 text-lg leading-relaxed text-muted">
-              {paragraphs.length ? (
-                paragraphs.map((p, i) => (
-                  <Reveal key={i} delay={i * 0.04}>
-                    <p>{p}</p>
-                  </Reveal>
-                ))
-              ) : (
-                <p>{service.summary}</p>
-              )}
-            </div>
+            {/* Prose, not a plain paragraph split: these bodies use markdown
+                headings, and a real h2 is worth more to a reader scanning the
+                page and to search than a bold line inside a paragraph. Prose
+                already carries the same wrapper classes this used. */}
+            {service.body.trim() ? (
+              <Reveal>
+                <Prose body={service.body} />
+              </Reveal>
+            ) : (
+              <p className="text-lg leading-relaxed text-muted">{service.summary}</p>
+            )}
           </div>
 
           <aside className="lg:col-span-5">

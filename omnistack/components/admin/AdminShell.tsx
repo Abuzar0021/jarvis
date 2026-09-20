@@ -31,7 +31,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-base lg:grid lg:grid-cols-[260px_1fr]">
+    <div className="min-h-screen bg-page lg:grid lg:grid-cols-[260px_1fr]">
       <aside className="border-b border-hair bg-surface lg:border-b-0 lg:border-r">
         <div className="flex items-center justify-between p-5">
           <Link href="/admin" className="flex items-center gap-2.5">

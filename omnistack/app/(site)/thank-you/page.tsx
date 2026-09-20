@@ -29,7 +29,7 @@ export default async function ThankYouPage() {
         </Reveal>
         <Reveal delay={0.05}>
           <h1 className="mt-8 text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
-            Thank you — we&rsquo;ve got it.
+            Thank you - we&rsquo;ve got it.
           </h1>
         </Reveal>
         <Reveal delay={0.1}>

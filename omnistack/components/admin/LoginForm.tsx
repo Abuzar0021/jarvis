@@ -35,7 +35,7 @@ export function LoginForm() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-base px-5">
+    <div className="flex min-h-screen items-center justify-center bg-page px-5">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center text-center">
           <LogoMark className="h-9 w-9" />
@@ -50,7 +50,7 @@ export function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoFocus
-              className="w-full rounded-lg border border-hair bg-card px-3.5 py-2.5 text-sm focus:border-gold/60 focus:outline-none"
+              className="w-full rounded-lg border border-hair bg-card px-3.5 py-2.5 text-sm focus:border-gold/60"
               placeholder="••••••••"
             />
           </label>

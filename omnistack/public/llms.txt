@@ -1,0 +1,41 @@
+# OmniStack Digital
+
+> Websites, web applications and AI automation, built and owned outright. No monthly platform fees: every project ships with the code, the domain and the hosting account in the client's name.
+
+## What this is
+
+OmniStack Digital is a solo-built, self-hosted web studio. Every site is built on Next.js, rendered ahead of time, and handed over with full ownership: the repository, the domain and the hosting account transfer to the client, and running a typical site costs a few dollars a month on the client's own hosting rather than a recurring platform fee.
+
+## Services
+
+- [Website Development](https://omnistacksdigital.com/services/website-development): fast, self-hosted marketing sites with a content editor, no platform fee
+- [Web Applications](https://omnistacksdigital.com/services/web-applications): production web apps with real auth, roles and a database the client owns
+- [Mobile Applications](https://omnistacksdigital.com/services/mobile-applications): React Native apps, built only when a native app is genuinely the right call
+- [Custom Software](https://omnistacksdigital.com/services/custom-software): internal tools and integrations for problems off the shelf software does not solve
+- [SaaS Platforms](https://omnistacksdigital.com/services/saas-platforms): multi-tenant products with billing, onboarding and admin
+- [API Integrations](https://omnistacksdigital.com/services/api-integrations): reliable connections between the systems a business already runs
+- [AI Automation](https://omnistacksdigital.com/services/ai-automation): agents and automations audited for genuine value before anything is built
+- [UI/UX Design](https://omnistacksdigital.com/services/ui-ux-design): interface design built in the same system it ships in
+- [Performance Optimization](https://omnistacksdigital.com/services/performance-optimization): Core Web Vitals fixes measured before and after
+- [SEO](https://omnistacksdigital.com/services/seo): technical SEO built into the site rather than sold as a retainer
+- [Digital Marketing](https://omnistacksdigital.com/services/digital-marketing): campaigns measured against revenue, scoped honestly against when they are not worth running
+
+## Industries
+
+Restaurants and hospitality, health and fitness, SaaS and startups, e-commerce and retail, professional services, and real estate. Full list at https://omnistacksdigital.com/industries.
+
+## Work
+
+Real, delivered projects only: https://omnistacksdigital.com/work. Template concepts, not client work, are kept separate at https://omnistacksdigital.com/templates and are labelled as such on every card.
+
+## Reviews
+
+Client reviews at https://omnistacksdigital.com/reviews are published unedited, with an explicit label on each card for whether it has been verified. No star ratings or aggregate score are shown or claimed.
+
+## Pricing
+
+Transparent pricing and a cost calculator at https://omnistacksdigital.com/pricing.
+
+## Contact
+
+https://omnistacksdigital.com/contact

@@ -9,7 +9,7 @@ import { whatsappLink } from "@/lib/utils";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Book a Consultation",
+  title: "Book a Free Scoping Call",
   description:
     "Book a free scoping call. Tell us what you're building and get a clear, fixed plan within one business day.",
   alternates: { canonical: "/book" },
@@ -23,6 +23,7 @@ export default async function BookPage() {
   return (
     <>
       <PageHeader
+        crumb={{ label: "Book a call", href: "/book" }}
         eyebrow="Book a call"
         title={booking.heading || "Book a free scoping call"}
         intro={booking.intro || "Tell us what you're building. You'll get a clear, fixed plan within one business day."}

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { Reveal } from "@/components/motion/Reveal";
 import type { Faq } from "@/lib/types";
@@ -25,9 +26,9 @@ export function FAQ({ faqs }: { faqs: Faq[] }) {
           <SectionHeading eyebrow="FAQ" title={<>Questions, answered.</>} />
           <p className="mt-4 text-muted">
             Still curious?{" "}
-            <a href="/contact" className="text-gold hover:underline">
+            <Link href="/contact" className="text-gold hover:underline">
               Talk to us
-            </a>
+            </Link>
             .
           </p>
         </div>

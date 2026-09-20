@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
 import { Container } from "@/components/ui/Container";
+import { GildedEgg } from "./GildedEgg";
+import { SoundToggle } from "@/components/motion/SoundToggle";
 import type { Service, SiteContent } from "@/lib/types";
 import { whatsappLink } from "@/lib/utils";
 
@@ -15,10 +17,10 @@ export function Footer({
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative mt-auto border-t border-hair bg-surface">
+    <footer className="relative z-[3] mt-auto border-t border-hair bg-surface">
       <Container className="py-16">
         <div className="grid gap-12 md:grid-cols-12">
-          <div className="md:col-span-4">
+          <div className="md:col-span-3">
             <Logo brand={site.brand} />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
               {site.footerTagline}
@@ -60,7 +62,9 @@ export function Footer({
             <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Company</h3>
             <ul className="mt-4 space-y-2.5 text-sm">
               <li><Link href="/work" className="text-muted transition-colors hover:text-fg">Work</Link></li>
+              <li><Link href="/templates" className="text-muted transition-colors hover:text-fg">Templates</Link></li>
               <li><Link href="/industries" className="text-muted transition-colors hover:text-fg">Industries</Link></li>
+              <li><Link href="/locations" className="text-muted transition-colors hover:text-fg">Where we work</Link></li>
               <li><Link href="/pricing" className="text-muted transition-colors hover:text-fg">Pricing</Link></li>
               <li><Link href="/insights" className="text-muted transition-colors hover:text-fg">Insights</Link></li>
               <li><Link href="/about" className="text-muted transition-colors hover:text-fg">About</Link></li>
@@ -68,7 +72,19 @@ export function Footer({
             </ul>
           </div>
 
-          <div className="md:col-span-4">
+          {/* Reviews live here rather than in the main nav. Someone deciding
+              whether to hire arrives at proof through the work, not through a
+              top level tab that reads like a request for applause. */}
+          <div className="md:col-span-2">
+            <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Clients</h3>
+            <ul className="mt-4 space-y-2.5 text-sm">
+              <li><Link href="/reviews" className="text-muted transition-colors hover:text-fg">Reviews</Link></li>
+              <li><Link href="/reviews/new" className="text-muted transition-colors hover:text-fg">Write a review</Link></li>
+              <li><Link href="/reviews#verification" className="text-muted transition-colors hover:text-fg">How we verify</Link></li>
+            </ul>
+          </div>
+
+          <div className="md:col-span-3">
             <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Get in touch</h3>
             <ul className="mt-4 space-y-3 text-sm">
               <li>
@@ -91,9 +107,11 @@ export function Footer({
         <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-hair pt-8 text-xs text-muted sm:flex-row sm:items-center">
           <p>© {year} {site.brand}. All rights reserved.</p>
           <div className="flex items-center gap-5">
+            <SoundToggle />
             <Link href="/privacy" className="transition-colors hover:text-fg">Privacy</Link>
             <Link href="/terms" className="transition-colors hover:text-fg">Terms</Link>
             <a href="#top" className="transition-colors hover:text-fg">Back to top ↑</a>
+            <GildedEgg />
           </div>
         </div>
       </Container>

@@ -1,10 +1,10 @@
-# OmniStack Digital — Website + Built-in CMS
+# OmniStack Digital - Website + Built-in CMS
 
 A premium, black-and-gold marketing site for **OmniStack Digital** (Dublin & Jakarta),
 built with **Next.js 16 + React 19 + TypeScript + Tailwind CSS v4**.
 
-Everything on the site — projects, services, testimonials, FAQs, the hero, the
-about page, contact details, WhatsApp number, announcement bar, stats and more —
+Everything on the site - projects, services, testimonials, FAQs, the hero, the
+about page, contact details, WhatsApp number, announcement bar, stats and more -
 is editable from a built-in **no-code admin** at `/admin`. **No coding required to
 run the business.**
 
@@ -20,10 +20,10 @@ pnpm install
 pnpm dev
 ```
 
-Open **http://localhost:3000** — that's your website.
+Open **http://localhost:3000** - that's your website.
 
-Open **http://localhost:3000/admin** — that's your dashboard.
-The default password is **`omnistack-admin`** (change it — see below).
+Open **http://localhost:3000/admin** - that's your dashboard.
+The default password is **`omnistack-admin`** (change it - see below).
 
 ---
 
@@ -68,7 +68,7 @@ SMTP_FROM=abuzarelahi01@gmail.com
 CONTACT_TO=abuzarelahi01@gmail.com
 ```
 
-If these aren't set, the site still works — you just read enquiries in the admin
+If these aren't set, the site still works - you just read enquiries in the admin
 Leads board instead of by email.
 
 ---
@@ -78,9 +78,9 @@ Leads board instead of by email.
 Copy `.env.example` to `.env.local` and adjust. Sensible defaults mean the site runs
 with nothing set, **but before going live you should set**:
 
-- `ADMIN_PASSWORD` — your admin login password.
-- `ADMIN_SECRET` — a long random string used to sign the login cookie.
-- `NEXT_PUBLIC_SITE_URL` — your real domain (for canonical URLs + sitemap).
+- `ADMIN_PASSWORD` - your admin login password.
+- `ADMIN_SECRET` - a long random string used to sign the login cookie.
+- `NEXT_PUBLIC_SITE_URL` - your real domain (for canonical URLs + sitemap).
 
 ---
 
@@ -124,7 +124,7 @@ omnistack/
 ## 7. Tech & design
 
 - **Brand:** matte black `#050505` + rich gold `#D4AF37`, Geist typeface.
-- **Motion:** reveal-on-scroll, count-up stats, marquee, nav frost, mobile overlay —
+- **Motion:** reveal-on-scroll, count-up stats, marquee, nav frost, mobile overlay -
   all respecting `prefers-reduced-motion`.
 - **Accessibility:** semantic HTML, visible gold focus rings, keyboard-friendly menus.
 - **SEO:** per-page metadata, JSON-LD on case studies and services, sitemap & robots.

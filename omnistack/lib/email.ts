@@ -3,7 +3,7 @@ import type { Lead, SiteContent } from "./types";
 
 /**
  * Sends new-lead notifications over SMTP when SMTP_* env vars are configured.
- * If email is not configured, this is a graceful no-op — the lead is still
+ * If email is not configured, this is a graceful no-op - the lead is still
  * stored and visible in /admin, so nothing ever errors.
  */
 function getTransport() {
@@ -47,7 +47,7 @@ export async function sendLeadEmail(
 
   const html = `
   <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;color:#111">
-    <h2 style="margin:0 0 4px">New enquiry — ${esc(site.brand)}</h2>
+    <h2 style="margin:0 0 4px">New enquiry - ${esc(site.brand)}</h2>
     <p style="color:#666;margin:0 0 16px">A new requirement was submitted on your website.</p>
     <table style="width:100%;border-collapse:collapse;font-size:14px">
       ${rows

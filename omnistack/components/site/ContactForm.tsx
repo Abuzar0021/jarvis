@@ -1,12 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const BUDGETS = ["Not sure yet", "Under €2k", "€2k–€5k", "€5k–€10k", "€10k+"];
+const BUDGETS = ["Not sure yet", "Under €2k", "€2k-€5k", "€5k-€10k", "€10k+"];
 
 const inputCls =
-  "h-12 w-full rounded-xl border border-hair bg-card px-4 text-sm text-fg placeholder:text-muted/60 transition-colors focus:border-gold/60 focus:outline-none";
+  "h-12 w-full rounded-xl border border-hair bg-card px-4 text-sm text-fg placeholder:text-muted/60 transition-colors focus:border-gold/60";
 
 export function ContactForm({
   services,
@@ -107,7 +108,7 @@ export function ContactForm({
           name="message"
           required
           rows={5}
-          className="w-full rounded-xl border border-hair bg-card px-4 py-3 text-sm text-fg placeholder:text-muted/60 transition-colors focus:border-gold/60 focus:outline-none"
+          className="w-full rounded-xl border border-hair bg-card px-4 py-3 text-sm text-fg placeholder:text-muted/60 transition-colors focus:border-gold/60"
           placeholder="Tell us what you're building, your timeline, and what success looks like."
         />
         {errors.message ? <p className="mt-1 text-xs text-red-400">{errors.message}</p> : null}
@@ -119,11 +120,28 @@ export function ContactForm({
       <button
         type="submit"
         disabled={status === "loading"}
-        className="group inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border border-gold/60 bg-gold-soft px-6 text-sm font-medium text-fg transition-all hover:border-gold hover:bg-gold/15 disabled:opacity-50 sm:w-auto"
+        className="group inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border border-gold/60 bg-gold-soft px-6 text-sm font-medium text-fg transition-all ease-snap active:scale-[0.97] hover:border-gold hover:bg-gold/15 disabled:opacity-50 sm:w-auto"
       >
         {status === "loading" ? "Sending…" : "Send your requirements"}
         <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
       </button>
+
+      {/* Stated at the point of collection rather than only in the footer.
+          The studio is established in Ireland, so a contact form taking a name,
+          an email and free text is processing personal data under the GDPR, and
+          the transparency obligation applies where the data is given, not
+          somewhere a visitor has to go looking. It is also the one genuinely
+          contextual link the privacy policy has. */}
+      <p className="text-xs leading-relaxed text-muted">
+        We use these details only to reply to your enquiry. See our{" "}
+        <Link
+          href="/privacy"
+          className="text-gold underline-offset-4 transition-opacity hover:underline hover:opacity-80"
+        >
+          privacy policy
+        </Link>
+        .
+      </p>
 
       {status === "error" ? (
         <p className="text-sm text-red-400" role="alert">

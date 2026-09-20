@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getProject, getProjects, getSite, getTestimonials } from "@/lib/content";
+import { getApprovedTestimonials, getProject, getWork, getSite } from "@/lib/content";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
@@ -9,6 +9,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { Prose } from "@/components/ui/Prose";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { CTABand } from "@/components/sections/CTABand";
+import { ReviewCard } from "@/components/sections/ReviewCard";
 import { coverGradient } from "@/lib/utils";
 
 export const revalidate = 3600;
@@ -22,9 +23,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const project = await getProject(slug);
-  if (!project) return { title: "Case study" };
+  if (!project || project.kind !== "work") return { title: "Case study" };
   return {
-    title: project.seoTitle || `${project.title} — ${project.category}`,
+    title: project.seoTitle || `${project.title} - ${project.category}`,
     description: project.seoDescription || project.summary,
     alternates: { canonical: `/work/${project.slug}` },
     openGraph: {
@@ -44,10 +45,13 @@ export default async function ProjectPage({
   const [project, site, all, testimonials] = await Promise.all([
     getProject(slug),
     getSite(),
-    getProjects(),
-    getTestimonials(),
+    getWork(),
+    getApprovedTestimonials(),
   ]);
-  if (!project) notFound();
+  // A template must 404 here rather than render as a case study. Its own page
+  // lives under /templates, and this route states outright that the work on it
+  // was delivered for a client.
+  if (!project || project.kind !== "work") notFound();
 
   const others = all.filter((p) => p.slug !== project.slug).slice(0, 2);
   const gallery = project.gallery ?? [];
@@ -96,7 +100,7 @@ export default async function ProjectPage({
             </div>
           </Reveal>
           <Reveal delay={0.08}>
-            <h1 className="mt-4 max-w-4xl text-balance text-4xl font-semibold tracking-tight sm:text-5xl md:text-[3.25rem] md:leading-[1.05]">
+            <h1 className="display-serif mt-4 max-w-4xl text-balance text-4xl sm:text-5xl md:text-[3.25rem]">
               {project.title}
             </h1>
           </Reveal>
@@ -115,21 +119,19 @@ export default async function ProjectPage({
         </Container>
       </section>
 
-      {/* Cover */}
+      {/* Cover - deliberately always the branded gradient here, never project.cover:
+          that field is a listing-page preview thumbnail, and this page already
+          shows its own real header above, so reusing the same screenshot as a
+          "cover" directly below it would just repeat the page back at itself. */}
       <Container className="py-10 sm:py-14">
         <Reveal>
           <div
             className="relative aspect-[16/9] overflow-hidden rounded-3xl border border-hair"
             style={{ background: coverGradient(project.slug) }}
           >
-            {project.cover ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={project.cover} alt={`${project.title} — ${project.category}`} className="absolute inset-0 h-full w-full object-cover" />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-3xl font-semibold tracking-tight text-fg/70 sm:text-5xl">{project.title}</span>
-              </div>
-            )}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-3xl font-semibold tracking-tight text-fg/70 sm:text-5xl">{project.title}</span>
+            </div>
           </div>
         </Reveal>
       </Container>
@@ -173,17 +175,11 @@ export default async function ProjectPage({
             )}
 
             {linkedTestimonial ? (
-              <Reveal>
-                <figure className="mt-12 rounded-3xl border border-hair bg-card p-8">
-                  <span className="text-4xl leading-none text-gold" aria-hidden>“</span>
-                  <blockquote className="mt-2 text-balance text-xl font-medium leading-snug tracking-tight sm:text-2xl">
-                    {linkedTestimonial.quote}
-                  </blockquote>
-                  <figcaption className="mt-5 text-sm text-muted">
-                    {[linkedTestimonial.authorName, linkedTestimonial.authorRole].filter(Boolean).join(", ")}
-                    {linkedTestimonial.company ? ` · ${linkedTestimonial.company}` : ""}
-                  </figcaption>
-                </figure>
+              <Reveal className="mt-12">
+                {/* Was assembling its own attribution, which rendered a
+                    leading " · " whenever name and role were both empty. The
+                    shared card owns that logic now. */}
+                <ReviewCard review={linkedTestimonial} variant="featured" />
               </Reveal>
             ) : null}
 
@@ -201,16 +197,22 @@ export default async function ProjectPage({
 
           <aside className="lg:col-span-5">
             <div className="sticky top-24 space-y-8 rounded-2xl border border-hair bg-card p-7">
+              {project.logo ? (
+                <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl border border-hair bg-fg/95 p-2">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={project.logo} alt={`${project.client || project.title} logo`} className="h-full w-full object-contain" />
+                </div>
+              ) : null}
               <div className="grid grid-cols-2 gap-4">
                 {project.client ? (
                   <div>
-                    <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Client</h2>
+                    <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Client</p>
                     <p className="mt-1 text-sm text-fg/90">{project.client}</p>
                   </div>
                 ) : null}
                 {project.year ? (
                   <div>
-                    <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Year</h2>
+                    <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Year</p>
                     <p className="mt-1 text-sm text-fg/90">{project.year}</p>
                   </div>
                 ) : null}
@@ -218,7 +220,7 @@ export default async function ProjectPage({
 
               {project.services.length > 0 ? (
                 <div>
-                  <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">What we did</h2>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">What we did</p>
                   <ul className="mt-4 space-y-2 text-sm text-muted">
                     {project.services.map((s) => (
                       <li key={s} className="flex items-center gap-2">
@@ -232,10 +234,10 @@ export default async function ProjectPage({
 
               {project.tags.length > 0 ? (
                 <div>
-                  <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Stack & focus</h2>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Stack & focus</p>
                   <ul className="mt-4 flex flex-wrap gap-2">
                     {project.tags.map((t) => (
-                      <li key={t} className="rounded-full border border-hair bg-base px-3 py-1 text-xs text-muted">{t}</li>
+                      <li key={t} className="rounded-full border border-hair bg-page px-3 py-1 text-xs text-muted">{t}</li>
                     ))}
                   </ul>
                 </div>

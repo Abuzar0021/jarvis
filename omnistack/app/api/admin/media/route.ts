@@ -45,7 +45,7 @@ export async function DELETE(req: NextRequest) {
   try {
     await fs.unlink(path.join(DIR, name));
   } catch {
-    // already gone — treat as success
+    // already gone - treat as success
   }
   return Response.json({ ok: true });
 }

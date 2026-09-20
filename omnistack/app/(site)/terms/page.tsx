@@ -7,6 +7,8 @@ export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Terms of Service",
+  description: "The terms that apply when you work with OmniStack Digital.",
+  alternates: { canonical: "/terms" },
   robots: { index: true, follow: true },
 };
 
@@ -14,7 +16,12 @@ export default async function TermsPage() {
   const site = await getSite();
   return (
     <>
-      <PageHeader eyebrow="Legal" title="Terms of Service" intro="The basics of working with us." />
+      <PageHeader
+        crumb={{ label: "Terms of Service", href: "/terms" }}
+        eyebrow="Legal"
+        title="Terms of Service"
+        intro="The basics of working with us."
+      />
       <Section>
         <div className="max-w-2xl space-y-5 text-[15px] leading-relaxed text-muted">
           <p>

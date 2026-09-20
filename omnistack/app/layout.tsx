@@ -1,29 +1,45 @@
 import type { Metadata, Viewport } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
+import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { getSite } from "@/lib/content";
 import { Analytics } from "@/components/site/Analytics";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
+// The design's three families. All variable, self-hosted by next/font, and
+// exposed as CSS vars that globals.css maps onto --font-serif/sans/mono.
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  variable: "--font-fraunces",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
+
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSite();
   return {
     metadataBase: new URL(siteUrl),
     title: {
-      default: `${site.brand} — ${site.tagline}`,
-      template: `%s — ${site.brand}`,
+      default: `${site.brand} - ${site.tagline}`,
+      template: `%s - ${site.brand}`,
     },
     description: site.description,
     applicationName: site.brand,
-    keywords: [
-      "digital product agency",
-      "full stack development agency",
-      "AI automation agency",
-      "web design Dublin",
-      "Next.js development agency",
-    ],
+    // No `keywords`. Google has ignored the meta keywords tag for years, and the
+    // list here still described the old agency positioning, so it was dead
+    // weight that happened to also be wrong.
     authors: [{ name: site.brand }],
     openGraph: {
       type: "website",
@@ -40,11 +56,18 @@ export async function generateMetadata(): Promise<Metadata> {
       icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
     },
     robots: { index: true, follow: true },
+    // Set GOOGLE_SITE_VERIFICATION in .env to emit the Search Console meta tag.
+    // Kept in env rather than hardcoded so the property can be verified, or
+    // re-verified under a different account, without a code change. Next omits
+    // the whole block when the value is undefined.
+    verification: process.env.GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+      : undefined,
   };
 }
 
 export const viewport: Viewport = {
-  themeColor: "#050505",
+  themeColor: "#0a0908",
   colorScheme: "dark",
 };
 
@@ -55,16 +78,29 @@ export default async function RootLayout({
   const jsonLd = [
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
+      "@type": "ProfessionalService",
       name: site.brand,
       url: siteUrl,
       description: site.description,
       email: site.contact.email,
+      telephone: `+${site.contact.whatsapp}`,
+      image: `${siteUrl}/opengraph-image`,
+      // Google prefers a raster logo for rich results, so a 512px PNG would be
+      // better than the SVG mark once one exists.
+      logo: `${siteUrl}/favicon.svg`,
       address: site.contact.locations.map((l) => ({
         "@type": "PostalAddress",
         addressLocality: l.city,
         addressCountry: l.country,
       })),
+      areaServed: site.contact.locations.map((l) => ({
+        "@type": "City",
+        name: l.city,
+      })),
+      // schema.org needs strict day-code format, so this is written by hand
+      // from site.hours ("Mon-Fri, 9:00-00:00") rather than parsed from it -
+      // update both together if the hours ever change.
+      openingHours: "Mo-Fr 09:00-00:00",
       sameAs: site.social.map((s) => s.href),
     },
     {
@@ -78,10 +114,10 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${GeistSans.variable} ${GeistMono.variable} h-full`}
+      className={`${fraunces.variable} ${inter.variable} ${jetbrainsMono.variable} h-full`}
       suppressHydrationWarning
     >
-      <body className="min-h-full bg-base text-fg antialiased">
+      <body className="min-h-full bg-page text-fg antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

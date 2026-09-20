@@ -9,7 +9,7 @@ import { whatsappLink } from "@/lib/utils";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: "Contact: Get a Project Quote",
   alternates: { canonical: "/contact" },
   description:
     "Tell us what you're building. We reply within one business day. Based in Dublin and Jakarta.",
@@ -22,6 +22,7 @@ export default async function ContactPage() {
   return (
     <>
       <PageHeader
+        crumb={{ label: "Contact", href: "/contact" }}
         eyebrow="Contact"
         title={<>Tell us what you&rsquo;re building.</>}
         intro={`Send your requirements and we'll come back with a clear, fixed plan. ${site.contact.responseTime}`}
@@ -37,13 +38,13 @@ export default async function ContactPage() {
             <Reveal>
               <div className="space-y-8 rounded-2xl border border-hair bg-card p-7">
                 <div>
-                  <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Email</h2>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Email</p>
                   <a href={`mailto:${site.contact.email}`} className="mt-2 block text-lg text-fg transition-colors hover:text-gold">
                     {site.contact.email}
                   </a>
                 </div>
                 <div>
-                  <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">WhatsApp</h2>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">WhatsApp</p>
                   <a
                     href={whatsappLink(site.contact.whatsapp, `Hi ${site.brand}, I'd like to discuss a project.`)}
                     target="_blank"
@@ -55,7 +56,7 @@ export default async function ContactPage() {
                   <p className="mt-1 text-sm text-muted">Fastest way to reach us.</p>
                 </div>
                 <div>
-                  <h2 className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Studios</h2>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">Studios</p>
                   <ul className="mt-2 space-y-1.5 text-[15px] text-muted">
                     {site.contact.locations.map((l) => (
                       <li key={`${l.city}-${l.country}`}>
