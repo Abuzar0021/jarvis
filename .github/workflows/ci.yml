@@ -21,6 +21,19 @@ on:
     branches: ["**"]
   pull_request:
 
+# A branch with an open pull request matches both triggers, so every push ran
+# the job twice. Grouping on github.ref would not have fixed that: a push
+# reports refs/heads/<branch> while a pull_request reports refs/pull/<n>/merge,
+# so the two events land in different groups and both survive. head_ref is the
+# branch name on a pull_request and empty on a push, so falling back to
+# ref_name gives both events the same key.
+#
+# It also covers the more common waste: pushing twice in a minute now cancels
+# the superseded run instead of paying for a build of code already replaced.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 defaults:
   run:
     working-directory: omnistack
