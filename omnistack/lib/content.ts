@@ -89,9 +89,9 @@ const FALLBACK_SITE: SiteContent = {
   newsletter: { title: "", body: "" },
   booking: { enabled: false, calendarUrl: "", heading: "", intro: "", expectations: [] },
   contact: {
-    email: "abuzarelahi01@gmail.com",
-    whatsapp: "353896050083",
-    whatsappDisplay: "+353 89 605 0083",
+    email: "omnistacksdigital@gmail.com",
+    whatsapp: "447821767235",
+    whatsappDisplay: "+44 7821 767235",
     locations: [
       { city: "Dublin", country: "Ireland" },
       { city: "Jakarta", country: "Indonesia" },

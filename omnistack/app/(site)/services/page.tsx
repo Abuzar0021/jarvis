@@ -44,6 +44,7 @@ export default async function ServicesPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <PageHeader
+        crumb={{ label: "Services", href: "/services" }}
         eyebrow="Services"
         title={<>One team for brand, product, and growth.</>}
         intro={site.servicesIntro}

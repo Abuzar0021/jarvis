@@ -35,6 +35,7 @@ export default async function IndustriesPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <PageHeader
+        crumb={{ label: "Industries", href: "/industries" }}
         eyebrow="Industries"
         title={<>Built for the way your sector works.</>}
         intro="We bring patterns that work - adapted to the specifics of your space, from the first impression to the systems behind it."

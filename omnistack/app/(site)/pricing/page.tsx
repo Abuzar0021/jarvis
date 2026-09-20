@@ -8,6 +8,7 @@ import { MaskLine } from "@/components/motion/MaskLine";
 import { WordReveal } from "@/components/motion/WordReveal";
 import { Magnetic } from "@/components/motion/Magnetic";
 import { FAQ } from "@/components/sections/FAQ";
+import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { cn } from "@/lib/utils";
 import {
   PricingCalculator,
@@ -150,6 +151,16 @@ export default async function PricingPage() {
           aria-hidden
         />
         <Container className="pb-[clamp(56px,9vh,90px)] pt-[clamp(120px,16vh,170px)]">
+          {/* This page builds its own hero rather than using PageHeader, so the
+              breadcrumb and its BreadcrumbList JSON-LD are placed by hand. */}
+          <div className="mb-7">
+            <Breadcrumbs
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Pricing", href: "/pricing" },
+              ]}
+            />
+          </div>
           <Reveal>
             <Eyebrow>Rent vs. Own</Eyebrow>
           </Reveal>

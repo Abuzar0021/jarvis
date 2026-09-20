@@ -266,8 +266,8 @@ export interface SiteContent {
 
   contact: {
     email: string;
-    whatsapp: string; // digits only, e.g. 353896050083
-    whatsappDisplay: string; // +353 89 605 0083
+    whatsapp: string; // digits only, e.g. 447821767235
+    whatsappDisplay: string; // +44 7821 767235
     locations: Location[];
     hours: string;
     responseTime: string;

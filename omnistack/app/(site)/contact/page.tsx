@@ -22,6 +22,7 @@ export default async function ContactPage() {
   return (
     <>
       <PageHeader
+        crumb={{ label: "Contact", href: "/contact" }}
         eyebrow="Contact"
         title={<>Tell us what you&rsquo;re building.</>}
         intro={`Send your requirements and we'll come back with a clear, fixed plan. ${site.contact.responseTime}`}

@@ -40,6 +40,7 @@ export default async function TemplatesPage() {
       />
 
       <PageHeader
+        crumb={{ label: "Templates", href: "/templates" }}
         eyebrow="Templates"
         title={
           <>

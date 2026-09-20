@@ -16,7 +16,12 @@ export default async function TermsPage() {
   const site = await getSite();
   return (
     <>
-      <PageHeader eyebrow="Legal" title="Terms of Service" intro="The basics of working with us." />
+      <PageHeader
+        crumb={{ label: "Terms of Service", href: "/terms" }}
+        eyebrow="Legal"
+        title="Terms of Service"
+        intro="The basics of working with us."
+      />
       <Section>
         <div className="max-w-2xl space-y-5 text-[15px] leading-relaxed text-muted">
           <p>

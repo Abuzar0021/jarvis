@@ -23,6 +23,7 @@ export default async function AboutPage() {
   return (
     <>
       <PageHeader
+        crumb={{ label: "About", href: "/about" }}
         eyebrow="About"
         title={site.about.heading || site.tagline}
         intro={site.description}

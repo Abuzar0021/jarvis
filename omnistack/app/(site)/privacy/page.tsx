@@ -16,7 +16,12 @@ export default async function PrivacyPage() {
   const site = await getSite();
   return (
     <>
-      <PageHeader eyebrow="Legal" title="Privacy Policy" intro="How we handle your data." />
+      <PageHeader
+        crumb={{ label: "Privacy Policy", href: "/privacy" }}
+        eyebrow="Legal"
+        title="Privacy Policy"
+        intro="How we handle your data."
+      />
       <Section>
         <div className="prose-invert max-w-2xl space-y-5 text-[15px] leading-relaxed text-muted">
           <p>

@@ -39,6 +39,7 @@ export default async function InsightsPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <PageHeader
+        crumb={{ label: "Insights", href: "/insights" }}
         eyebrow="Insights"
         title={<>Notes on shipping better products.</>}
         intro="Clear, practical writing on design, engineering, and AI - no fluff."

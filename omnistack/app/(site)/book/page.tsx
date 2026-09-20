@@ -23,6 +23,7 @@ export default async function BookPage() {
   return (
     <>
       <PageHeader
+        crumb={{ label: "Book a call", href: "/book" }}
         eyebrow="Book a call"
         title={booking.heading || "Book a free scoping call"}
         intro={booking.intro || "Tell us what you're building. You'll get a clear, fixed plan within one business day."}

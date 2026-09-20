@@ -35,6 +35,7 @@ export default async function WorkPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <PageHeader
+        crumb={{ label: "Work", href: "/work" }}
         eyebrow="Selected work"
         title={<>Products we&rsquo;re proud to put our name on.</>}
         intro="Every project here was designed, built, and shipped by one senior team - from the first sketch to the last deploy."
