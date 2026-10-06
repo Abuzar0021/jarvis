@@ -53,7 +53,13 @@ export async function generateMetadata(): Promise<Metadata> {
       // title/description cascade from each page as above.
     },
     icons: {
-      icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+      icon: [
+        { url: "/favicon.svg", type: "image/svg+xml" },
+        { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
+        { url: "/icon-48.png", sizes: "48x48", type: "image/png" },
+        { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      ],
+      apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
     },
     robots: { index: true, follow: true },
     // Set GOOGLE_SITE_VERIFICATION in .env to emit the Search Console meta tag.
