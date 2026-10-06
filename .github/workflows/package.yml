@@ -1,0 +1,79 @@
+name: Package build
+
+# Builds the site on GitHub's network and publishes the finished app as a release asset, so a
+# server with a poor connection to the package registry can run it without installing anything.
+# The build runs inside node:22-alpine, the same base the production image uses, so native
+# binaries match. Server steps are in omnistack/SETUP.md ("Deploy from a prebuilt package").
+on:
+  push:
+    branches:
+      - package-build
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: package-build
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: node:22-alpine
+    defaults:
+      run:
+        working-directory: omnistack
+    env:
+      NEXT_PUBLIC_SITE_URL: https://omnistacksdigital.com
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - name: Tools for checkout
+        working-directory: /
+        run: apk add --no-cache git
+
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          corepack enable
+          pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Assemble the app
+        run: |
+          mkdir -p dist/.next
+          cp -r .next/standalone/. dist/
+          cp -r .next/static dist/.next/static
+          cp -r public dist/public
+          # live data and uploads are mounted from the server, never shipped
+          rm -rf dist/content dist/public/uploads
+          tar -czf omnistack-build.tgz -C dist .
+          ls -la omnistack-build.tgz
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: omnistack-build
+          path: omnistack/omnistack-build.tgz
+          retention-days: 7
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: omnistack-build
+
+      - name: Publish the package
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete latest-build --cleanup-tag --yes --repo "$GITHUB_REPOSITORY" || true
+          gh release create latest-build omnistack-build.tgz \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Prebuilt app ($GITHUB_SHA)" \
+            --notes "Built from commit $GITHUB_SHA. Download omnistack-build.tgz and unpack it into the server's dist folder."
