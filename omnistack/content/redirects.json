@@ -1,1 +1,10 @@
-[]
+[
+  { "from": "/services/ai-agents", "to": "/services/ai-automation", "permanent": true },
+  { "from": "/services/ai-solutions", "to": "/services/ai-automation", "permanent": true },
+  { "from": "/services/ai-automations", "to": "/services/ai-automation", "permanent": true },
+  { "from": "/services/ai-integrations", "to": "/services/ai-automation", "permanent": true },
+  { "from": "/services/workflow-automation", "to": "/services/ai-automation", "permanent": true },
+  { "from": "/services/branding", "to": "/services", "permanent": true },
+  { "from": "/services/ugc-advertising", "to": "/services", "permanent": true },
+  { "from": "/services/maintenance-support", "to": "/pricing#retainer", "permanent": true }
+]

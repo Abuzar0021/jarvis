@@ -68,7 +68,7 @@ export function IndustriesEditor({ initial }: { initial: Industry[] }) {
               <Field label="Slug" value={it.slug} onChange={(v) => patch(i, { slug: v })} hint="Auto from name if blank" mono />
             </div>
             <TextArea label="Summary" value={it.summary} onChange={(v) => patch(i, { summary: v })} rows={2} />
-            <ImageField label="Cover image" value={it.cover} onChange={(v) => patch(i, { cover: v })} hint="Optional — branded gradient used if empty." />
+            <ImageField label="Cover image" value={it.cover} onChange={(v) => patch(i, { cover: v })} hint="Optional - branded gradient used if empty." />
             <StringList label="Pain points" values={it.painPoints} onChange={(v) => patch(i, { painPoints: v })} placeholder="A problem this industry faces" />
             <StringList label="Featured service slugs" values={it.services} onChange={(v) => patch(i, { services: v })} placeholder="e.g. website-development" />
             <TextArea label="Body" value={it.body} onChange={(v) => patch(i, { body: v })} rows={6} hint="Separate paragraphs with a blank line." />

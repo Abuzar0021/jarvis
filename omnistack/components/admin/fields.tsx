@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 const inputCls =
-  "w-full rounded-lg border border-hair bg-card px-3.5 py-2.5 text-sm text-fg placeholder:text-muted/50 transition-colors focus:border-gold/60 focus:outline-none";
+  "w-full rounded-lg border border-hair bg-card px-3.5 py-2.5 text-sm text-fg placeholder:text-muted/50 transition-colors focus:border-gold/60";
 
 export function PageTitle({
   title,
@@ -156,8 +156,8 @@ export function Toggle({
       >
         <span
           className={cn(
-            "absolute top-0.5 h-5 w-5 rounded-full bg-fg transition-all",
-            checked ? "left-[22px]" : "left-0.5",
+            "absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-fg transition-transform ease-snap",
+            checked ? "translate-x-[22px]" : "translate-x-0",
           )}
         />
       </span>

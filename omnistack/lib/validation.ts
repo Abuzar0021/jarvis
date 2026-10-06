@@ -12,7 +12,7 @@ export const contactSchema = z.object({
   source: z.string().trim().max(40).optional().default("contact"),
   page: z.string().trim().max(200).optional().default(""),
   utm: z.string().trim().max(400).optional().default(""),
-  // Honeypot — must be empty.
+  // Honeypot - must be empty.
   website: z.string().max(0).optional().default(""),
 });
 export type ContactInput = z.infer<typeof contactSchema>;
@@ -24,6 +24,9 @@ export const newsletterSchema = z.object({
 
 export const projectSchema = z.object({
   id: z.string().optional(),
+  // Defaults to "work", so a record saved without this field stays portfolio
+  // work and nothing can become a template by omission.
+  kind: z.enum(["work", "template"]).optional().default("work"),
   title: z.string().trim().min(2).max(160),
   slug: z.string().trim().max(120).optional().default(""),
   client: z.string().trim().max(160).optional().default(""),
@@ -37,6 +40,9 @@ export const projectSchema = z.object({
   gallery: z.array(z.string().trim().max(600)).optional().default([]),
   testimonialId: z.string().trim().max(60).optional().default(""),
   cover: z.string().trim().max(600).optional().default(""),
+  video: z.string().trim().max(600).optional().default(""),
+  videoPoster: z.string().trim().max(600).optional().default(""),
+  logo: z.string().trim().max(600).optional().default(""),
   url: z.string().trim().max(400).optional().default(""),
   tags: z.array(z.string().trim().max(60)).optional().default([]),
   services: z.array(z.string().trim().max(80)).optional().default([]),
@@ -66,14 +72,54 @@ export const serviceSchema = z.object({
   featured: z.boolean().optional().default(false),
 });
 
+/** A YYYY-MM month, or empty. */
+const MONTH = /^(\d{4}-(0[1-9]|1[0-2]))?$/;
+
 export const testimonialSchema = z.object({
   id: z.string().optional(),
-  quote: z.string().trim().min(5).max(1000),
+  quote: z.string().trim().min(5).max(1200),
   authorName: z.string().trim().max(120).optional().default(""),
   authorRole: z.string().trim().max(120).optional().default(""),
-  company: z.string().trim().max(120).optional().default(""),
+  company: z.string().trim().max(160).optional().default(""),
   featured: z.boolean().optional().default(false),
+  // New records default to pending: nothing reaches the public site without a
+  // person deciding it should.
+  status: z.enum(["pending", "approved", "rejected"]).optional().default("pending"),
+  projectScope: z.string().trim().max(200).optional().default(""),
+  deliveredOn: z.string().trim().regex(MONTH, "Use YYYY-MM").optional().default(""),
+  verifiedBy: z.enum(["", "email", "handover"]).optional().default(""),
+  nameWithheld: z.boolean().optional().default(false),
+  contactEmail: z.string().trim().max(200).optional().default(""),
+  submittedAt: z.string().trim().max(40).optional().default(""),
+  consentAt: z.string().trim().max(40).optional().default(""),
 });
+
+/**
+ * The public /reviews/new endpoint. Deliberately not testimonialSchema: a
+ * visitor may not set status, featured, verifiedBy or any timestamp. Those are
+ * decided server side and in the admin.
+ */
+export const reviewSubmissionSchema = z.object({
+  name: z.string().trim().min(2, "Please enter your name").max(120),
+  role: z.string().trim().max(120).optional().default(""),
+  company: z.string().trim().max(160).optional().default(""),
+  projectScope: z
+    .string()
+    .trim()
+    .min(3, "Tell us in a few words what was built")
+    .max(200, "Keep the scope under 200 characters"),
+  quote: z
+    .string()
+    .trim()
+    .min(40, "A useful review runs to at least 40 characters")
+    .max(1200, "Please keep the review under 1200 characters"),
+  email: z.string().trim().regex(EMAIL, "Enter a valid email").max(200),
+  nameWithheld: z.boolean().optional().default(false),
+  consent: z.literal(true, "Please confirm you agree to your review being published"),
+  // Honeypot - must be empty.
+  website: z.string().max(0).optional().default(""),
+});
+export type ReviewSubmissionInput = z.infer<typeof reviewSubmissionSchema>;
 
 export const faqSchema = z.object({
   id: z.string().optional(),
@@ -93,6 +139,8 @@ export const postSchema = z.object({
   author: z.string().trim().max(80).optional().default(""),
   publishedAt: z.string().trim().max(40).optional().default(""),
   featured: z.boolean().optional().default(false),
+  seoTitle: z.string().trim().max(160).optional().default(""),
+  seoDescription: z.string().trim().max(300).optional().default(""),
 });
 
 export const industrySchema = z.object({
@@ -139,6 +187,8 @@ export const siteSchema = z.object({
     headline: z.string().max(160),
     highlight: z.string().max(80),
     subhead: z.string().max(400),
+    note: z.string().max(120),
+    annotations: z.array(z.string().max(80)),
     primaryCta: cta,
     secondaryCta: cta,
   }),

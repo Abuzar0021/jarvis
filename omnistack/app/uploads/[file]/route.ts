@@ -12,7 +12,7 @@ export async function GET(
   ctx: { params: Promise<{ file: string }> },
 ) {
   const { file } = await ctx.params;
-  // Prevent path traversal — only allow a bare filename.
+  // Prevent path traversal - only allow a bare filename.
   const safe = path.basename(file);
   if (safe !== file || file.includes("..") || file.startsWith(".")) {
     return new Response("Not found", { status: 404 });

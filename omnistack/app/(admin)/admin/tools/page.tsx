@@ -27,7 +27,7 @@ export default async function ToolsAdminPage() {
               {activity.slice(0, 50).map((a) => (
                 <li key={a.id} className="flex items-center justify-between gap-4 py-2.5 text-sm">
                   <span className="text-fg/90">
-                    <span className="capitalize">{a.action}</span> — {a.detail}
+                    <span className="capitalize">{a.action}</span> - {a.detail}
                   </span>
                   <span className="shrink-0 text-xs text-muted">{formatDate(a.at)}</span>
                 </li>

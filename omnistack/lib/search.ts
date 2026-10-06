@@ -2,7 +2,7 @@ import {
   getFaqs,
   getIndustries,
   getPosts,
-  getProjects,
+  getWork,
   getServices,
 } from "./content";
 import type { SearchItem } from "./search-core";
@@ -13,7 +13,7 @@ export { searchIndex } from "./search-core";
 /** Build a flat, searchable index across all public content (server-only). */
 export async function buildSearchIndex(): Promise<SearchItem[]> {
   const [projects, services, posts, industries, faqs] = await Promise.all([
-    getProjects(),
+    getWork(),
     getServices(),
     getPosts(),
     getIndustries(),

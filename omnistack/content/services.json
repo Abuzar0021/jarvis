@@ -5,9 +5,16 @@
     "slug": "website-development",
     "group": "Build",
     "summary": "Fast, beautiful, SEO-first sites that convert.",
-    "body": "Marketing sites and landing pages engineered for speed, accessibility, and search from the first commit. Built on Next.js so they load instantly and rank well.",
-    "deliverables": ["Design system & responsive build", "Headless CMS so you can edit everything", "90+ Lighthouse & Core Web Vitals", "On-page SEO & schema"],
-    "featured": true
+    "body": "Most small business websites are rented. You pay a platform every month, the site lives on their servers, the templates are theirs, and the day you stop paying it disappears. Three years in you have spent thousands and own nothing you can take with you.\n\nThis is the other option. You get a site built for you, and you get the code, the repository, the domain and the hosting account. Not a licence to use it. The actual thing.\n\n## How it is built\n\nEvery site is built on Next.js and rendered ahead of time, so a page arrives as finished HTML rather than as a JavaScript bundle the visitor's phone has to assemble first. That is why these sites feel instant on a mid range Android on mobile data, which is what most of your visitors are actually using.\n\nThe build targets a Lighthouse score above 90 and passing Core Web Vitals, because Google uses page experience as a ranking input and because a slow site loses people before they read anything. Structured data, sitemap, canonical tags and Open Graph are part of the build rather than a plugin added afterwards.\n\nYou get a content editor for the parts that change. Text, images, projects, prices. No developer, no ticket, no waiting.\n\n## What it costs to run\n\nA static site on a small server costs roughly four dollars a month, paid directly to your host, not to us. There is no platform fee, no per seat charge, and no annual increase decided by somebody else. Compare that to the sixty to five hundred a month that hosted platforms and agency retainers typically charge and the difference over a few years is usually larger than the build itself.\n\n## What you actually receive at handover\n\nThe repository with full history, transferred to your account. The domain, in your name. The hosting account, in your name, paid with your card. Analytics, if you want it, under your login. And a walkthrough so you can edit the site yourself.\n\nIf you later want to hire somebody else, you hand them a normal Next.js repository and they get to work. Nothing is locked, nothing is proprietary, and there is no exit fee, because there is nothing to exit from.\n\n## Who this suits\n\nBusinesses that have outgrown a template, that are tired of paying rent on their own storefront, or that were quoted a five figure sum by an agency for something a solo build does better. It suits people who want to know what they own.\n\nIt is a poor fit if you want somebody else permanently responsible for every change, or if you need a large team and a long contract. Say so early and we will tell you honestly.",
+    "deliverables": [
+      "Design system & responsive build",
+      "Headless CMS so you can edit everything",
+      "90+ Lighthouse & Core Web Vitals",
+      "On-page SEO & schema"
+    ],
+    "featured": true,
+    "seoTitle": "Website Development Agency",
+    "seoDescription": "Custom Next.js websites built to load fast and rank well. You get the code, the domain and the hosting account in your name, with no monthly platform fees."
   },
   {
     "id": "svc_web-apps",
@@ -15,9 +22,16 @@
     "slug": "web-applications",
     "group": "Build",
     "summary": "Production-grade products built to scale from day one.",
-    "body": "Dashboards, portals, and platforms with real authentication, data, and roles. Type-safe end to end and architected so new features don't mean a rewrite.",
-    "deliverables": ["Auth, roles & permissions", "Database design & APIs", "Reusable component library", "Testing & CI/CD"],
-    "featured": true
+    "body": "A marketing site tells people about your business. A web application is your business: the booking system, the customer portal, the dashboard, the internal tool your staff use all day.\n\nThe difference that matters commercially is that applications are where software companies lock you in hardest. Per user pricing, per transaction fees, and data held in a format you cannot export. A tool that costs eighty a month at five users costs eight hundred at fifty, and the price rises exactly as you grow.\n\n## How these are built\n\nNext.js and TypeScript on the application side, with a real database rather than a spreadsheet pretending to be one. Authentication, roles and permissions built properly, because these are the parts that quietly become security incidents when they are improvised.\n\nServer rendered where it should be indexed, client rendered where it needs to be interactive. Sessions signed and rate limited. Input validated on the server, never trusting what the browser sends.\n\nEverything runs on infrastructure you control. Your database, your server, your backups.\n\n## What that changes\n\nYour per user cost does not rise as you add staff, because there are no per user licences. Your data is in your database and you can export or query it however you like. And if the tool needs to do something unusual, it can, because it was written for your process rather than configured around somebody else's.\n\n## When not to do this\n\nIf an off the shelf product genuinely does what you need, buy it. Custom software is worth building when the tool is close to what you do rather than beside it, when the subscription cost has grown past the build cost, or when the workaround your team performs every day is itself the problem. If none of those is true, we will tell you to keep your subscription.",
+    "deliverables": [
+      "Auth, roles & permissions",
+      "Database design & APIs",
+      "Reusable component library",
+      "Testing & CI/CD"
+    ],
+    "featured": true,
+    "seoTitle": "Web Application Development",
+    "seoDescription": "Production web apps with real authentication, user roles and a database you own. Built on Next.js, self-hosted, and handed over with the full repository."
   },
   {
     "id": "svc_mobile-apps",
@@ -25,9 +39,16 @@
     "slug": "mobile-applications",
     "group": "Build",
     "summary": "Native-feeling apps from one shared codebase.",
-    "body": "Cross-platform mobile apps that share logic with your web product, so you ship faster and maintain less.",
-    "deliverables": ["iOS & Android builds", "Offline & push notifications", "App store submission", "Analytics & crash reporting"],
-    "featured": false
+    "body": "Most businesses that ask for a mobile app do not actually need one. What they need is something that works well on a phone, loads fast on mobile data, and can be added to a home screen. A native app solves that and adds two app store accounts, two review processes, and two codebases to maintain, for a problem a fast, installable web app usually solves for a fraction of the cost.\n\n## When a native app is actually the right call\n\nPush notifications that need to work reliably in the background, offline behaviour beyond a simple cache, access to a device capability a browser genuinely cannot reach such as deep Bluetooth or background location, or a store listing itself being part of how the product is found. If none of those apply, the honest answer is usually a fast site or an installable progressive web app instead, which saves the store fee and the two codebase tax.\n\n## How it is built when it is the right call\n\nA single React Native codebase targets iOS and Android together, sharing logic with any existing Next.js product rather than duplicating it in a separate mobile stack. Push notifications, offline storage and the app store submission are part of the build rather than an afterthought added before launch.\n\n## What you own\n\nThe repository, in your name, the same as every other service here. No agency lock on the App Store or Play Console account, and no dependency on us to ship an update once the app is live.\n\n## Being honest about cost\n\nTwo platforms, app review cycles and ongoing OS compatibility make mobile apps the most expensive way to reach a phone. Before committing to one, we will walk through whether a fast website already does the job, because for most businesses it does.",
+    "deliverables": [
+      "iOS & Android builds",
+      "Offline & push notifications",
+      "App store submission",
+      "Analytics & crash reporting"
+    ],
+    "featured": false,
+    "seoTitle": "Mobile App Development",
+    "seoDescription": "React Native apps for iOS and Android, built only when a native app genuinely beats a fast mobile site. Honest scoping before a single line of code."
   },
   {
     "id": "svc_custom-software",
@@ -35,9 +56,16 @@
     "slug": "custom-software",
     "group": "Build",
     "summary": "Bespoke systems for problems off-the-shelf can't solve.",
-    "body": "Internal tools, integrations, and engines tailored to how your business actually runs.",
-    "deliverables": ["Discovery & technical spec", "Scalable architecture", "Documentation & handover", "Ongoing support"],
-    "featured": false
+    "body": "Most businesses run on a gap. Two systems that do not talk to each other, a process held together by a spreadsheet somebody maintains by hand, or a report that takes a person half a day every week to assemble.\n\nCustom software is worth building when that gap costs more than closing it. Not before.\n\n## What this usually looks like\n\nAn integration that moves data between systems that were never designed to cooperate, so nobody retypes it. An internal tool that replaces a spreadsheet several people edit at once and periodically break. A process engine that applies your rules consistently instead of relying on whoever is on shift remembering them. A reporting layer that reads your real data instead of a monthly export.\n\nNone of these are glamorous. All of them return time immediately.\n\n## How it works\n\nIt starts with discovery, which is mostly watching how the work is done now and finding where the time actually goes. That produces a written technical specification with a fixed scope and a price, before anything is built.\n\nThen the build, in stages you can see, with the architecture chosen for what you need rather than what is fashionable. Then documentation written for whoever maintains it next, which may well not be us, and handover of the repository and infrastructure.\n\n## Why the handover matters more here than anywhere else\n\nInternal tools are where custom software becomes a trap. A system only one developer understands, with no documentation, hosted on an account nobody else can access, is a liability disguised as an asset. It is also how a lot of contractors keep clients.\n\nSo the deliverable includes the specification, commented code, a written explanation of how it runs and how to deploy it, and the accounts in your name. You should be able to hand the whole thing to another developer and have them productive in a day.\n\n## Being straight about cost\n\nCustom software is the most expensive thing on this list and the easiest to get wrong. If a subscription product does eighty percent of what you need, that is usually the better buy. Bring the problem first and we will tell you honestly whether it is worth building.",
+    "deliverables": [
+      "Discovery & technical spec",
+      "Scalable architecture",
+      "Documentation & handover",
+      "Ongoing support"
+    ],
+    "featured": false,
+    "seoTitle": "Custom Software Development",
+    "seoDescription": "Internal tools and integrations for problems off-the-shelf software cannot solve. You own the source code, the data and the deployment. No per-seat fees."
   },
   {
     "id": "svc_saas",
@@ -45,9 +73,16 @@
     "slug": "saas-platforms",
     "group": "Build",
     "summary": "Platforms engineered for reliability and growth.",
-    "body": "Multi-tenant SaaS with billing, onboarding, and admin — built to onboard your hundredth customer as smoothly as your first.",
-    "deliverables": ["Multi-tenant architecture", "Subscriptions & billing", "Admin & analytics", "Scalable infrastructure"],
-    "featured": false
+    "body": "A SaaS product is a different commitment from a website. It is infrastructure you run for other people, with their data, their uptime expectations and their billing on the line every day it exists. Building one is worth it when the market for renting your idea by subscription is real. It is not worth it as a way to avoid deciding what the product actually is.\n\n## What has to exist from day one\n\nMulti-tenancy, so one customer's data and usage never touches another's, done properly at the database layer rather than bolted on with a filter that is one bug away from a breach. Subscription billing wired to a real payments provider, with upgrades, downgrades and failed payments handled rather than assumed away. An admin surface for you, separate from the product your customers see, because you will need to see what is actually happening before they tell you.\n\n## How it is built\n\nNext.js and TypeScript, a real database with row level isolation between tenants, and Stripe or an equivalent for billing rather than a hand rolled payments flow. Onboarding is treated as part of the product, not a form before the real thing starts, because a customer who cannot activate themselves in the first ten minutes usually does not come back.\n\n## What you own\n\nThe same as every service here. The codebase, the database, the infrastructure account. If the product succeeds, nothing about how it was built stops you from bringing on your own team, hiring elsewhere, or simply owning it outright.\n\n## Being honest about scope\n\nA SaaS platform is the largest build on this list, and the temptation is to build every feature a competitor already has before launching. We will push back on that. The honest version of a first release is small enough to prove the idea works with real customers before either of us spends months on features nobody has asked for yet.",
+    "deliverables": [
+      "Multi-tenant architecture",
+      "Subscriptions & billing",
+      "Admin & analytics",
+      "Scalable infrastructure"
+    ],
+    "featured": false,
+    "seoTitle": "SaaS Platform Development",
+    "seoDescription": "Multi-tenant SaaS platforms with billing, onboarding and an admin panel. Built to launch quickly, then scale, on infrastructure that stays yours."
   },
   {
     "id": "svc_api",
@@ -55,59 +90,35 @@
     "slug": "api-integrations",
     "group": "Build",
     "summary": "Connect the tools you already use.",
-    "body": "Reliable integrations between your product and the services it depends on — payments, CRMs, data, and more.",
-    "deliverables": ["Secure API design", "Third-party integrations", "Webhooks & sync", "Monitoring & retries"],
-    "featured": false
+    "body": "Every business runs on several systems that were never designed to talk to each other. A CRM that does not know what the payment processor knows. An inventory tool a website cannot see. A spreadsheet somebody updates by hand because two platforms do not sync. The fix is rarely a new system, it is a reliable connection between the ones you already have.\n\n## What actually breaks integrations\n\nMost integration problems are not about the API calls themselves, they are about what happens when something goes wrong. A webhook that arrives twice and creates a duplicate order. A third party outage that silently drops data instead of retrying it. A token that expires overnight with nobody watching. An integration that works in the demo and breaks under real volume is usually missing exactly these things.\n\n## How it is built\n\nEvery integration is built to be idempotent, so a duplicate event cannot duplicate the result, with retries and backoff for the failures that are temporary and clear logging for the ones that are not. Webhooks are verified rather than trusted blindly, and secrets live in environment configuration rather than in code. Where a provider offers a sandbox, the integration is proven against it before it ever touches live data.\n\n## What you get\n\nMonitoring on the connection itself, so a broken sync surfaces as an alert rather than as a customer noticing their order never arrived. Documentation of what connects to what, so the next person who touches it, whether that is us or someone else, is not reverse engineering it from the code alone.\n\n## What you own\n\nThe integration code and its configuration, in your infrastructure, not gated behind a third party automation platform charging per task run. If the tools you connect ever change, the fix is a code change you own, not a support ticket to somebody else.",
+    "deliverables": [
+      "Secure API design",
+      "Third-party integrations",
+      "Webhooks & sync",
+      "Monitoring & retries"
+    ],
+    "featured": false,
+    "seoTitle": "API Integration Services",
+    "seoDescription": "Reliable connections between the systems you already run. Payment providers, CRMs and internal APIs, wired together and monitored in production."
   },
   {
-    "id": "svc_ai-solutions",
-    "name": "AI Solutions",
-    "slug": "ai-solutions",
+    "id": "svc_ai-automation",
+    "name": "AI Automation",
+    "slug": "ai-automation",
     "group": "AI",
-    "summary": "AI features that earn their place in the product.",
-    "body": "We identify where AI genuinely helps, then build it into your product with the right model, guardrails, and evaluation.",
-    "deliverables": ["Use-case discovery", "Model selection & prompts", "Guardrails & evaluation", "Production monitoring"],
-    "featured": false
-  },
-  {
-    "id": "svc_ai-agents",
-    "name": "AI Agents",
-    "slug": "ai-agents",
-    "group": "AI",
-    "summary": "Agents that do real work, not demos.",
-    "body": "Autonomous and human-in-the-loop agents that handle real operations — research, outreach, support, and more — wired into your stack.",
-    "deliverables": ["Agent design & tooling", "Human-in-the-loop controls", "Integration with your systems", "Observability & cost control"],
-    "featured": true
-  },
-  {
-    "id": "svc_ai-automations",
-    "name": "AI Automations",
-    "slug": "ai-automations",
-    "group": "AI",
-    "summary": "Automate the busywork end to end.",
-    "body": "Automations that qualify leads, generate content, and sync systems while you sleep — monitored and reliable.",
-    "deliverables": ["Workflow mapping", "Automated pipelines", "Notifications & logging", "Failure handling"],
-    "featured": true
-  },
-  {
-    "id": "svc_ai-integrations",
-    "name": "AI Integrations",
-    "slug": "ai-integrations",
-    "group": "AI",
-    "summary": "Bring AI into the tools you already run.",
-    "body": "Add intelligence to your existing CRM, helpdesk, or internal tools without replacing them.",
-    "deliverables": ["Integration architecture", "Secure data handling", "Custom AI endpoints", "Rollout & training"],
-    "featured": false
-  },
-  {
-    "id": "svc_workflow-automation",
-    "name": "Workflow Automation",
-    "slug": "workflow-automation",
-    "group": "AI",
-    "summary": "Remove the manual steps between your tools.",
-    "body": "We connect your apps and processes so data flows and tasks trigger themselves — fewer errors, more time back.",
-    "deliverables": ["Process audit", "Automation build", "Integrations", "Documentation"],
-    "featured": false
+    "summary": "Agents and automations that do real work, not demos.",
+    "body": "One service covering the whole range: finding where AI genuinely helps, building it, and running it in production.\n\n## What this covers\n\nAutonomous and human-in-the-loop agents that handle real operations such as research, outreach and support, wired into the systems you already run. Automations that qualify leads, generate content on brand, and keep data in sync between your tools without anyone copying and pasting between tabs. And adding intelligence to an existing CRM, helpdesk or internal tool rather than replacing it with something new to learn.\n\n## How it starts\n\nEvery build starts with a process audit, because most of what looks like an AI problem is a workflow problem, and the fastest way to waste a budget is to automate a process that should have been deleted instead. What survives that audit gets the right model for the job rather than the newest one, real guardrails around what it is allowed to do unsupervised, and an evaluation set so a change to the model or the prompt can be tested before it reaches production.\n\n## What you get after launch\n\nCost and failure monitoring, so you can tell whether it is working and what it is costing you, rather than hoping. A human-in-the-loop point wherever a mistake would be expensive, so the agent proposes and a person approves until the failure rate earns more autonomy. And documentation of what it does and why, so it does not become the one system nobody but us understands.\n\n## Being honest about the limits\n\nNot every process should be automated with AI. Some are automated better with a plain script, and some should not be automated at all because the judgment involved is exactly the part worth paying a person for. We will tell you which is which before we build anything, not after.",
+    "deliverables": [
+      "Process audit & use-case discovery",
+      "Agent design, tooling & human-in-the-loop controls",
+      "Automated pipelines & system integrations",
+      "Model selection, prompts & guardrails",
+      "Evaluation, observability & cost control",
+      "Documentation & handover"
+    ],
+    "featured": true,
+    "seoTitle": "AI Automation and AI Agents",
+    "seoDescription": "AI agents and automations audited for real value before anything is built. Wired into your stack and monitored in production, not a chatbot bolted on."
   },
   {
     "id": "svc_uiux",
@@ -115,19 +126,16 @@
     "slug": "ui-ux-design",
     "group": "Design",
     "summary": "Interfaces with restraint and intent.",
-    "body": "Research-led product and web design that's beautiful and usable — and built to translate cleanly into code.",
-    "deliverables": ["UX research & flows", "High-fidelity UI", "Design system", "Prototypes"],
-    "featured": true
-  },
-  {
-    "id": "svc_branding",
-    "name": "Branding",
-    "slug": "branding",
-    "group": "Design",
-    "summary": "Identity that feels premium and human.",
-    "body": "Logo, type, color, and voice — a complete identity system your whole product can be built on.",
-    "deliverables": ["Logo & marks", "Type & color system", "Brand guidelines", "Assets & templates"],
-    "featured": false
+    "body": "The clearest evidence for how we approach design is the site you are reading right now. It was designed and built by the same team that would design yours, with the same restraint: a small, deliberate set of decisions rather than every trend applied at once.\n\n## What restraint actually means\n\nFewer typefaces, used consistently, rather than a different one per section. Motion that has a reason to exist rather than movement for its own sake, and that switches off entirely for anyone who has asked their device to reduce motion. Colour used to mean something rather than as decoration. Whitespace treated as a real design decision, not the leftover space between the parts somebody actually wanted.\n\n## How it is built\n\nDesign and build are not handed off between two different people or two different tools. What gets designed is built in the same system it will ship in, so nothing is lost translating a picture of an interface into the interface itself, and no gap opens between how a component looks in a design file and how it behaves for a real visitor on a real phone.\n\n## What that changes for you\n\nFewer rounds of a static mockup being reinterpreted by a developer who did not make it. A design system, not a one off set of screens, so new pages stay consistent with the ones already built rather than drifting page by page. And a result you can judge the way we do, by using it, not by looking at a flat image of it.\n\n## Who this suits\n\nBusinesses that want an interface that looks considered rather than assembled from a component kit, and are willing to have fewer things on the page in exchange for the things that are there mattering more.",
+    "deliverables": [
+      "UX research & flows",
+      "High-fidelity UI",
+      "Design system",
+      "Prototypes"
+    ],
+    "featured": true,
+    "seoTitle": "UI/UX Design Services",
+    "seoDescription": "Interface design built in the same system it ships in, so what you approve is what you get. No hand-off gap between the mockup and the finished build."
   },
   {
     "id": "svc_performance",
@@ -135,9 +143,16 @@
     "slug": "performance-optimization",
     "group": "Design",
     "summary": "Make what you have fast.",
-    "body": "Audits and fixes that lift Core Web Vitals, Lighthouse scores, and conversion — measurably.",
-    "deliverables": ["Performance audit", "Core Web Vitals fixes", "Image & font optimization", "Before/after report"],
-    "featured": false
+    "body": "A slow site costs money in two directions at once. Visitors leave before the page finishes, and Google ranks it lower because page experience is a ranking input. Both problems have the same set of causes, and most of them are introduced by decisions made when the site was built.\n\n## What is usually wrong\n\nImages shipped at full resolution and served to phones. A hero image the browser is told is not urgent, so it starts downloading late. JavaScript bundles that block the main thread for hundreds of milliseconds before anything is interactive. Web fonts that swap in after the text has already rendered and shove the layout down. Analytics and chat widgets loaded before the content.\n\nMost of these are invisible on a fast laptop and obvious on a four year old Android on mobile data, which is why so many sites feel fine to the person who commissioned them and slow to everybody else.\n\n## How the work is done\n\nThe starting point is a measurement, not an opinion: Lighthouse and Core Web Vitals on both mobile and desktop, with the specific failing metrics identified. Then the causes are fixed in order of what the numbers say, which usually means the largest contentful paint element first, then main thread blocking, then layout shift.\n\nTypical changes: preloading and prioritising the image that actually is the largest contentful paint, sizing images to how they are displayed rather than how they were uploaded, splitting heavy libraries so they load only on the routes that use them, removing polyfills modern browsers do not need, and eliminating the layout reads that force the browser to recalculate geometry mid animation.\n\n## What you get\n\nA before and after measurement you can reproduce, a written list of what changed and why, and the code. Not a dashboard subscription.\n\n## An honest limit\n\nThere is a point past which further gains cost more than they return, and it arrives sooner than most agencies admit. If your site already loads quickly and passes Core Web Vitals, more optimisation is not where your next customer comes from, and we will say so rather than sell you a package.",
+    "deliverables": [
+      "Performance audit",
+      "Core Web Vitals fixes",
+      "Image & font optimization",
+      "Before/after report"
+    ],
+    "featured": false,
+    "seoTitle": "Core Web Vitals and Speed Optimization",
+    "seoDescription": "Core Web Vitals fixed and measured before and after. Faster LCP, lower CLS and a Lighthouse score above 90, with the numbers to prove the difference."
   },
   {
     "id": "svc_seo",
@@ -145,9 +160,16 @@
     "slug": "seo",
     "group": "Grow",
     "summary": "Traffic, rankings, and conversions that compound.",
-    "body": "Technical and content SEO built into the product, not bolted on — so you rank for the searches that bring customers.",
-    "deliverables": ["Technical SEO", "Keyword & content strategy", "Schema & internal linking", "Reporting"],
-    "featured": true
+    "body": "Most SEO work is sold as a monthly retainer with a report attached. This is not that. The technical foundation is built into the site at construction, and it stays working without anybody billing you to maintain it.\n\n## What gets built in\n\nEvery page is server rendered, so search engines receive finished HTML rather than having to execute JavaScript to discover your content. Each page carries its own title, description and canonical URL. Structured data is emitted where it earns something: organisation and logo, breadcrumbs, articles on posts, FAQ where a page genuinely answers questions. A sitemap is generated automatically from your real content, so it never drifts out of date, and robots.txt points at it.\n\nCore Web Vitals are treated as part of the build rather than an optimisation pass afterwards. Largest contentful paint, interaction latency and layout shift are all ranking inputs, and all three are far cheaper to get right while building than to retrofit.\n\nInternal linking is structured so that services, industries and case studies reinforce each other instead of competing for the same query.\n\n## What is honest about the rest\n\nRankings take months, not weeks, and nobody who tells you otherwise is being straight with you. A new domain has no history and no links, and Google is deliberately slow to trust one. What the technical work does is remove every reason for Google not to rank you. It does not manufacture demand.\n\nContent and links are what move position after that, and both take time and real effort. If you want that work done, it is a separate conversation with a separate price, and we will tell you plainly whether the search volume in your market justifies it. For plenty of local businesses it does not, and a Google Business Profile plus a fast site will do more than a year of blogging.\n\n## What you can check yourself\n\nEverything here is verifiable. Run your site through PageSpeed Insights. View source and read the meta tags. Open the sitemap. Paste a page into Google's Rich Results Test. We would rather you check than take our word for it, which is also why no page on this site claims a ranking result it cannot show you.\n\n## What you own\n\nThe same as everything else. The code, the configuration, the analytics account. If you stop working with us, none of it switches off.",
+    "deliverables": [
+      "Technical SEO",
+      "Keyword & content strategy",
+      "Schema & internal linking",
+      "Reporting"
+    ],
+    "featured": true,
+    "seoTitle": "Technical SEO Services",
+    "seoDescription": "Technical SEO built into the site instead of sold as a monthly retainer. Schema, sitemaps, canonicals and Core Web Vitals, correct from the first commit."
   },
   {
     "id": "svc_digital-marketing",
@@ -155,28 +177,15 @@
     "slug": "digital-marketing",
     "group": "Grow",
     "summary": "Campaigns that drive the right traffic.",
-    "body": "Paid and organic growth aligned to your funnel, measured against revenue — not vanity metrics.",
-    "deliverables": ["Channel strategy", "Campaign setup", "Landing pages", "Analytics & reporting"],
-    "featured": false
-  },
-  {
-    "id": "svc_ugc",
-    "name": "UGC Advertising",
-    "slug": "ugc-advertising",
-    "group": "Grow",
-    "summary": "Creative that performs on social.",
-    "body": "User-generated-style ad creative built to stop the scroll and convert across paid social.",
-    "deliverables": ["Creative concepts", "Scripting", "Edited ad creative", "Performance iteration"],
-    "featured": false
-  },
-  {
-    "id": "svc_maintenance",
-    "name": "Maintenance & Support",
-    "slug": "maintenance-support",
-    "group": "Grow",
-    "summary": "Stay fast, secure, and up to date.",
-    "body": "Ongoing care for your product — updates, monitoring, fixes, and small improvements, handled.",
-    "deliverables": ["Updates & security patches", "Uptime monitoring", "Bug fixes", "Monthly improvements"],
-    "featured": false
+    "body": "Most of what gets sold as digital marketing is spend without a clear line back to revenue. The honest starting point is the same one used on the SEO page: work out what a customer is actually worth to you before spending anything to acquire one, because that number should decide the budget, not the channel that happens to be fashionable.\n\n## What this actually covers\n\nDeciding which channel is worth testing for your specific business, since paid search, paid social and organic content earn attention in different ways and none of them is right for every business. Landing pages built to convert the specific traffic a campaign sends, rather than pointing every campaign at the homepage and hoping. Tracking set up before a campaign launches, not added afterwards once somebody asks where the money went.\n\n## How campaigns are measured\n\nAgainst cost per lead and, where the data allows it, cost per customer, not against clicks or impressions, which are easy to buy and do not pay your invoices. A campaign that generates traffic but no leads gets reported as exactly that, not dressed up as a success because the numbers moved.\n\n## Being honest about when this is not worth it\n\nIf your market has low search volume, a long sales cycle driven by relationships, or a product better sold through referral than advertising, we will say so rather than run a campaign anyway. Paid spend rewards demand that already exists, it does not create it from nothing. For some businesses the right answer is a fast, well built site and word of mouth, not a monthly ad budget.",
+    "deliverables": [
+      "Channel strategy",
+      "Campaign setup",
+      "Landing pages",
+      "Analytics & reporting"
+    ],
+    "featured": false,
+    "seoTitle": "Digital Marketing Services",
+    "seoDescription": "Campaigns measured against revenue rather than impressions. Scoped honestly, including the cases where paid marketing is not yet worth running for you."
   }
 ]

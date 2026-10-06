@@ -43,7 +43,7 @@ export default async function DashboardPage() {
 
   return (
     <AdminShell>
-      <PageTitle title="Dashboard" description="Manage every part of your website — no code required." />
+      <PageTitle title="Dashboard" description="Manage every part of your website - no code required." />
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-7">
         {cards.map((c) => (
@@ -76,7 +76,7 @@ export default async function DashboardPage() {
         <ul className="mt-3 space-y-2 text-sm text-muted">
           <li>• Every change you save here goes live on your website immediately.</li>
           <li>• Set <code className="text-fg/90">ADMIN_PASSWORD</code> in your environment to secure this dashboard.</li>
-          <li>• Add SMTP settings to receive contact-form enquiries by email — they always appear under Leads regardless.</li>
+          <li>• Add SMTP settings to receive contact-form enquiries by email - they always appear under Leads regardless.</li>
         </ul>
       </div>
     </AdminShell>
