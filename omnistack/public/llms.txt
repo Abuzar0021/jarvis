@@ -1,41 +1,29 @@
-# OmniStack Digital
+# Strawberry (OmniStack Digital)
 
-> Websites, web applications and AI automation, built and owned outright. No monthly platform fees: every project ships with the code, the domain and the hosting account in the client's name.
+> Strawberry builds SaaS websites and iOS and Android mobile apps, then grows them with social media marketing. One fixed scope, one honest price, one timeline.
 
-## What this is
+## What we do
 
-OmniStack Digital is a solo-built, self-hosted web studio. Every site is built on Next.js, rendered ahead of time, and handed over with full ownership: the repository, the domain and the hosting account transfer to the client, and running a typical site costs a few dollars a month on the client's own hosting rather than a recurring platform fee.
+- SaaS websites: marketing sites, pricing pages and onboarding for SaaS products, built to be fast, findable and to turn visitors into signups.
+- Mobile apps: iOS and Android apps, cross-platform where that helps and fully native where it matters, shipped through the App Store and Google Play.
+- Social media marketing: strategy, content and paid campaigns on Instagram, TikTok, LinkedIn and X, measured in signups and installs rather than likes.
 
-## Services
+## How we work
 
-- [Website Development](https://omnistacksdigital.com/services/website-development): fast, self-hosted marketing sites with a content editor, no platform fee
-- [Web Applications](https://omnistacksdigital.com/services/web-applications): production web apps with real auth, roles and a database the client owns
-- [Mobile Applications](https://omnistacksdigital.com/services/mobile-applications): React Native apps, built only when a native app is genuinely the right call
-- [Custom Software](https://omnistacksdigital.com/services/custom-software): internal tools and integrations for problems off the shelf software does not solve
-- [SaaS Platforms](https://omnistacksdigital.com/services/saas-platforms): multi-tenant products with billing, onboarding and admin
-- [API Integrations](https://omnistacksdigital.com/services/api-integrations): reliable connections between the systems a business already runs
-- [AI Automation](https://omnistacksdigital.com/services/ai-automation): agents and automations audited for genuine value before anything is built
-- [UI/UX Design](https://omnistacksdigital.com/services/ui-ux-design): interface design built in the same system it ships in
-- [Performance Optimization](https://omnistacksdigital.com/services/performance-optimization): Core Web Vitals fixes measured before and after
-- [SEO](https://omnistacksdigital.com/services/seo): technical SEO built into the site rather than sold as a retainer
-- [Digital Marketing](https://omnistacksdigital.com/services/digital-marketing): campaigns measured against revenue, scoped honestly against when they are not worth running
+- Every project gets one written scope, one price and one timeline before work begins. No surprise invoices.
+- Social media retainers are monthly, with no long lock-in.
+- A SaaS website usually takes four to six weeks. A first app release takes ten to fourteen. You get a dated plan before work starts.
+- We take on a handful of clients at a time.
+- You own the code, the designs, and the store and social accounts, from day one.
 
-## Industries
+## Answers to common questions
 
-Restaurants and hospitality, health and fitness, SaaS and startups, e-commerce and retail, professional services, and real estate. Full list at https://omnistacksdigital.com/industries.
-
-## Work
-
-Real, delivered projects only: https://omnistacksdigital.com/work. Template concepts, not client work, are kept separate at https://omnistacksdigital.com/templates and are labelled as such on every card.
-
-## Reviews
-
-Client reviews at https://omnistacksdigital.com/reviews are published unedited, with an explicit label on each card for whether it has been verified. No star ratings or aggregate score are shown or claimed.
-
-## Pricing
-
-Transparent pricing and a cost calculator at https://omnistacksdigital.com/pricing.
+- How long does a project take? A SaaS website usually takes four to six weeks and a first app release ten to fourteen, with a dated plan before we start.
+- Do you build for iOS and Android? Yes, cross-platform or fully native, chosen per project with the trade-off explained in writing.
+- Can you run our social media? Yes: monthly strategy, content and ads, with a report tied to signups and installs.
+- What does it cost? Builds are priced after a short discovery call and the quoted number is the number you pay. Social is a flat monthly fee.
+- Who owns the code and designs? You do.
 
 ## Contact
 
-https://omnistacksdigital.com/contact
+Everything is on one page: https://omnistacksdigital.com/ (the brief form is at the end). Email: omnistacksdigital@gmail.com
