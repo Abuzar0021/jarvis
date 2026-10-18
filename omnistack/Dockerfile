@@ -7,7 +7,10 @@ WORKDIR /app
 
 # ---- deps ----
 FROM base AS deps
-COPY package.json pnpm-lock.yaml ./
+# pnpm-workspace.yaml carries the build-script allow/ignore list. Without it in
+# this stage pnpm 11 finds two unapproved build scripts and exits 1 with
+# ERR_PNPM_IGNORED_BUILDS, which is fatal rather than the warning it used to be.
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 
 # ---- build ----
@@ -18,6 +21,10 @@ COPY . .
 # bake correctly into statically prerendered pages.
 ARG NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+# Same reason: the Search Console tag is emitted by generateMetadata, which
+# runs during prerender, so an empty value here means no tag in the HTML.
+ARG GOOGLE_SITE_VERIFICATION=
+ENV GOOGLE_SITE_VERIFICATION=$GOOGLE_SITE_VERIFICATION
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN pnpm build
 

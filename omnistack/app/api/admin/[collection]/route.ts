@@ -21,7 +21,7 @@ import {
   saveServices,
   saveTestimonials,
 } from "@/lib/content";
-import { genId, slugify } from "@/lib/utils";
+import { canPublish, genId, slugify } from "@/lib/utils";
 import type {
   Faq,
   Industry,
@@ -73,7 +73,16 @@ export async function PUT(
       case "testimonials": {
         const out: Testimonial[] = items.map((raw) => {
           const t = testimonialSchema.parse(raw);
-          return { ...t, id: t.id || genId("tst") };
+          const record: Testimonial = { ...t, id: t.id || genId("tst") };
+          // The attribution ladder, enforced server side as well as in the
+          // editor UI. A quote nobody can be attributed to, or one with no
+          // stated scope of work, cannot be approved by any route.
+          if (record.status === "approved" && !canPublish(record)) {
+            throw new Error(
+              "A review needs a name, role or company, plus a project scope, before it can be approved.",
+            );
+          }
+          return record;
         });
         await saveTestimonials(out);
         break;

@@ -15,6 +15,8 @@ const blank = (): Service => ({
   body: "",
   deliverables: [],
   featured: false,
+  seoTitle: "",
+  seoDescription: "",
 });
 
 export function ServicesEditor({ initial }: { initial: Service[] }) {
@@ -59,6 +61,20 @@ export function ServicesEditor({ initial }: { initial: Service[] }) {
             <TextArea label="Summary" value={s.summary} onChange={(v) => patch(i, { summary: v })} rows={2} />
             <TextArea label="Body" value={s.body} onChange={(v) => patch(i, { body: v })} rows={4} hint="Separate paragraphs with a blank line." />
             <StringList label="Deliverables" values={s.deliverables} onChange={(v) => patch(i, { deliverables: v })} placeholder="e.g. Design system" />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field
+                label="SEO title"
+                value={s.seoTitle ?? ""}
+                onChange={(v) => patch(i, { seoTitle: v })}
+                hint="Aim for 40 chars or fewer; the brand name is appended automatically."
+              />
+              <Field
+                label="SEO description"
+                value={s.seoDescription ?? ""}
+                onChange={(v) => patch(i, { seoDescription: v })}
+                hint="140-160 chars. Shorter than ~120 and Google rewrites it."
+              />
+            </div>
             <div className="flex flex-wrap items-center justify-between gap-4 border-t border-hair pt-4">
               <Toggle label="Feature on homepage" checked={s.featured} onChange={(v) => patch(i, { featured: v })} />
               <button

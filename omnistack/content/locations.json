@@ -1,0 +1,134 @@
+[
+  {
+    "id": "loc_ireland",
+    "name": "Ireland",
+    "slug": "ireland",
+    "country": "Ireland",
+    "region": "",
+    "parent": "",
+    "sortOrder": 1,
+    "summary": "Our home market. Based in Dublin, working Irish hours.",
+    "intro": "OmniStack Digital is based in Dublin. Ireland is the one market where we are not working across a time difference, and where a first conversation can happen in person if that is easier than a call.",
+    "presence": "Based in Dublin, Ireland. This is where the studio is run from.",
+    "overlap": "Full working-day overlap. We work Monday to Friday, 9:00 to 00:00 Irish time, so there is no lag on a question asked at any point in your day.",
+    "points": [
+      "No time difference, so a question asked at 10am is answered the same morning",
+      "Invoicing in euro, with no currency conversion on either side",
+      "Sites hosted wherever you prefer, including EU regions if data residency matters to you",
+      "In-person scoping in Dublin where that is more useful than a call"
+    ],
+    "body": "Most Irish businesses we talk to are paying a monthly platform fee for a website they do not own. Squarespace, Wix, Shopify and the rest all rent you the site. Stop paying and it goes dark, and after three years you have spent thousands with nothing transferable to show for it.\n\nWe build the other kind. The site is custom, it is fast, and at handover the repository, the domain and the hosting account all go into your name. Running it afterwards typically costs a few euro a month on your own hosting rather than a subscription that never ends.\n\nThat matters more in a small market. Irish search volumes are lower than in the UK or the US, which means the businesses that show up well locally tend to do so on technical quality rather than on advertising spend. A site that loads fast, passes Core Web Vitals and carries correct structured data starts ahead.",
+    "seoTitle": "Dublin Web Development Agency",
+    "seoDescription": "Dublin-based web development studio building fast, custom Next.js sites. You own the code, the domain and the hosting, with no monthly platform fee."
+  },
+  {
+    "id": "loc_malaysia",
+    "name": "Malaysia",
+    "slug": "malaysia",
+    "country": "Malaysia",
+    "region": "",
+    "parent": "",
+    "sortOrder": 2,
+    "summary": "Delivered work in the market, with Southeast Asian hours covered from Jakarta.",
+    "intro": "We have built and delivered a corporate site for a Malaysian group, and we cover Malaysian business hours from our Jakarta base rather than from Europe.",
+    "presence": "No office in Malaysia. The market is served from our Jakarta location, one hour behind Malaysian time, and remotely from Dublin.",
+    "overlap": "Jakarta runs one hour behind Malaysian time, so a normal Malaysian working day is covered without anyone waiting overnight for a reply.",
+    "points": [
+      "Delivered work in the market already, not a first attempt",
+      "Bilingual sites where the audience needs more than English",
+      "Jakarta hours cover the Malaysian working day with a one hour offset",
+      "Handover of the repository, domain and hosting account, so nothing stays rented"
+    ],
+    "body": "Our reference point in this market is Banafee Group, a halal food and retail group for whom we built a bilingual corporate site as a single cinematic scroll. It is live, it is theirs outright, and it is the case study we would point any Malaysian business at first.\n\nBilingual delivery is the part most templates handle badly. A site that has to carry two languages needs that decided at the structure level, not bolted on by a translation widget that search engines cannot read properly. Building it in ahead of time costs nothing extra and avoids a rebuild later.\n\nThe commercial model is the same as everywhere else we work. The build is paid once. The code, the domain and the hosting account are transferred at handover, and the running cost afterwards is hosting rather than a licence.",
+    "seoTitle": "Web Development for Malaysian Businesses",
+    "seoDescription": "Custom, bilingual websites for Malaysian businesses, with delivered work in the market. You own the code and the hosting, with no recurring platform fee."
+  },
+  {
+    "id": "loc_united-states",
+    "name": "United States",
+    "slug": "united-states",
+    "country": "United States",
+    "region": "",
+    "parent": "",
+    "sortOrder": 3,
+    "summary": "Served remotely from Dublin, with US business hours genuinely covered.",
+    "intro": "We work with US clients remotely from Dublin. Our working day runs to midnight Irish time, which is what makes that practical rather than merely possible.",
+    "presence": "No US office and no US phone number. Every US engagement is remote, run from Dublin.",
+    "overlap": "We work Monday to Friday, 9:00 to 00:00 Irish time. That window covers the whole Eastern and Central working day, and most of the Pacific one.",
+    "points": [
+      "Eastern and Central business hours covered end to end, not partially",
+      "Invoicing in US dollars where that is easier for your accounting",
+      "The repository, domain and hosting account transfer to you at handover",
+      "Written scope and fixed price before any code is written"
+    ],
+    "body": "The usual objection to hiring a studio abroad is the time difference, and it is usually a fair one. A team working 9 to 5 in Europe has already finished by the time the American working day gets going, which turns every exchange into a 24 hour round trip.\n\nOur working day runs to midnight Irish time, which removes that. A message sent at 9am in New York arrives at 2pm here. One sent at 9am in Los Angeles arrives at 5pm here. Neither waits until tomorrow.\n\nWhat we build does not change by market. Custom sites and web applications on Next.js, rendered ahead of time so they are fast on a phone, with the code, the domain and the hosting account handed over in your name at the end. No monthly platform fee, and nothing that stops working if you stop paying us.",
+    "seoTitle": "US Web Development, Remote from Dublin",
+    "seoDescription": "Custom web development for US businesses, remote from Dublin with Eastern and Central hours fully covered. You own the code, the domain and the hosting."
+  },
+  {
+    "id": "loc_new-york",
+    "name": "New York",
+    "slug": "new-york",
+    "country": "United States",
+    "region": "New York",
+    "parent": "united-states",
+    "sortOrder": 4,
+    "summary": "Eastern time, covered end to end from Dublin.",
+    "intro": "New York runs five hours behind Dublin. Because our day runs to midnight here, your entire working day sits inside our working day.",
+    "presence": "No New York office. Work is delivered remotely from Dublin.",
+    "overlap": "Dublin is five hours ahead of Eastern time. Our 9:00 to 00:00 window is 4:00 to 19:00 in New York, so every hour of your working day is covered.",
+    "points": [
+      "The full Eastern working day falls inside our hours",
+      "A 9am message in New York reaches us at 2pm, answered the same day",
+      "Invoicing in US dollars",
+      "Full ownership handover: repository, domain and hosting account"
+    ],
+    "body": "Eastern time is the easiest US zone to work with from Ireland. The five hour gap means our afternoon is your morning and our evening is your afternoon, so a question and its answer fit inside one working day on both sides rather than bouncing overnight.\n\nIn practice that means scope discussions, review calls and launch coordination happen live rather than by asynchronous message. It is the difference between a two week feedback loop and a two day one.\n\nThe work itself is custom Next.js sites and web applications, rendered ahead of time, built to pass Core Web Vitals, and handed over so that you own the code outright.",
+    "seoTitle": "Web Development for New York Businesses",
+    "seoDescription": "Custom web development for New York businesses, remote from Dublin. The entire Eastern working day is covered, and you own the code and hosting outright."
+  },
+  {
+    "id": "loc_texas",
+    "name": "Texas",
+    "slug": "texas",
+    "country": "United States",
+    "region": "Texas",
+    "parent": "united-states",
+    "sortOrder": 5,
+    "summary": "Central time, covered end to end from Dublin.",
+    "intro": "Texas runs six hours behind Dublin. Our working day extends to midnight, which puts your whole working day inside ours.",
+    "presence": "No Texas office. Work is delivered remotely from Dublin.",
+    "overlap": "Dublin is six hours ahead of Central time. Our 9:00 to 00:00 window is 3:00 to 18:00 in Texas, so the full Central working day is covered.",
+    "points": [
+      "The full Central working day falls inside our hours",
+      "A 9am message in Austin, Dallas or Houston reaches us at 3pm",
+      "Invoicing in US dollars",
+      "Full ownership handover: repository, domain and hosting account"
+    ],
+    "body": "Central time sits six hours behind Dublin, which still leaves your entire working day inside ours. A message sent first thing in Austin arrives mid afternoon here and is answered before the day ends on either side.\n\nTexas has a dense startup and services economy, and the businesses in it tend to be the ones most poorly served by rented website platforms: growing fast enough that the template stops fitting, but not yet large enough to keep an in-house engineering team for the marketing site.\n\nThat is the gap we build for. A custom site you own outright, fast enough to pass Core Web Vitals on a phone, with the repository and hosting account in your name at handover.",
+    "seoTitle": "Web Development for Texas Businesses",
+    "seoDescription": "Custom web development for Texas businesses, remote from Dublin with the full Central working day covered. You own the code, the domain and the hosting."
+  },
+  {
+    "id": "loc_california",
+    "name": "California",
+    "slug": "california",
+    "country": "United States",
+    "region": "California",
+    "parent": "united-states",
+    "sortOrder": 6,
+    "summary": "Pacific time, with most of your working day covered from Dublin.",
+    "intro": "California runs eight hours behind Dublin. Our day runs to midnight here, which covers your morning through to late afternoon.",
+    "presence": "No California office. Work is delivered remotely from Dublin.",
+    "overlap": "Dublin is eight hours ahead of Pacific time. Our 9:00 to 00:00 window is 1:00 to 16:00 in California, so we are available from the start of your day until late afternoon.",
+    "points": [
+      "Available from the start of your working day until roughly 4pm Pacific",
+      "A 9am message in San Francisco or Los Angeles reaches us at 5pm",
+      "Invoicing in US dollars",
+      "Full ownership handover: repository, domain and hosting account"
+    ],
+    "body": "Pacific time is the widest gap we work across, and we would rather be straight about it than oversell. Eight hours behind Dublin means our day ends around 4pm yours. Your morning and early afternoon overlap with us; your late afternoon does not.\n\nIn practice that is enough for most projects, because the parts that genuinely need both sides present are calls, and those are scheduled. The rest is written scope, review links and deploys, none of which require us to be awake at the same moment.\n\nIf your work needs late-afternoon Pacific availability every day, say so early and we will tell you honestly whether we are the right fit rather than discovering it halfway through a build.",
+    "seoTitle": "Web Development for California",
+    "seoDescription": "Custom web development for California businesses, remote from Dublin. Pacific mornings through mid-afternoon covered, and you own the code and hosting."
+  }
+]

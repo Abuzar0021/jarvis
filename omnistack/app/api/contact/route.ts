@@ -52,8 +52,9 @@ export async function POST(req: NextRequest) {
     await addLead(lead);
 
     const site = await getSite();
-    // Best-effort email notification — never fails the request.
-    await sendLeadEmail(lead, site).catch(() => undefined);
+    // Best-effort email notification - never fails the request, but a failure is logged so it can be fixed.
+    const mail = await sendLeadEmail(lead, site).catch((e) => ({ sent: false, error: e instanceof Error ? e.message : "send failed" }));
+    if (!mail.sent) logger.error("lead.email_failed", { error: mail.error || "SMTP is not configured" });
 
     logger.info("lead.received", { source: lead.source, page: lead.page });
     return Response.json({ ok: true });

@@ -12,7 +12,10 @@ export default async function TestimonialsAdminPage() {
   const testimonials = await getTestimonials();
   return (
     <AdminShell>
-      <PageTitle title="Testimonials" description="Client quotes shown on the homepage." />
+      <PageTitle
+        title="Reviews"
+        description="Client reviews. Submissions land as pending and only go live once you approve them."
+      />
       <TestimonialsEditor initial={testimonials} />
     </AdminShell>
   );

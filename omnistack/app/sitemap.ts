@@ -1,57 +1,13 @@
-import type { MetadataRoute } from "next";
-import { getIndustries, getPosts, getProjects, getServices } from "@/lib/content";
+﻿import type { MetadataRoute } from "next";
 
-export const dynamic = "force-dynamic";
-
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-  const [projects, services, posts, industries] = await Promise.all([
-    getProjects(),
-    getServices(),
-    getPosts(),
-    getIndustries(),
-  ]);
-  const now = new Date();
-
-  const staticRoutes = [
-    "",
-    "/work",
-    "/services",
-    "/industries",
-    "/pricing",
-    "/insights",
-    "/about",
-    "/contact",
-    "/book",
-    "/privacy",
-    "/terms",
-  ].map((path) => ({ url: `${base}${path}`, lastModified: now }));
-
-  const projectRoutes = projects.map((p) => ({
-    url: `${base}/work/${p.slug}`,
-    lastModified: now,
-  }));
-
-  const serviceRoutes = services.map((s) => ({
-    url: `${base}/services/${s.slug}`,
-    lastModified: now,
-  }));
-
-  const postRoutes = posts.map((p) => ({
-    url: `${base}/insights/${p.slug}`,
-    lastModified: new Date(p.publishedAt || now),
-  }));
-
-  const industryRoutes = industries.map((i) => ({
-    url: `${base}/industries/${i.slug}`,
-    lastModified: now,
-  }));
-
+// The studio's routes: the desk, and the three doorways on it, plus the privacy policy.
+export default function sitemap(): MetadataRoute.Sitemap {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://omnistacksdigital.com";
   return [
-    ...staticRoutes,
-    ...projectRoutes,
-    ...serviceRoutes,
-    ...postRoutes,
-    ...industryRoutes,
+    { url: `${base}/`, changeFrequency: "monthly", priority: 1 },
+    { url: `${base}/work`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/about`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/contact`, changeFrequency: "yearly", priority: 0.7 },
+    { url: `${base}/privacy`, changeFrequency: "yearly", priority: 0.2 },
   ];
 }

@@ -6,41 +6,52 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/Button";
+import { Magnetic } from "@/components/motion/Magnetic";
 import { cn } from "@/lib/utils";
 
-type ServiceLink = { name: string; slug: string };
-type Grouped = { group: string; items: ServiceLink[] }[];
-
-const NAV_LINKS = [
-  { label: "Work", href: "/work" },
+/**
+ * The design's nav, plus the two routes it left out.
+ *
+ * The design ships four links. That looked right and ranked badly: it left the
+ * 18 service pages and 6 industry pages reachable only from the footer, and
+ * /work linked from no desktop nav at all. Services and Industries are back
+ * because internal links are how those pages get crawled and weighted.
+ *
+ * An entry with an `id` is a homepage section. On the homepage it scrolls; off
+ * it, it falls back to `href` if there is one, otherwise to "/#id". That is why
+ * Work carries both: it scrolls to the pinned track on the homepage and routes
+ * to the work index everywhere else.
+ */
+const NAV_LINKS: { label: string; id?: string; href?: string }[] = [
+  { label: "Process", id: "process" },
+  { label: "Services", href: "/services" },
   { label: "Industries", href: "/industries" },
+  { label: "Templates", href: "/templates" },
   { label: "Pricing", href: "/pricing" },
-  { label: "Insights", href: "/insights" },
-  { label: "About", href: "/about" },
+  { label: "Work", id: "work", href: "/work" },
 ];
 
-export function Nav({
-  brand,
-  grouped,
-  ctaLabel,
-}: {
-  brand: string;
-  grouped: Grouped;
-  ctaLabel: string;
-}) {
+export function Nav({ brand, ctaLabel }: { brand: string; ctaLabel: string }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
   const pathname = usePathname();
-  const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href.split("#")[0]);
+  const onHome = pathname === "/";
+  const to = (l: { id?: string; href?: string }) =>
+    l.id && onHome ? `#${l.id}` : (l.href ?? `/#${l.id}`);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    // The design keeps the bar translucent over the first half-viewport, then
+    // darkens it and firms up the hairline. Same rule on every route.
+    const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.5);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -50,76 +61,31 @@ export function Nav({
   }, [open]);
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 transition-colors duration-300",
-        scrolled || open
-          ? "border-b border-hair bg-surface/80 backdrop-blur-xl"
-          : "border-b border-transparent bg-transparent",
-      )}
-    >
-      <nav className="mx-auto flex h-[68px] max-w-[1240px] items-center justify-between px-5 sm:px-8">
+    <>
+      <header
+        className={cn(
+          // z-50 so the bar, and the close button on it, stay above the open
+          // menu panel at z-40.
+          "fixed inset-x-0 top-0 z-50 border-b backdrop-blur-[14px] transition-colors duration-[400ms]",
+          scrolled || open
+            ? "border-gold/[0.22] bg-page"
+            : "border-gold/[0.12] bg-page/[0.4]",
+        )}
+      >
+      <nav className="mx-auto flex max-w-[1400px] items-center justify-between gap-6 px-5 py-5 sm:px-8 lg:px-16">
         <Logo brand={brand} />
 
-        {/* Desktop links */}
-        <div className="hidden items-center gap-1 lg:flex">
-          <div className="group/services relative">
-            <Link
-              href="/services"
-              aria-current={isActive("/services") ? "page" : undefined}
-              className={cn(
-                "flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm transition-colors hover:text-fg",
-                isActive("/services") ? "text-fg" : "text-muted",
-              )}
-            >
-              Services
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden className="mt-0.5 transition-transform group-hover/services:rotate-180">
-                <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Link>
-            {/* Mega menu */}
-            <div className="invisible absolute left-1/2 top-full z-50 w-[680px] -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 group-hover/services:visible group-hover/services:opacity-100 group-focus-within/services:visible group-focus-within/services:opacity-100">
-              <div className="grid grid-cols-2 gap-x-8 gap-y-6 rounded-2xl border border-hair bg-card/95 p-6 shadow-2xl backdrop-blur-xl">
-                {grouped.map((g) => (
-                  <div key={g.group}>
-                    <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.16em] text-gold">
-                      {g.group}
-                    </p>
-                    <ul className="space-y-0.5">
-                      {g.items.map((s) => (
-                        <li key={s.slug}>
-                          <Link
-                            href={`/services/${s.slug}`}
-                            className="block rounded-md px-2 py-1.5 text-sm text-muted transition-colors hover:bg-white/5 hover:text-fg"
-                          >
-                            {s.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-                <div className="col-span-2 border-t border-hair pt-4">
-                  <Link
-                    href="/services"
-                    className="inline-flex items-center gap-2 text-sm font-medium text-gold hover:underline"
-                  >
-                    Explore all services
-                    <span aria-hidden>→</span>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-
+        <div className="hidden items-center gap-[clamp(16px,3vw,40px)] lg:flex">
           {NAV_LINKS.map((l) => (
             <Link
-              key={l.href}
-              href={l.href}
-              aria-current={isActive(l.href) ? "page" : undefined}
+              key={l.label}
+              href={to(l)}
+              aria-current={l.href && pathname.startsWith(l.href) ? "page" : undefined}
               className={cn(
-                "rounded-full px-3.5 py-2 text-sm transition-colors hover:text-fg",
-                isActive(l.href) ? "text-fg" : "text-muted",
+                "font-mono text-[11px] uppercase tracking-[0.2em] transition-colors",
+                l.href && pathname.startsWith(l.href)
+                  ? "text-fg"
+                  : "text-muted hover:text-fg",
               )}
             >
               {l.label}
@@ -128,19 +94,15 @@ export function Nav({
         </div>
 
         <div className="flex items-center gap-3">
-          <Link
-            href="/search"
-            aria-label="Search"
-            className="hidden h-10 w-10 items-center justify-center rounded-full border border-hair text-muted transition-colors hover:border-gold/50 hover:text-fg lg:flex"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.6" />
-              <path d="M21 21l-4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-            </svg>
-          </Link>
-          <Button href="/book" variant="primary" size="sm" className="hidden sm:inline-flex">
-            {ctaLabel}
-          </Button>
+          {/* Responsive hiding lives on a wrapper, not on Magnetic, so the
+              two display rules never fight. */}
+          <div className="hidden sm:block">
+            <Magnetic>
+              <Button href={onHome ? "#cta" : "/#cta"} variant="primary" size="sm">
+                {ctaLabel}
+              </Button>
+            </Magnetic>
+          </div>
           {/* Mobile toggle */}
           <button
             type="button"
@@ -148,7 +110,7 @@ export function Nav({
             aria-expanded={open}
             aria-controls="mobile-menu"
             onClick={() => setOpen((v) => !v)}
-            className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border border-hair text-fg lg:hidden"
+            className="relative z-50 flex h-10 w-10 items-center justify-center rounded-full border border-hair text-fg transition-transform ease-snap active:scale-[0.94] lg:hidden"
           >
             <span className="sr-only">Menu</span>
             <div className="relative h-4 w-5">
@@ -158,9 +120,19 @@ export function Nav({
             </div>
           </button>
         </div>
-      </nav>
+        </nav>
+      </header>
 
-      {/* Mobile overlay */}
+      {/* Mobile overlay. The design has no mobile menu, so this keeps the
+          design links and adds Work index / Contact so those routes stay
+          reachable without a desktop nav.
+
+          It is a sibling of the header, not a child, and that is load bearing.
+          The header carries backdrop-blur, and a backdrop-filter makes an
+          element the containing block for fixed positioned descendants. Nested
+          inside it, this panel resolved `inset-0 top-[73px]` against the 80px
+          header instead of the viewport and came out seven pixels tall, so the
+          links rendered over the page with almost no background behind them. */}
       <AnimatePresence>
         {open ? (
           <motion.div
@@ -170,39 +142,43 @@ export function Nav({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 top-[68px] z-40 bg-base/98 backdrop-blur-xl lg:hidden"
+            className="fixed inset-0 top-[73px] z-40 bg-page/[0.98] backdrop-blur-xl lg:hidden"
           >
             <div
-              className="flex h-[calc(100dvh-68px)] flex-col overflow-y-auto px-5 py-8 sm:px-8"
+              className="flex h-[calc(100dvh-73px)] flex-col overflow-y-auto px-5 py-8 sm:px-8"
               onClick={(e) => {
                 if ((e.target as HTMLElement).closest("a")) setOpen(false);
               }}
             >
               <ul className="space-y-1">
-                {[{ label: "Services", href: "/services" }, ...NAV_LINKS, { label: "Contact", href: "/contact" }, { label: "Search", href: "/search" }].map(
-                  (l, i) => (
-                    <motion.li
-                      key={l.href}
-                      initial={reduce ? false : { opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.05 + i * 0.05, duration: 0.3 }}
+                {[
+                  ...NAV_LINKS,
+                  { label: "All work", href: "/work" },
+                  { label: "Contact", href: "/contact" },
+                ].map((l, i) => (
+                  <motion.li
+                    key={l.label}
+                    initial={reduce ? false : { opacity: 0, transform: "translateY(12px)" }}
+                    animate={{ opacity: 1, transform: "translateY(0px)" }}
+                    transition={{ delay: 0.05 + i * 0.05, duration: 0.3 }}
+                  >
+                    <Link
+                      href={to(l)}
+                      className="block border-b border-hair py-4 font-serif text-3xl font-light tracking-tight text-fg"
                     >
-                      <Link
-                        href={l.href}
-                        aria-current={isActive(l.href) ? "page" : undefined}
-                        className={cn(
-                          "block border-b border-hair py-4 text-2xl font-medium tracking-tight",
-                          isActive(l.href) ? "text-gold" : "text-fg",
-                        )}
-                      >
-                        {l.label}
-                      </Link>
-                    </motion.li>
-                  ),
-                )}
+                      {l.label}
+                    </Link>
+                  </motion.li>
+                ))}
               </ul>
               <div className="mt-auto pt-8">
-                <Button href="/book" variant="primary" size="lg" className="w-full" withArrow>
+                <Button
+                  href={onHome ? "#cta" : "/#cta"}
+                  variant="primary"
+                  size="lg"
+                  className="w-full"
+                  withArrow
+                >
                   {ctaLabel}
                 </Button>
               </div>
@@ -210,6 +186,6 @@ export function Nav({
           </motion.div>
         ) : null}
       </AnimatePresence>
-    </header>
+    </>
   );
 }

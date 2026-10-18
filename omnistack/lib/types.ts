@@ -26,6 +26,42 @@ export interface Industry {
   seoDescription: string;
 }
 
+/**
+ * A market the studio sells into, rendered at /locations/<slug>.
+ *
+ * `presence` exists to keep these pages honest. There are offices in Dublin
+ * and Jakarta and nowhere else, so a page for a market served remotely has to
+ * say so rather than implying a local branch. Nothing here may assert an
+ * address, a phone number or a team that does not exist.
+ */
+export interface LocationPage {
+  id: string;
+  /** Display name, e.g. "Ireland" or "California". */
+  name: string;
+  slug: string;
+  /** Country, used for schema areaServed. */
+  country: string;
+  /** Sub-national region for a state page; empty for country-level pages. */
+  region: string;
+  /** Parent country page slug for a state, empty at country level. */
+  parent: string;
+  /** One line for the index card. */
+  summary: string;
+  /** Opening paragraph. */
+  intro: string;
+  /** Plain statement of whether there is an office here or it is served remotely. */
+  presence: string;
+  /** Factual working-hours overlap with this market. */
+  overlap: string;
+  /** Market-specific points. */
+  points: string[];
+  /** Remaining copy, blank-line separated paragraphs. */
+  body: string;
+  seoTitle: string;
+  seoDescription: string;
+  sortOrder: number;
+}
+
 export type SocialLink = { label: string; href: string };
 
 export type Location = { city: string; country: string };
@@ -41,10 +77,27 @@ export interface Service {
   body: string;
   deliverables: string[];
   featured: boolean;
+  /**
+   * Search-result copy. `summary` is a short in-page marketing line (often
+   * under 50 characters), which Google discards and rewrites when it is used
+   * as a meta description, so these carry the full-length versions instead.
+   * Optional: records written before these existed fall back to name/summary.
+   */
+  seoTitle?: string;
+  seoDescription?: string;
 }
+
+/**
+ * Delivered client work, or a template published for inspiration. Templates are
+ * kept out of /work, the sitemap and search on purpose: a design nobody paid for
+ * must never read as a case study. Absent means "work", so every record written
+ * before this field existed stays portfolio work.
+ */
+export type ProjectKind = "work" | "template";
 
 export interface Project {
   id: string;
+  kind: ProjectKind;
   title: string;
   slug: string;
   client: string;
@@ -58,7 +111,16 @@ export interface Project {
   outcome: string;
   gallery: string[]; // additional image URLs
   testimonialId: string; // optional linked testimonial
-  cover: string; // image URL (optional) — falls back to a branded gradient
+  cover: string; // image URL (optional) - falls back to a branded gradient
+  /**
+   * Looping motion preview, e.g. "/media/banafee-motion.mp4". A sibling .webm is
+   * offered first when present. Empty means the card keeps its still image, and
+   * that path must stay pixel for pixel what it was before video existed.
+   */
+  video: string;
+  /** First frame of `video`. Falls back to `cover` when empty. */
+  videoPoster: string;
+  logo: string; // client logo mark URL (optional)
   url: string; // live site link
   tags: string[];
   services: string[];
@@ -69,6 +131,16 @@ export interface Project {
   seoDescription: string;
 }
 
+/** Moderation state. Only "approved" records ever reach a public surface. */
+export type TestimonialStatus = "pending" | "approved" | "rejected";
+
+/**
+ * How a published review was checked. "" means unverified, and the /reviews
+ * verification ledger says so in plain language: EU Omnibus requires the site
+ * to disclose whether and how reviews are verified, not to claim they all are.
+ */
+export type TestimonialVerification = "" | "email" | "handover";
+
 export interface Testimonial {
   id: string;
   quote: string;
@@ -76,6 +148,20 @@ export interface Testimonial {
   authorRole: string;
   company: string;
   featured: boolean;
+  // Everything below is normalised on read (see lib/content.ts), so records
+  // written before the review system existed keep working untouched.
+  status: TestimonialStatus;
+  /** What was actually delivered, e.g. "Five page site, booking flow". */
+  projectScope: string;
+  /** YYYY-MM. */
+  deliveredOn: string;
+  verifiedBy: TestimonialVerification;
+  /** Publish the review, hold back the name. */
+  nameWithheld: boolean;
+  /** Private. Used to verify the submitter, never rendered publicly. */
+  contactEmail: string;
+  submittedAt: string;
+  consentAt: string;
 }
 
 export interface Faq {
@@ -96,6 +182,8 @@ export interface Post {
   author: string;
   publishedAt: string; // YYYY-MM-DD
   featured: boolean;
+  seoTitle: string;
+  seoDescription: string;
 }
 
 export interface Redirect {
@@ -150,6 +238,10 @@ export interface SiteContent {
     headline: string;
     highlight: string; // the gold word/phrase inside the headline
     subhead: string;
+    // The line beside the pulsing dot under the hero CTAs.
+    note: string;
+    // Four short lines the cursor spotlight uncovers around the wordmark.
+    annotations: string[];
     primaryCta: CTA;
     secondaryCta: CTA;
   };
@@ -210,8 +302,8 @@ export interface SiteContent {
 
   contact: {
     email: string;
-    whatsapp: string; // digits only, e.g. 353896050083
-    whatsappDisplay: string; // +353 89 605 0083
+    whatsapp: string; // digits only, e.g. 447821767235
+    whatsappDisplay: string; // +44 7821 767235
     locations: Location[];
     hours: string;
     responseTime: string;
