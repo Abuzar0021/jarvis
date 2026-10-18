@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // The studio is built and minified in its own folder; its bundle is not source code.
+    "public/home/**",
+    // Generated from home-src/index.html by scripts/build-home.mjs.
+    "lib/home-html.ts",
   ]),
 ]);
 
