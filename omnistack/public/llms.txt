@@ -1,6 +1,6 @@
-# Strawberry (OmniStack Digital)
+# OmniStacks Digital
 
-> Strawberry builds SaaS websites and iOS and Android mobile apps, then grows them with social media marketing. One fixed scope, one honest price, one timeline.
+> OmniStacks Digital (OSD) builds SaaS websites and iOS and Android mobile apps, then grows them with social media marketing. The website is an interactive 3D studio: every object on the desk opens a page.
 
 ## What we do
 
@@ -8,22 +8,29 @@
 - Mobile apps: iOS and Android apps, cross-platform where that helps and fully native where it matters, shipped through the App Store and Google Play.
 - Social media marketing: strategy, content and paid campaigns on Instagram, TikTok, LinkedIn and X, measured in signups and installs rather than likes.
 
+## Selected work
+
+- Banafee Group: bilingual corporate website for a Malaysian halal food group (https://www.banafeegroup.com).
+- FitPlanCoach: fitness web app, designed and engineered end to end (https://www.fitplancoach.com).
+- Clovey Kitchen: mobile-first restaurant website.
+- KAIA Dubai Chewy: vertical launch reel for Instagram and TikTok.
+- Banafee brand film: a social brand film for Instagram, LinkedIn and YouTube.
+
 ## How we work
 
-- Every project gets one written scope, one price and one timeline before work begins. No surprise invoices.
-- Social media retainers are monthly, with no long lock-in.
+- Every build is priced after a short discovery call, and the quoted number is the number you pay. Social media is a flat monthly fee.
 - A SaaS website usually takes four to six weeks. A first app release takes ten to fourteen. You get a dated plan before work starts.
-- We take on a handful of clients at a time.
+- A small studio: the people on your first call design, build and grow the product.
 - You own the code, the designs, and the store and social accounts, from day one.
 
-## Answers to common questions
+## Pages
 
-- How long does a project take? A SaaS website usually takes four to six weeks and a first app release ten to fourteen, with a dated plan before we start.
-- Do you build for iOS and Android? Yes, cross-platform or fully native, chosen per project with the trade-off explained in writing.
-- Can you run our social media? Yes: monthly strategy, content and ads, with a report tied to signups and installs.
-- What does it cost? Builds are priced after a short discovery call and the quoted number is the number you pay. Social is a flat monthly fee.
-- Who owns the code and designs? You do.
+- Studio: https://omnistacksdigital.com/
+- Work: https://omnistacksdigital.com/work
+- About, what a build includes, and FAQ: https://omnistacksdigital.com/about
+- Contact (brief form): https://omnistacksdigital.com/contact
+- Privacy: https://omnistacksdigital.com/privacy
 
 ## Contact
 
-Everything is on one page: https://omnistacksdigital.com/ (the brief form is at the end). Email: omnistacksdigital@gmail.com
+Email: omnistacksdigital@gmail.com. Instagram: https://www.instagram.com/omnistacksdigital/
